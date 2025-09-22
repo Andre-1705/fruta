@@ -1,0 +1,53 @@
+
+/* Sección Formulario */
+
+.nosotros-seccion {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Acceso a clase .nosotros-seccion, .nosotros-formulario, .formulrio-grupo, .formulario-grupo label */
+
+.nosotros-formulario {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formulario-grupo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.formulario-grupo label {
+  margin-bottom: 0.5rem;
+}
+
+/* Acceso a clase .formulario-grupo input, .formulario-grupo textarea */
+
+.formulario-grupo input,
+.formulario-grupo textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* botón submit */
+
+button[type="submit"] {
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
