@@ -6,10 +6,15 @@ import './Header.css';
 export const Header = () => {
     return (
   
-        // El elemento <header> representa el encabezado de una sección o de la página entera
+        // El header manejará titulo, logo y barra de navegación?
         <header>
             {/* Título principal de la aplicación */}
+            <div className="header">
+            
+            <img className= "logo" src="/assets/logo_fruta.png" alt="logo"></img>
             <h1 className="titulo">Fruta</h1>
+           
+            </div>
             {/* Renderiza el componente de navegación (Nav) */}
             <Nav />
         </header>

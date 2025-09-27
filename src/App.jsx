@@ -47,7 +47,7 @@ function App() {
                         Acá las cosas caen por su propio peso" productos={productos}/> 
 
       {/* Renderiza el componente Nosotros */}
-       <Nosotros /> 
+       <Formulario /> 
        
       {/* Renderiza el componente Footer */}
       <Footer />

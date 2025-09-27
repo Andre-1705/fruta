@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './Nosotros.css';
+import './Formulario.css';
 
 //Al usar constante más arrow function , garantizás que  no se pueda reasignar
 
-export const Nosotros = () => {
+export const Formulario = () => {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -23,14 +23,14 @@ const manejarEnvio = (e) => {
   };
 
   return (
-    <section id="nosotros" className="nosotros-seccion">
+    <section id="formulario" className="formulario-seccion">
       <h2>Nosotros</h2>
       <p>Mandá fruta, te responderemos a la brevedad.</p>
 
       {/* Manejo del nombre con id, value, etc y manejo de la actualización del valor con onChange  */}
       {/* Con target.value accedo al valor actualizado del imput mejorando la experiencia de usuario */}
 
-      <form className="nosotros-formulario" onSubmit={manejarEnvio}>
+      <form className="seccion-formulario" onSubmit={manejarEnvio}>
         <div className="formulario-grupo">
           <label htmlFor="nombre">Nombre:</label>
           <input

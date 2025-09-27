@@ -1,12 +1,23 @@
-.titulo{
+.header{
+    display:flex;
+    align-items: center;
+    padding:1rem;
+    background-color: white;
+    border: 5px solid rgb(15, 77, 8);
+    border-radius: 20px;
+}   
 
+.titulo{
+    flex-grow: 1;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 4rem;
-    color:rgb(109, 251, 128);
+    color:rgb(15, 77, 8);
     text-align: center;
 }
-/*.titulo img{     -- acá manejaré logo
-    width: 200px;
-    height: 200px;
-}*/
+
+.logo{     
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+}
 

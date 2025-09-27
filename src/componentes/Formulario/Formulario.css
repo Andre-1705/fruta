@@ -1,14 +1,14 @@
 
 /* Sección Formulario */
 
-.nosotros-seccion {
+.formulario-seccion {
   padding: 2rem;
   text-align: center;
 }
 
 /* Acceso a clase .nosotros-seccion, .nosotros-formulario, .formulrio-grupo, .formulario-grupo label */
 
-.nosotros-formulario {
+.seccion-formulario {
   max-width: 500px;
   margin: 0 auto;
   display: flex;

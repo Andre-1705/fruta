@@ -5,7 +5,7 @@ export const Item = ({ producto })  => {
 
     return(
 // La "key" es importante para que React pueda identificar cada elemento de forma única
-        <article className="card" key={producto.id}>
+        <article className="tarjeta" key={producto.id}>
                 {/* Se accede y se muestra la imagen del producto */}
                 <img src={producto.img} alt={producto.nombre} />
                 {/* Se accede y se muestra el nombre del producto */}
