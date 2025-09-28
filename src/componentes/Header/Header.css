@@ -1,20 +1,40 @@
+:root {
+    --header-textos-margin-left: 11rem;
+}
+
 .header{
     display:flex;
     align-items: center;
-    padding:1rem;
-    background-color: white;
+    padding: 1rem;
     border: 5px solid rgb(15, 77, 8);
     border-radius: 20px;
+    padding: 1rem;
+    gap: 1rem;
 }   
-
 .titulo{
-    flex-grow: 1;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 4rem;
+    font-size: 3.5rem;
     color:rgb(15, 77, 8);
-    text-align: center;
+    text-align: end;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
 }
 
+.subtitulo{
+    font-size: 2.3rem;
+    font-style: italic;
+    color: rgb(32, 178, 170);
+    margin-bottom: 0.01rem;
+    
+}
+
+.textos
+.textos{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: var(--header-textos-margin-left);
+}
 .logo{     
     width: 100px;
     height: 100px;

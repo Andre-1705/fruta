@@ -3,7 +3,7 @@ import './Formulario.css';
 
 //Al usar constante más arrow function , garantizás que  no se pueda reasignar
 
-export const Formulario = () => {
+const Formulario = () => {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -24,7 +24,7 @@ const manejarEnvio = (e) => {
 
   return (
     <section id="formulario" className="formulario-seccion">
-      <h2>Nosotros</h2>
+      <h2>Contactanos</h2>
       <p>Mandá fruta, te responderemos a la brevedad.</p>
 
       {/* Manejo del nombre con id, value, etc y manejo de la actualización del valor con onChange  */}
@@ -77,4 +77,4 @@ const manejarEnvio = (e) => {
     </section>
   );
 };
-export default Nosotros;
+export default Formulario;

@@ -10,10 +10,11 @@ export const Header = () => {
         <header>
             {/* Título principal de la aplicación */}
             <div className="header">
-            
-            <img className= "logo" src="/assets/logo_fruta.png" alt="logo"></img>
-            <h1 className="titulo">Fruta</h1>
-           
+                <img className= "logo" src="/assets/logo_fruta.png" alt="logo"></img>
+                <div className="textos">
+                    <h1 className="titulo">Bienvenidos a Fruta</h1>
+                    <h2 className="subtitulo">Acá las cosas caen por su propio peso</h2>
+                </div>
             </div>
             {/* Renderiza el componente de navegación (Nav) */}
             <Nav />

@@ -1,7 +1,39 @@
-.carrito{
-    border: solid, 2px;
+h2{
+    font-size: 1.5rem;
+    text-align: center;
 }
 
-.carrito-producto{
-    border: solid, 2px;
+.carrito,
+.carrito-producto {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+.carrito {
+  border: 2px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.carrito-producto {
+  border: 2px solid #ddd;
+  background-color: #fff;
+}
+
+.carrito-producto span {
+  display: block;
+  margin: 0.25rem 0;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #c0392b;
 }

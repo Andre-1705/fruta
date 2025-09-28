@@ -9,7 +9,7 @@
 /* Acceso a clase .nosotros-seccion, .nosotros-formulario, .formulrio-grupo, .formulario-grupo label */
 
 .seccion-formulario {
-  max-width: 500px;
+  max-width: 800px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -24,6 +24,17 @@
 
 .formulario-grupo label {
   margin-bottom: 0.5rem;
+  font-size: medium;
+}
+
+h2{
+  font-size: 1.9rem;
+  text-align: center;
+}
+
+p{
+  font-size: medium;
+  text-align: center;
 }
 
 /* Acceso a clase .formulario-grupo input, .formulario-grupo textarea */
