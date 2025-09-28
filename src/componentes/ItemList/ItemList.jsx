@@ -1,8 +1,14 @@
 import { Item } from "../Item/Item";
 
 // Componente que recibe una lista de productos y maneja el hover
-export const ItemList = ({ lista, hoveredId, setHoveredId, agregarAlCarrito }) => {
-  console.log(lista);
+export const ItemList = ({
+  lista,
+  hoveredId,
+  setHoveredId,
+  agregarAlCarrito,
+  removerDelCarrito,
+  carrito
+}) => {
   return (
     <div className="fila">
       {lista && lista.length > 0 ? (
@@ -13,6 +19,8 @@ export const ItemList = ({ lista, hoveredId, setHoveredId, agregarAlCarrito }) =
             hoveredId={hoveredId}
             setHoveredId={setHoveredId}
             agregarAlCarrito={agregarAlCarrito}
+            removerDelCarrito={removerDelCarrito}
+            carrito={carrito}
           />
         ))
       ) : (

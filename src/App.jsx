@@ -4,6 +4,7 @@ import { Header } from './componentes/Header/Header';
 import { Footer } from './componentes/Footer/Footer';
 import { ItemListContainer } from './componentes/ItemListContainer/ItemListContainer';
 import Formulario from './componentes/Formulario/Formulario';
+import { Carrito } from './componentes/Carrito/Carrito';
 
 function App() {
   const [carrito, setCarrito] = useState([]);
@@ -34,7 +35,9 @@ function App() {
 
 
   // Función para agregar un producto al carrito
-  //
+  // Si el producto ya existe, incrementa su cantidad en 1
+  // Si no existe, le agrega lo agrega al carrito con cantidad 1
+  // Mapea el carrito y actualiza el estado
 
   const agregarAlCarrito = (productoNuevo) => {
     setCarrito(previoCarrito => {
@@ -71,8 +74,13 @@ function App() {
     });
   };
 
-  const removerDelCarrito = (id) => {
-    setCarrito(previoCarrito => previoCarrito.filter(producto => producto.id !== id));
+  // Función para remover el producto del carrito
+  // Filtra el carrito y actualiza el estado
+  
+
+  const removerDelCarrito = (idProducto) => {
+    setCarrito(previoCarrito => 
+      previoCarrito.filter(producto => producto.id !== idProducto));
   };
 
   return (
@@ -87,6 +95,10 @@ function App() {
           agregarAlCarrito={agregarAlCarrito}
           removerDelCarrito={removerDelCarrito}
         />
+
+        <Carrito carrito={carrito} 
+          removerDelCarrito={removerDelCarrito} 
+          agregarAlCarrito={agregarAlCarrito} />
 
         <Formulario />
         <Footer />
