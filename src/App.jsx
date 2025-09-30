@@ -6,32 +6,10 @@ import { ItemListContainer } from './componentes/ItemListContainer/ItemListConta
 import Formulario from './componentes/Formulario/Formulario';
 import { Carrito } from './componentes/Carrito/Carrito';
 
+
 function App() {
   const [carrito, setCarrito] = useState([]);
 
-  const productosArray = [
-    {
-      id: 1,
-      img: "/assets/banana.jpg",
-      nombre: 'Banana',
-      precio: 100,
-      descripcion: 'ecuatoriana',
-    },
-    {
-      id: 2,
-      img: "/assets/naranja.jpg",
-      nombre: 'Naranja',
-      precio: 200,
-      descripcion: 'roja',
-    },
-    {
-      id: 3,
-      img: "/assets/mandarina.jpg",
-      nombre: 'Mandarina',
-      precio: 300,
-      descripcion: 'de estación',
-    }
-  ];
 
 
   // Función para agregar un producto al carrito

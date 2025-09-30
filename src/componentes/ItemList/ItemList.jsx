@@ -1,6 +1,7 @@
-import { Item } from "../Item/Item";
+import React from 'react';
+import { Item } from '../Item/Item';
+import './ItemList.css'; // Si tenés estilos específicos
 
-// Componente que recibe una lista de productos y maneja el hover
 export const ItemList = ({
   lista,
   hoveredId,
@@ -9,23 +10,31 @@ export const ItemList = ({
   removerDelCarrito,
   carrito
 }) => {
+
+  // Manejo de caso cuando no hay productos
+
+  if (!lista || lista.length === 0) {
+    return <p>No hay productos disponibles</p>;
+  }
+
   return (
-    <div className="fila">
-      {lista && lista.length > 0 ? (
-        lista.map((producto) => (
-          <Item
-            key={producto.id}
-            producto={producto}
-            hoveredId={hoveredId}
-            setHoveredId={setHoveredId}
-            agregarAlCarrito={agregarAlCarrito}
-            removerDelCarrito={removerDelCarrito}
-            carrito={carrito}
+    <div className="item-list">
+
+      {lista.map(producto => (
+        <Item
+          key={producto.id}
+          id={producto.id}
+          nombre={producto.nombre}
+          precio={producto.precio}
+          imagen={producto.imagen} // si tenés imágenes en el JSON
+          hoveredId={hoveredId}
+          setHoveredId={setHoveredId}
+          agregarAlCarrito={agregarAlCarrito}
+          removerDelCarrito={removerDelCarrito}
+          carrito={carrito}
+      
           />
-        ))
-      ) : (
-        <p className="info">No hay productos disponibles.</p>
-      )}
+      ))}
     </div>
   );
 };
