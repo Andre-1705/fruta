@@ -17,16 +17,15 @@ export const ItemList = ({
     return <p>No hay productos disponibles</p>;
   }
 
+// Mapea la lista de productos y renderiza componente Item para cada uno
+
   return (
     <div className="item-list">
 
       {lista.map(producto => (
         <Item
           key={producto.id}
-          id={producto.id}
-          nombre={producto.nombre}
-          precio={producto.precio}
-          imagen={producto.imagen} // si tenés imágenes en el JSON
+          producto={producto}
           hoveredId={hoveredId}
           setHoveredId={setHoveredId}
           agregarAlCarrito={agregarAlCarrito}

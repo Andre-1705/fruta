@@ -1,5 +1,6 @@
 import './App.css';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { Header } from './componentes/Header/Header';
 import { Footer } from './componentes/Footer/Footer';
 import { ItemListContainer } from './componentes/ItemListContainer/ItemListContainer';
@@ -14,7 +15,7 @@ function App() {
 
   // Función para agregar un producto al carrito
   // Si el producto ya existe, incrementa su cantidad en 1
-  // Si no existe, le agrega lo agrega al carrito con cantidad 1
+  // Si no existe, lo agrega al carrito con cantidad 1
   // Mapea el carrito y actualiza el estado
 
   const agregarAlCarrito = (productoNuevo) => {
@@ -68,7 +69,6 @@ function App() {
 
         <ItemListContainer
           titulo="Productos"
-          productosArray={productosArray}
           carrito={carrito}
           agregarAlCarrito={agregarAlCarrito}
           removerDelCarrito={removerDelCarrito}

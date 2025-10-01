@@ -6,7 +6,7 @@ import './Header.css';
 export const Header = () => {
     return (
   
-        // El header manejará titulo, logo y barra de navegación?
+        // El header manejará titulo, logo y subtitulo
         <header>
             {/* Título principal de la aplicación */}
             <div className="header">
