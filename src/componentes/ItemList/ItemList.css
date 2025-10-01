@@ -6,3 +6,29 @@
   justify-items: center;
 }
 
+h1{
+  color: rgb(15, 77, 8);
+}
+
+.categorias-lista {
+  font-family: 'Arial', 'sans-serif';
+  font-size: 1.8rem;
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.categorias-lista li {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+}
+
+.categorias-lista li.seleccionada {
+  border-bottom: 2px solid #ffa726;
+  font-weight: bold;
+}
+

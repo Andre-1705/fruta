@@ -9,15 +9,17 @@ export const Item = ({
   carrito
 }) => {
   const estaHovered = hoveredId === producto.id;
-  const enCarrito = carrito.some(p => p.id === producto.id);
+  const enCarrito = carrito.some(producto => producto.id === producto.id);
 
-  const handleAgregar = (e) => {
-    e.stopPropagation();
+// Maneja el evento para que no se propague al hacer click en los botones
+
+  const handleAgregar = (eventoClick) => {
+    eventoClick.stopPropagation();
     agregarAlCarrito(producto);
   };
 
-  const handleRemover = (e) => {
-    e.stopPropagation();
+  const handleRemover = (eventoClick) => {
+    eventoClick.stopPropagation();
     removerDelCarrito(producto.id);
   };
 

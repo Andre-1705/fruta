@@ -4,20 +4,23 @@
       "img": "/assets/banana.jpg",
       "nombre": "Banana",
       "precio": 100,
-      "descripcion": "ecuatoriana"
+      "descripcion": "ecuatoriana",
+      "categoria": "Tropicales"
     },
     {
       "id": 2,
       "img": "/assets/naranja.jpg",
       "nombre": "Naranja",
       "precio": 200,
-      "descripcion": "roja"
+      "descripcion": "roja",
+      "categoria": "Cítricos"
     },
     {
       "id": 3,
       "img": "/assets/mandarina.jpg",
       "nombre": "Mandarina",
       "precio": 300,
-      "descripcion": "de estación"
+      "descripcion": "dulces",
+      "categoria": "Cítricos"
     }
 ]

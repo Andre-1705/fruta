@@ -18,10 +18,6 @@ export const ItemListContainer = ({
   const [productosArray, setProductosArray] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const productosFiltrados = categoriaSeleccionada === 'Todas'
-    ? productos
-    : productos.filter(producto => 
-      producto.categoria.toLowerCase() === categoriaSeleccionada.toLowerCase());
 
     //Este hook se ejecuta una sola vez al montar el componente, gracias al array vacío   
     //Pide al JSON que le pase los productos
@@ -53,7 +49,7 @@ export const ItemListContainer = ({
 
   return (
     <section className="fila">
-      <h1>{titulo}</h1>
+      <h1>{}</h1>
       {cargando && <p>Cargando productos...</p>}
       {error && <p className="error">{error}</p>}
 

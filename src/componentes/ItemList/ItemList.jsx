@@ -1,6 +1,7 @@
 import React from 'react';
 import { Item } from '../Item/Item';
 import './ItemList.css'; // Si tenés estilos específicos
+import { useState } from 'react';
 
 export const ItemList = ({
   lista,
@@ -8,21 +9,48 @@ export const ItemList = ({
   setHoveredId,
   agregarAlCarrito,
   removerDelCarrito,
-  carrito
+  carrito,
 }) => {
+
+  //Filtra productos por categoría. En Productos filtrados guarda la categoría seleccionada
+
+const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas');   
+
+const productosFiltrados = categoriaSeleccionada === 'Todas'
+  ? lista
+  : lista.filter(producto =>
+      producto.categoria.toLowerCase() === categoriaSeleccionada.toLowerCase()
+    );
+
 
   // Manejo de caso cuando no hay productos
 
-  if (!lista || lista.length === 0) {
+  if (!productosFiltrados || productosFiltrados.length === 0) {
     return <p>No hay productos disponibles</p>;
   }
+
 
 // Mapea la lista de productos y renderiza componente Item para cada uno
 
   return (
+    <section>               
+      <h1>Seleccione poductos por categoría</h1>
+      
+      <ul className="categorias-lista">
+        {['Todas', 'Cítricos', 'Tropicales', 'Frutas secas'].map(categoria => (
+        <li
+          key={categoria}
+          className={categoriaSeleccionada === categoria ? 'seleccionada' : ''}
+          onClick={() => setCategoriaSeleccionada(categoria)}
+      >
+        {categoria}
+       </li>
+     ))}
+     </ul>
+
     <div className="item-list">
 
-      {lista.map(producto => (
+      {productosFiltrados.map(producto => (
         <Item
           key={producto.id}
           producto={producto}
@@ -35,6 +63,7 @@ export const ItemList = ({
           />
       ))}
     </div>
+    </section>
   );
 };
 
