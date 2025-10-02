@@ -14,7 +14,29 @@ h2{
   background-color: #f9f9f9;
 }
 
+.carrito img {
+  width: 300px;
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-left: 100px;
+}
+
+.carrito-detalle {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+}
+
+.carrito-total{
+  font-size: 1.2rem;
+  color: red;
+}
+
 .carrito-producto {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   border: 2px solid #ddd;
   background-color: #fff;
 }

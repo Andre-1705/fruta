@@ -1,44 +1,7 @@
 
-/* Manejo de borde de tarjeta por clases */
-
-.fila {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  justify-content: center;
-  padding: 40px;
-}
-
-.tarjeta {
-  width: 300px;
-  max-width: 100%;
-  height: 350px;
-  margin-top: 10px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-.imagen{
-  width: 100%;
-  height: 200px;
-  object-fit: contain;
-  margin-top: 5px;
-  display:block;
-}
-
-.tarjeta:hover {
-  transform: scale(1.03);
-}
-
-.info {
-  padding: 10px;
+.item-list-container {
   text-align: center;
+  padding: 40px;
 }
 
 .error{

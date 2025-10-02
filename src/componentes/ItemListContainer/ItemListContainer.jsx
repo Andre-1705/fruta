@@ -21,7 +21,7 @@ export const ItemListContainer = ({
 
     //Este hook se ejecuta una sola vez al montar el componente, gracias al array vacío   
     //Pide al JSON que le pase los productos
-    //Verifica si la respuesta fue exitosa (). Si no, lanza un error.	
+    //Verifica si la respuesta fue exitosa. Si no, lanza un error.	
     //Si todo va bien, convierte la respuesta en JSON y:
     //Guarda los datos en el estado 
     //Cambia el estado de cargando a falso
@@ -48,8 +48,8 @@ export const ItemListContainer = ({
 //Muestra mensaje de error si hay un problema al cargar los productos
 
   return (
-    <section className="fila">
-      <h1>{}</h1>
+    <section className="item-list-container">
+      
       {cargando && <p>Cargando productos...</p>}
       {error && <p className="error">{error}</p>}
 

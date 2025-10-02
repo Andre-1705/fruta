@@ -19,12 +19,15 @@ export const Carrito = ({ carrito, removerDelCarrito, agregarAlCarrito }) => {
         <>
           {carrito.map(producto => (
             <div key={producto.id} className="carrito-producto">
-              <span>Producto: {producto.nombre}</span>
-              <span>Cantidad: {producto.cantidad}</span>
-              <span>Precio $: {producto.precio}</span>
-              <span>Total: $ {producto.precio * producto.cantidad}</span>
-              <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button> 
-              <button onClick={() => removerDelCarrito(producto.id)}>Eliminar del carrito</button>
+              <img src={producto.img} alt={`Foto ilustrativa de ${producto.nombre}`} />
+              <div className="carrito-detalle">
+                <span>Producto: {producto.nombre}</span>
+                <span>Cantidad: {producto.cantidad}</span>
+                <span>Precio $: {producto.precio}</span>
+                <span>Total: $ {producto.precio * producto.cantidad}</span>
+                <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button> 
+                <button onClick={() => removerDelCarrito(producto.id)}>Eliminar del carrito</button>
+              </div>
             </div>
           ))}
 

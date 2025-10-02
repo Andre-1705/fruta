@@ -59,7 +59,15 @@ function App() {
 
   const removerDelCarrito = (idProducto) => {
     setCarrito(previoCarrito => 
-      previoCarrito.filter(producto => producto.id !== idProducto));
+      previoCarrito
+
+        .map(producto => 
+        producto.id === idProducto
+          ? { ...producto, cantidad : producto.cantidad - 1 }
+          : producto
+        )      
+        .filter(producto => producto.cantidad > 0)
+      );
   };
 
   return (

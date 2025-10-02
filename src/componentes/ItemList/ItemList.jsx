@@ -26,14 +26,14 @@ const productosFiltrados = categoriaSeleccionada === 'Todas'
   // Manejo de caso cuando no hay productos
 
   if (!productosFiltrados || productosFiltrados.length === 0) {
-    return <p>No hay productos disponibles</p>;
+    return <p className="mensaje-vacio">No hay productos disponibles</p>;
   }
 
 
 // Mapea la lista de productos y renderiza componente Item para cada uno
 
   return (
-    <section>               
+    <section className="item-list-section">               
       <h1>Seleccione poductos por categoría</h1>
       
       <ul className="categorias-lista">
