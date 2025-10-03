@@ -1,0 +1,39 @@
+footer {
+  background-color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  border-top: 6px solid #333; /* Línea gruesa arriba */
+  font-family: 'Segoe UI', sans-serif;
+  color: #555;
+}
+
+footer p {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.iconos-redes {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.iconos-redes img{
+    width:60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.iconos-redes a {
+  color: #555;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.iconos-redes a:hover {
+  color: #000;
+}

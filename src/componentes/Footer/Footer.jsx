@@ -1,15 +1,23 @@
-// Definición del componente Footer. Este componente renderiza el pie de página de la aplicación.
+import './Footer.css';
+
 export const Footer = () => {
+  return (
+    <footer>
+      
+      <div className="iconos-redes">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <img src="/assets/icon/logo_face.png" alt="Logo Facebook"/>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <img src="/assets/icon/logo_insta.png" alt="Logo Instagram"/>
+        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">Tik Tok</a>
+            <img src="/assets/icon/logo_tiktok.png" alt="Logo Tik Tok"/>
+         <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">Whats Apps</a>
+            <img src="/assets/icon/logo_watsapp.png" alt="Logo Whats Apps"/>
 
-    return(
-        // El elemento <footer> representa el pie de página de una sección o de la página entera.
-        <footer>
-            {/* Párrafo con el texto del copyright. */}
-            <p>Reservamos fruta solo por derecha &Copy; 2025</p>
-        </footer>
-    );
-}; 
+      </div>
+         <p>Reservamos fruta solo por derecha &copy; 2025</p>
+    </footer>
+  );
+};
 
-// Exportación por defecto del componente Footer para que pueda ser importado en otros archivos.
 export default Footer;
-

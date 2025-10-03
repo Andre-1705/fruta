@@ -1,11 +1,15 @@
 import './App.css';
 import { useState } from 'react';
-import { useEffect } from 'react';
+//import { useEffect } from 'react'; para futuras apis
 import { Header } from './componentes/Header/Header';
 import { Footer } from './componentes/Footer/Footer';
-import { ItemListContainer } from './componentes/ItemListContainer/ItemListContainer';
-import Formulario from './componentes/Formulario/Formulario';
-import { Carrito } from './componentes/Carrito/Carrito';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Nosotras from './pages/VistaNosotras.jsx';
+import VistaContacto from './pages/VistaContacto.jsx';
+import Carrito from './pages/VistaCarrito.jsx';
+import VistaProductos from './pages/VistaProductos.jsx';
+import VistaCarrito from './pages/VistaCarrito.jsx';
+import VistaNosotras from './pages/VistaNosotras.jsx';
 
 
 function App() {
@@ -73,22 +77,35 @@ function App() {
   return (
     <>
       <div>
-        <Header />
+        
+        <Router>
+          <Header />
 
-        <ItemListContainer
-          titulo="Productos"
-          carrito={carrito}
-          agregarAlCarrito={agregarAlCarrito}
-          removerDelCarrito={removerDelCarrito}
-        />
+          <Routes>        
+            <Route path="/VistaContacto" element={<VistaContacto />} />
+            <Route path="/VistaNosotras" element={<VistaNosotras />} />
+            <Route path="/VistaProductos" element={ 
+              <VistaProductos
+                lista={productoId}
+                hoveredId={hoveredId}
+                setHoveredId={setHoveredId}           
+                carrito={carrito}
+                agregarAlCarrito={agregarAlCarrito}
+                removerDelCarrito={removerDelCarrito}
+             />
+            } />
+            <Route path="/VistaCarrito" element={
+              <VistaCarrito
+                carrito={carrito}
+                agregarAlCarrito={agregarAlCarrito}
+                removerDelCarrito={removerDelCarrito}
+              />
+            } />
+    </Routes>
 
-        <Carrito carrito={carrito} 
-          removerDelCarrito={removerDelCarrito} 
-          agregarAlCarrito={agregarAlCarrito} />
-
-        <Formulario />
-        <Footer />
-      </div>
+          <Footer />
+       </Router>  
+    </div>
     </>
   );
 }
