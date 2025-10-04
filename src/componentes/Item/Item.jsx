@@ -9,7 +9,7 @@ export const Item = ({
   carrito
 }) => {
   const estaHovered = hoveredId === producto.id;
-  const enCarrito = carrito.some(producto => producto.id === producto.id);
+  const enCarrito = carrito.some(item => item.id === producto.id);
 
 // Maneja el evento para que no se propague al hacer click en los botones
 

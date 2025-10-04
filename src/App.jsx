@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-//import { useEffect } from 'react'; para futuras apis
+import { useEffect } from 'react'; //para futuras apis
 import { Header } from './componentes/Header/Header.jsx';
 import { Footer } from './componentes/Footer/Footer.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -8,7 +8,7 @@ import VistaContacto from './pages/VistaContacto.jsx';
 import VistaProductos from './pages/VistaProductos.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
-import productosArray from './data/productosArray.json';
+//import productosArray from '/data/productosArray.json';
 
 function App() {
   const [carrito, setCarrito] = useState([]);
@@ -56,17 +56,17 @@ function App() {
 
   // Función para remover el producto del carrito
   // Filtra el carrito y actualiza el estado
-  
+
 
   const removerDelCarrito = (idProducto) => {
-    setCarrito(previoCarrito => 
+    setCarrito(previoCarrito =>
       previoCarrito
 
-        .map(producto => 
+        .map(producto =>
         producto.id === idProducto
           ? { ...producto, cantidad : producto.cantidad - 1 }
           : producto
-        )      
+        )
         .filter(producto => producto.cantidad > 0)
       );
   };
@@ -74,18 +74,18 @@ function App() {
   return (
     <>
       <div>
-        
+
         <Router>
           <Header />
 
-          <Routes>        
+          <Routes>
             <Route path="/VistaContacto" element={<VistaContacto />} />
             <Route path="/VistaNosotras" element={<VistaNosotras />} />
-            <Route path="/VistaProductos" element={ 
+            <Route path="/VistaProductos" element={
               <VistaProductos
                 lista={productosArray}
                 hoveredId={hoveredId}
-                setHoveredId={setHoveredId}           
+                setHoveredId={setHoveredId}
                 carrito={carrito}
                 agregarAlCarrito={agregarAlCarrito}
                 removerDelCarrito={removerDelCarrito}
@@ -101,7 +101,7 @@ function App() {
     </Routes>
 
           <Footer />
-       </Router>  
+       </Router>
     </div>
     </>
   );

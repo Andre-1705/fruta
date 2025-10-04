@@ -1,17 +1,11 @@
-import ItemList from '../componentes/ItemList/ItemList.jsx';
 import './VistaProductos.css';
-
-// Ver si requiere de mas css y props
+import ItemListContainer from '../componentes/ItemListContainer/ItemListContainer.jsx';
 
 const VistaProductos = ({ carrito, agregarAlCarrito, removerDelCarrito }) => {
   return (
-
-    <div className="vista-productos"> 
+    <div className="vista-productos">
       <h1>Hora de Armar... tu propio carrito!!!!</h1>
-      <ItemList
-        lista={producto}
-        hoveredId={hoveredId}
-        setHoveredId={setHoveredId}
+      <ItemListContainer
         carrito={carrito}
         agregarAlCarrito={agregarAlCarrito}
         removerDelCarrito={removerDelCarrito}
