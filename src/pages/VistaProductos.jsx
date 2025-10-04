@@ -9,7 +9,7 @@ const VistaProductos = ({ carrito, agregarAlCarrito, removerDelCarrito }) => {
     <div className="vista-productos"> 
       <h1>Hora de Armar... tu propio carrito!!!!</h1>
       <ItemList
-        lista={productoId}
+        lista={producto}
         hoveredId={hoveredId}
         setHoveredId={setHoveredId}
         carrito={carrito}

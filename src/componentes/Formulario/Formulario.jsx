@@ -14,9 +14,13 @@ const Formulario = () => {
 // Le paso el evento e como parámetro y accedo a preventdefault para evitar que se refresque la página 
 // Muestro por pantalla mensaje de envío y el alerta por experiencia de usuario 
 
-const manejarEnvio = (e) => {
-    e.preventDefault();
-    console.log('Formulario enviado:', { nombre, email, mensaje });
+// Manejo del nombre con id, value, etc y manejo de la actualización del valor con onChange  
+// Con target.value accedo al valor actualizado del imput mejorando la experiencia de usuario 
+
+
+
+const manejarEnvio = (evento) => {
+    evento.preventDefault();
     alert(`Gracias ${nombre}, mandaste fruta de forma exitosa`);
 
     // Se puede agregar lógica para enviar los datos al backend
@@ -27,9 +31,6 @@ const manejarEnvio = (e) => {
       <h2>Contactanos</h2>
       <p>Mandá fruta, te responderemos a la brevedad.</p>
 
-      {/* Manejo del nombre con id, value, etc y manejo de la actualización del valor con onChange  */}
-      {/* Con target.value accedo al valor actualizado del imput mejorando la experiencia de usuario */}
-
       <form className="seccion-formulario" onSubmit={manejarEnvio}>
         <div className="formulario-grupo">
           <label htmlFor="nombre">Nombre:</label>
@@ -38,7 +39,7 @@ const manejarEnvio = (e) => {
             id="nombre"
             name="nombre"
             value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            onChange={(evento) => setNombre(evento.target.value)}
             required
           />
         </div>
@@ -52,8 +53,9 @@ const manejarEnvio = (e) => {
             id="email"
             name="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(evento) => setEmail(evento.target.value)}
             required
+            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
           />
         </div>
 
@@ -65,7 +67,7 @@ const manejarEnvio = (e) => {
             id="mensaje"
             name="mensaje"
             value={mensaje}
-            onChange={(e) => setMensaje(e.target.value)}
+            onChange={(evento) => setMensaje(evento.target.value)}
             required
           ></textarea>
         </div>
