@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 export const Nav = () => {
     return (
 
-// En nav, está pensado solo para secciones básicas de navegación 
+// En nav, está pensado solo para secciones básicas de navegación
         <nav className="nav">
-            
-                    <Link to="/VistaNosotros">Nosotros</Link>
+
+                    <Link to="/VistaNosotros">Nosotras</Link>
                     <Link to= "/VistaProductos">Productos</Link>
                     <Link to="/VistaCarrito">Carrito</Link>
-                    <Link to="/VistaContacto">Contacto</Link> 
+                    <Link to="/VistaContacto">Contacto</Link>
 
         </nav>
     );

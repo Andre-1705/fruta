@@ -8,7 +8,7 @@ import VistaContacto from './pages/VistaContacto.jsx';
 import VistaProductos from './pages/VistaProductos.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
-//import productosArray from '/data/productosArray.json';
+
 
 function App() {
   const [carrito, setCarrito] = useState([]);
@@ -83,7 +83,6 @@ function App() {
             <Route path="/VistaNosotras" element={<VistaNosotras />} />
             <Route path="/VistaProductos" element={
               <VistaProductos
-                lista={productosArray}
                 hoveredId={hoveredId}
                 setHoveredId={setHoveredId}
                 carrito={carrito}

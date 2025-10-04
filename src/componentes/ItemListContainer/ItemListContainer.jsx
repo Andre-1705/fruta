@@ -6,8 +6,8 @@ import './ItemListContainer.css';
 const ItemListContainer = ({ carrito, agregarAlCarrito, removerDelCarrito }) => {
   const [hoveredId, setHoveredId] = useState(null);
   const [productosArray, setProductosArray] = useState([]);
-  const [cargando, setcargando] = useState(true);
-  const [error, seterror] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Posible Api
@@ -16,8 +16,9 @@ const ItemListContainer = ({ carrito, agregarAlCarrito, removerDelCarrito }) => 
         if (!respuesta.ok) throw new Error("No se pudo cargar el archivo JSON");
         return respuesta.json();
       })
-      .then(dato => {
-        setProductosArray(dato);
+      .then(data => {
+
+        setProductosArray(data);
         setCargando(false);
       })
       .catch(error => {
@@ -27,6 +28,8 @@ const ItemListContainer = ({ carrito, agregarAlCarrito, removerDelCarrito }) => 
       });
   }, []);
 
+
+
   return (
     <section className="item-list-container">
       {cargando && <p className="cargando">Cargando Productos</p>}
@@ -35,7 +38,7 @@ const ItemListContainer = ({ carrito, agregarAlCarrito, removerDelCarrito }) => 
       {!cargando && !error && (
 
         <ItemList
-          lista={productos}
+          lista={productosArray}
           hoveredId={hoveredId}
           setHoveredId={setHoveredId}
           carrito={carrito}
