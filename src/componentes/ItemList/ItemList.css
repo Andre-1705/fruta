@@ -8,7 +8,7 @@
   margin-bottom: 1rem;
 }
 
-/* Con Grid-template-columns logramos que distribuyan las columnas dentro de un contenedor 
+/* Con Grid-template-columns logramos que distribuyan las columnas dentro de un contenedor
 permite repetir un patrón de columnas. Ajustar automáticamente el número de columnas que caben en el contenedor. Si hay espacio para 3 columnas de 250px, crea 3; si hay espacio para 5, crea 5.
 Si el espacio es menor, reduce el número de columnas. Si sobra espacio, las columnas se expanden para ocuparlo.
 Define el tamaño mínimo y máximo de cada columna. Cada columna debe tener al menos 250px.
@@ -23,25 +23,12 @@ Si hay espacio extra, se reparte equitativamente entre las columnas (fr = fracci
   justify-items: center;
 }
 
-.tarjeta {
-  width: 100%;
-  max-width: 300px;
-  height: 350px;
-  margin-top: 10px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
 .imagen{
   width: 100%;
   height: 200px;
-  object-fit: contain;
+  flex: 0 0 200px;
+  object-position: center;
+  object-fit: cover;
   margin-top: 5px;
   display:block;
 }
@@ -51,6 +38,10 @@ Si hay espacio extra, se reparte equitativamente entre las columnas (fr = fracci
 }
 
 .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 10px;
   text-align: center;
 }

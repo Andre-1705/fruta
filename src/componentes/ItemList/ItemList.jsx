@@ -14,7 +14,7 @@ export const ItemList = ({
 
   //Filtra productos por categoría. En Productos filtrados guarda la categoría seleccionada
 
-const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas');   
+const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas');
 
 const productosFiltrados = categoriaSeleccionada === 'Todas'
   ? lista
@@ -33,9 +33,9 @@ const productosFiltrados = categoriaSeleccionada === 'Todas'
 // Mapea la lista de productos y renderiza componente Item para cada uno
 
   return (
-    <section className="item-list-section">               
+    <section className="item-list-section">
       <h1>Seleccione poductos por categoría</h1>
-      
+
       <ul className="categorias-lista">
         {['Todas', 'Cítricos', 'Tropicales', 'Frutas secas'].map(categoria => (
         <li
@@ -59,7 +59,7 @@ const productosFiltrados = categoriaSeleccionada === 'Todas'
           agregarAlCarrito={agregarAlCarrito}
           removerDelCarrito={removerDelCarrito}
           carrito={carrito}
-      
+
           />
       ))}
     </div>

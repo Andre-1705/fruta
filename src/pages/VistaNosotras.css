@@ -4,11 +4,11 @@
   padding: 2rem;
   text-align: center;
   background-color: white;
-  color: #333;
+  color: rgb(32, 178, 170);
 }
 
 .nosotras-img {
-  max-width: 100%;
+  max-width: 77%;
   height: auto;
   border-radius: 8px;
   margin: 1rem 0;
