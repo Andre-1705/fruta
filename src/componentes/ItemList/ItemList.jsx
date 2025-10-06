@@ -34,7 +34,7 @@ const productosFiltrados = categoriaSeleccionada === 'Todas'
 
   return (
     <section className="item-list-section">
-      <h1>Seleccione poductos por categoría</h1>
+      <h1>Cliquear sobre los artículos para comprar</h1>
 
       <ul className="categorias-lista">
         {['Todas', 'Cítricos', 'Tropicales', 'Frutas secas'].map(categoria => (

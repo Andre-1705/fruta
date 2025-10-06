@@ -1,6 +1,8 @@
 footer {
+  height:96px;
+  overflow: hidden;
   background-color: white;
-  padding: 2rem 1rem;
+  padding: 0.2rem 0.5rem;
   text-align: center;
   border-top: 6px solid #333; /* Línea gruesa arriba */
   font-family: 'Segoe UI', sans-serif;
@@ -8,12 +10,12 @@ footer {
 }
 
 footer p {
-  margin-top: 1rem;
+  margin-top: 0.2rem;
   font-size: 1rem;
 }
 
 .iconos-redes {
-  margin-top: 1rem;
+  margin-top: 0.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +31,7 @@ footer p {
 
 .iconos-redes a {
   color: #555;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   transition: color 0.3s ease;
   text-decoration: none;
 }

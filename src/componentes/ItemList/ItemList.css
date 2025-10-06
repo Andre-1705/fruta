@@ -1,11 +1,12 @@
 .item-list-section {
-  padding: 2 rem;
+  padding: 1rem;
 }
 
 .item-list-section h1{
   color: rgb(15, 77, 8);
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 0rem;
+  margin-top: 0rem;
 }
 
 /* Con Grid-template-columns logramos que distribuyan las columnas dentro de un contenedor
