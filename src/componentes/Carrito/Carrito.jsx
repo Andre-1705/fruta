@@ -25,7 +25,7 @@ export const Carrito = ({ carrito, removerDelCarrito, agregarAlCarrito }) => {
                 <span>Cantidad: {producto.cantidad}</span>
                 <span>Precio $: {producto.precio}</span>
                 <span>Total: $ {producto.precio * producto.cantidad}</span>
-                <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button> 
+                <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button>
                 <button onClick={() => removerDelCarrito(producto.id)}>Eliminar del carrito</button>
               </div>
             </div>

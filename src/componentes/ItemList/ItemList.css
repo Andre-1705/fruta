@@ -1,67 +1,11 @@
 .item-list-section {
-  padding: 1rem;
+  padding: 2rem;
 }
-
-.item-list-section h1{
-  color: rgb(15, 77, 8);
-  font-size: 1.5rem;
-  margin-bottom: 0rem;
-  margin-top: 0rem;
-}
-
-/* Con Grid-template-columns logramos que distribuyan las columnas dentro de un contenedor
-permite repetir un patrón de columnas. Ajustar automáticamente el número de columnas que caben en el contenedor. Si hay espacio para 3 columnas de 250px, crea 3; si hay espacio para 5, crea 5.
-Si el espacio es menor, reduce el número de columnas. Si sobra espacio, las columnas se expanden para ocuparlo.
-Define el tamaño mínimo y máximo de cada columna. Cada columna debe tener al menos 250px.
-Si hay espacio extra, se reparte equitativamente entre las columnas (fr = fracción del espacio disponible).
-*/
-
-.item-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 2rem 0;
-  justify-items: center;
-}
-
-.imagen{
-  width: 100%;
-  height: 200px;
-  flex: 0 0 200px;
-  object-position: center;
-  object-fit: cover;
-  margin-top: 5px;
-  display:block;
-}
-
-.tarjeta:hover {
-  transform: scale(1.03);
-}
-
-.info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 10px;
-  text-align: center;
-}
-
-.mesaje-vacio {
-  text-align: center;
-  font-size: 1.2rem;
-  color: red;
-  margin-top: 2rem;
-}
-
 
 .categorias-lista {
-  font-family: 'Arial', 'sans-serif';
-  font-size: 1.8rem;
   display: flex;
-  list-style: none;
-  justify-content: center;
   gap: 1rem;
+  list-style: none;
   padding: 0;
   margin-bottom: 1rem;
 }
@@ -69,11 +13,25 @@ Si hay espacio extra, se reparte equitativamente entre las columnas (fr = fracci
 .categorias-lista li {
   cursor: pointer;
   padding: 0.5rem 1rem;
-  border-bottom: 2px solid transparent;
+  border-radius: 4px;
+  background-color: #eee;
 }
 
-.categorias-lista li.seleccionada {
-  border-bottom: 2px solid #ffa726;
-  font-weight: bold;
+.categorias-lista .seleccionada {
+  background-color: #4caf50;
+  color: white;
 }
+
+.item-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+}
+
 

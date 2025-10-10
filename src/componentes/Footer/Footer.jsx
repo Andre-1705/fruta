@@ -3,7 +3,7 @@ import './Footer.css';
 export const Footer = () => {
   return (
     <footer>
-      
+
       <div className="iconos-redes">
         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
             <img src="/assets/icon/logo_face.png" alt="Logo Facebook"/>

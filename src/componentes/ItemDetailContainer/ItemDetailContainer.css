@@ -1,16 +1,13 @@
-
-.item-list-container {
-  padding: 2rem;
-}
-
 .cargando {
   text-align: center;
   font-weight: bold;
   color: #4caf50;
+  padding: 2rem;
 }
 
 .error {
   text-align: center;
   color: red;
   font-weight: bold;
+  padding: 2rem;
 }

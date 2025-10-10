@@ -5,7 +5,8 @@
       "nombre": "Banana",
       "precio": 100,
       "descripcion": "ecuatoriana",
-      "categoria": "Tropicales"
+      "categoria": "Tropicales",
+      "stock": 10
     },
     {
       "id": 2,
@@ -13,7 +14,8 @@
       "nombre": "Naranja",
       "precio": 200,
       "descripcion": "roja",
-      "categoria": "Cítricos"
+      "categoria": "Cítricos",
+      "stock": 20
     },
     {
       "id": 3,
@@ -21,6 +23,7 @@
       "nombre": "Mandarina",
       "precio": 300,
       "descripcion": "dulces",
-      "categoria": "Cítricos"
+      "categoria": "Cítricos",
+      "stock": 30
     }
 ]

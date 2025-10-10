@@ -1,13 +1,16 @@
 import './VistaNosotras.css';
 
+//vista home?
+
+
 const VistaNosotras = () => {
   return (
     <section className="nosotras">
 
       <h1>Sobre Nosotras</h1>
 
-      <img className="nosotras-img"
-           src="/assets/tres_generaciones_manos.jpg" alt="Equipo o identidad de la marca"/>
+      <img className="nosotras-img" alt="Equipo o identidad de la marca"
+           src="/assets/tres_generaciones_manos.jpg" />
 
       <p className="nosotras-parrafo">
         Tres generaciones unidas por un misma necesidad, crecer juntas. Somos nosotras tres, entendiendo que la felicidad de la otra es la propia.

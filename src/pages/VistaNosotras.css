@@ -4,19 +4,28 @@
   padding: 2rem;
   text-align: center;
   background-color: white;
-  color: rgb(32, 178, 170);
+  color: black;
+  margin-top: 0rem;
 }
 
 .nosotras-img {
-  max-width: 77%;
+  max-width: 1000px;
+  width: 100%;
   height: auto;
   border-radius: 8px;
-  margin: 1rem 0;
+  margin: 1rem auto;
+  display: block;
+  object-fit: cover;
 }
 
 .nosotras-parrafo {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.2rem;
   max-width: 700px;
-  margin: 0 auto;
+  margin-top: 1.5rem;
+  margin-left: 17rem;
+  margin-bottom: 0rem;
+  text-align: justify;
+  justify-content: center;
+  align-items: center;
+  color: black
 }

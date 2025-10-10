@@ -1,17 +1,15 @@
-import './VistaProductos.css';
-import ItemListContainer from '../componentes/ItemListContainer/ItemListContainer.jsx';
+import { useContext } from 'react';
+import { CarritoContexto } from '../contexto/CarritoContexto.jsx';
+import ItemListContainer from '../componentes/ItemListContainer/ItemListContainer';
 
-const VistaProductos = ({ carrito, agregarAlCarrito, removerDelCarrito }) => {
+export default function VistaProductos() {
+  const { carrito, agregarAlCarrito, eliminarDelCarrito } = useContext(CarritoContexto);
+
   return (
-    <div className="vista-productos">
-      <h1>Seleccione productos por categoría</h1>
-      <ItemListContainer
-        carrito={carrito}
-        agregarAlCarrito={agregarAlCarrito}
-        removerDelCarrito={removerDelCarrito}
-      />
-    </div>
+    <ItemListContainer
+      carrito={carrito}
+      agregarAlCarrito={agregarAlCarrito}
+      removerDelCarrito={eliminarDelCarrito}
+    />
   );
-};
-
-export default VistaProductos;
+}

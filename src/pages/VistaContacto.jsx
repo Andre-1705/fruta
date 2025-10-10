@@ -1,4 +1,4 @@
-import Formulario from '../componentes/Formulario/Formulario.jsx'; 
+import Formulario from '../componentes/Formulario/Formulario.jsx';
 
 export default function VistaContacto() {
   return (
