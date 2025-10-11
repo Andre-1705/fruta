@@ -1,23 +1,17 @@
-import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
-import { CarritoContext } from '../contexto/CarritoContexto.jsx';
+import { CarritoContexto } from '../../contexto/CarritoContexto.jsx';
 import './ItemDetail.css';
 
-export const ItemDetail = ({ lista }) => {
-  const { id } = useParams();
-  const { agregarAlCarrito } = useContext(CarritoContext);
+export const ItemDetail = ({ detail }) => {
+  const { agregarAlCarrito } = useContext(CarritoContexto);
 
-  // Buscar el producto por ID
-
-  const producto = lista.find(p => p.id.toString() === id);
-
-  // si no se encuentra el producto, mostrar mensaje
-
-  if (!producto) {
-    return <p className="mensaje-error">Producto no encontrado</p>;
+  // Verificación de seguridad: si `detail` no existe, no renderizar nada.
+  // El contenedor se encargará de mostrar el mensaje de "cargando" o "no encontrado".
+  if (!detail) {
+    return null;
   }
 
-  const { nombre, precio, descripcion, img, stock } = producto;
+  const { nombre, precio, descripcion, img, stock } = detail;
 
   return (
     <div className="detalle-producto">
@@ -30,7 +24,7 @@ export const ItemDetail = ({ lista }) => {
       </p>
 
       {stock > 0 && (
-        <button onClick={() => agregarAlCarrito(producto)}>
+        <button onClick={() => agregarAlCarrito(detail)}>
           Agregar al carrito
         </button>
       )}

@@ -1,10 +1,11 @@
 import './Item.css';
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
+import { CarritoContexto } from '../../contexto/CarritoContexto';
 
 
 export const Item = ({ producto }) => {
-  const { carrito, agregarAlCarrito, eliminarDelCarrito } = useContext(CarritoContext);
+  const { carrito, agregarAlCarrito, removerDelCarrito } = useContext(CarritoContexto);
   const [estaHovered, setEstaHovered] = useState(false);
 
   const enCarrito = carrito.some(item => item.id === producto.id);
@@ -14,21 +15,22 @@ export const Item = ({ producto }) => {
 // Verifica con some si el producto ya está en el carrito
 // Propagation maneja el evento para que no se propague al hacer click en los botones
 
-  const handleAgregar = (eventoClick) => {
-    eventoClick.stopPropagation();
+  const handleAgregar = (evento) => {
+    evento.stopPropagation();
     agregarAlCarrito(producto);
   };
 
-  const handleRemover = (eventoClick) => {
-    eventoClick.stopPropagation();
-    eliminarDelCarrito(producto.id);
+  const handleRemover = (evento) => {
+    evento.stopPropagation();
+    removerDelCarrito(producto.id);
   };
 
   // El hovered se aplica sobre la clase tarjeta
   // Link te dirige hacia producto.id
 
   return (
-    <Link to={`/item/${producto.id}`} className="item-link">
+
+    <Link to={`/producto/${producto.id}`} className="item-link">
       <article
         className={`tarjeta ${estaHovered ? 'hovered' : ''}`}
         onMouseEnter={() => setEstaHovered(true)}
@@ -53,11 +55,11 @@ export const Item = ({ producto }) => {
               Agregar al carrito
             </button>
           )}
+
         </div>
       </article>
     </Link>
+
   );
 };
-
 export default Item;
-

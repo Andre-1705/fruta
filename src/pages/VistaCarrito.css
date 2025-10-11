@@ -1,0 +1,82 @@
+/* c:/Users/maria/OneDrive/Escritorio/IT/fruta/src/pages/VistaCarrito.css */
+
+.carrito {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.carrito h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.item-carrito {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+.item-carrito-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-carrito-nombre {
+  flex-grow: 1;
+  margin: 0 1.5rem;
+  font-weight: bold;
+  font-size: 1.2rem; /* Hacemos el nombre del producto más grande */
+  color: #c75c0c; /* Un tono naranja oscuro para que destaque */
+}
+
+.control-cantidad {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.control-cantidad button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.control-cantidad span {
+  padding: 0 1rem;
+  min-width: 20px;
+  font-size: 1.1rem; /* Aumentamos el tamaño del número de cantidad */
+  text-align: center;
+}
+
+.item-carrito-subtotal {
+  font-weight: bold;
+  min-width: 80px;
+  font-size: 1.1rem; /* Hacemos el subtotal un poco más grande */
+  text-align: right;
+}
+
+.btn-quitar {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.total-carrito {
+  text-align: right;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+}

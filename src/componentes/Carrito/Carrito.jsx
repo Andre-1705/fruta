@@ -1,7 +1,12 @@
 import "./Carrito.css";
+import { useContext } from "react";
+import { CarritoContexto } from "../../contexto/CarritoContexto";
 
 // Componente que muestra los productos añadidos al carrito y el total acumulado
-export const Carrito = ({ carrito, removerDelCarrito, agregarAlCarrito }) => {
+
+const Carrito = () => {
+  const { carrito, removerDelCarrito, agregarAlCarrito } = useContext(CarritoContexto);
+
   const obtenerTotal = () => {
     return carrito.reduce((total, producto) =>
       total + (producto.precio * (producto.cantidad || 0)), 0);

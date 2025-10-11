@@ -1,68 +1,27 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useContext } from "react";
 import './ItemDetailContainer.css';
-import ItemDetail from '../ItemDetail/ItemDetail.jsx';
+import { ItemDetail } from '../ItemDetail/ItemDetail.jsx';
+import { ProductosContexto } from "../../contexto/ProductosContexto.jsx";
 
-// id esta definido en App
+const ItemDetailContainer = () => {
+  const { id } = useParams();
+  const { productosArray, cargando, error } = useContext(ProductosContexto);
 
-export const ItemDetailContainer = () => {
-    const [ detail, setDetail] = useState({});
-    const { id } = useParams();
-    const [cargando, setCargando] = useState(true);
-    const [ error, setError ] = useState(null);
+  const producto = !cargando && productosArray.find(p => p.id.toString() === id);
 
+  return (
+    <section className="item-detail-container">
+      {cargando && <p className="cargando">Cargando producto...</p>}
+      {error && <p className="error">{error}</p>}
 
-      useEffect(() => {
-        fetch("/data/productosArray.json")
-        .then((respuesta) => {
-          if (!respuesta.ok) {
-            throw new Error("No se pudo cargar el producto");
-          }
-          return respuesta.json();
-          })
-//1 = id del producto
-        .then((data) => {
-          const encontrado = data.find((parametroIterador) => parametroIterador.id === id);
-          if(!encontrado) {
-            setDetail(encontrado);
-            setCargando(false);
+      {!cargando && !error && !producto && (
+        <p className="mensaje-error">Producto no encontrado</p>
+      )}
 
-           } else {
-            throw new Error("Producto no encontrado");
-          }
-
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      }, [id]);
-
-      const {nombre, precio, descripcion, img, stock} = detail;
-
-      return(
-   <section className="item-detail-container">
-      {cargando && <p className="cargando">Cargando Productos...</p>}
-      {error && <p className ="error">{error}</p>}
-
-      {!cargando && !error && (
-
-        <ItemDetail
-          detail={detail}
-        />
-        )}
+      {!cargando && producto && <ItemDetail detail={producto} />}
     </section>
-      )
+  );
 };
 
-    export default ItemDetailContainer;
-//1.28 minutos de clase 5 y 6 respecto al contedor en blanco
-//Ver el cargando de itemlistcontainer
-// el primer detail es props el segundo estado
-// objeto con claves
-//<main>
-//        {Object.keys(detail).length ? (
-//          <ItemDetail detail={detail} />
-//        ) : (
-//          <p>Cargando...</p>
-//        )}
-//      </main>;
+export default ItemDetailContainer;

@@ -1,8 +1,15 @@
 import { useContext } from 'react';
-import { CarritoContexto } from '../contexto/CarritoContexto.jsx';
+import { CarritoContexto } from '../contexto/CarritoContexto.jsx'; // Asegúrate que el nombre y la ruta son correctos
+import './VistaCarrito.css'; // Importamos un CSS para los estilos
 
 export default function VistaCarrito() {
-  const { carrito, agregarAlCarrito, eliminarDelCarrito } = useContext(CarritoContext);
+  const { carrito, agregarAlCarrito, restarDelCarrito, removerDelCarrito } =
+    useContext(CarritoContexto);
+
+  const totalCarrito = carrito.reduce(
+    (acc, prod) => acc + prod.precio * prod.cantidad,
+    0
+  );
 
   return (
     <div className="carrito">
@@ -10,19 +17,23 @@ export default function VistaCarrito() {
       {carrito.length === 0 ? (
         <p>Tu carrito está vacío</p>
       ) : (
-        carrito.map(producto => (
-          <div key={producto.id} className="item-carrito">
-            <p>Producto: {producto.nombre}</p>
-            <p>Cantidad: {producto.cantidad}</p>
-            <p>Precio $: {producto.precio}</p>
-            <p>Total: ${producto.precio * producto.cantidad}</p>
-            <button onClick={() => agregarAlCarrito(producto)}>Agregar</button>
-            <button onClick={() => eliminarDelCarrito(producto.id)}>Eliminar</button>
-          </div>
-        ))
+        <>
+          {carrito.map((producto) => (
+            <div key={producto.id} className="item-carrito">
+              <img src={producto.img} alt={producto.nombre} className="item-carrito-img" />
+              <span className="item-carrito-nombre">{producto.nombre}</span>
+              <div className="control-cantidad">
+                <button onClick={() => restarDelCarrito(producto.id)}>-</button>
+                <span>{producto.cantidad}</span>
+                <button onClick={() => agregarAlCarrito(producto)}>+</button>
+              </div>
+              <span className="item-carrito-subtotal">${(producto.precio * producto.cantidad).toFixed(2)}</span>
+              <button className="btn-quitar" onClick={() => removerDelCarrito(producto.id)}>Quitar</button>
+            </div>
+          ))}
+          <p className="total-carrito">Total del carrito: ${totalCarrito.toFixed(2)}</p>
+        </>
       )}
-      <p>Total del carrito: ${carrito.reduce((acc, prod) => acc + prod.precio * prod.cantidad, 0)}</p>
     </div>
   );
 }
-

@@ -4,6 +4,7 @@
 
 .categorias-lista {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   list-style: none;
   padding: 0;
@@ -15,6 +16,8 @@
   padding: 0.5rem 1rem;
   border-radius: 4px;
   background-color: #eee;
+  font-size: medium;
+  margin-right: 2rem;
 }
 
 .categorias-lista .seleccionada {
