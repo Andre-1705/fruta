@@ -8,6 +8,12 @@ export const ProductosProvider = ({ children }) => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
+
+//Con provider cualquier componente hijo accede a datos relacionados
+//con productos sin necesidad de pasar props manualmente
+//Chau props!
+//fetch futura Api
+
   useEffect(() => {
     fetch('/data/productosArray.json')
       .then(res => {

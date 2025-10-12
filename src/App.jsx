@@ -1,3 +1,6 @@
+//falta decidir home, css de main!
+
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -11,7 +14,8 @@ import VistaProductos from './pages/VistaProductos.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
 
-// Detalle de producto
+// Para la ruta dinámica producto:id importo ItemDetailContainer
+
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer.jsx';
 
 function App() {

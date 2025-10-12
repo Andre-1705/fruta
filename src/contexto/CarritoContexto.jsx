@@ -7,13 +7,14 @@ export const CarritoProvider = ({ children }) => {
 
   const agregarAlCarrito = (producto) => {
     setCarrito((carritoActual) => {
+
       // 1. Buscar si el producto ya está en el carrito.
       const productoEnCarrito = carritoActual.find(
         (item) => item.id === producto.id
       );
 
       // 2. Si ya está, mapeamos el carrito y al encontrarlo,
-      // creamos un nuevo objeto de producto con la cantidad incrementada.
+      // creamos un nuevo objeto de producto con la cantidad incrementada
       if (productoEnCarrito) {
         return carritoActual.map((item) =>
           item.id === producto.id
@@ -21,7 +22,8 @@ export const CarritoProvider = ({ children }) => {
             : item
         );
       }
-      // 3. Si no está, lo agregamos al carrito con cantidad 1.
+
+      // 3. Si no está, lo agregamos al carrito con cantidad 1
       return [...carritoActual, { ...producto, cantidad: 1 }];
     });
   };
@@ -30,12 +32,12 @@ export const CarritoProvider = ({ children }) => {
     setCarrito((carritoActual) => {
       const productoEnCarrito = carritoActual.find((item) => item.id === id);
 
-      // Si la cantidad es 1, al restar se elimina el producto del carrito.
+      // Si la cantidad es 1, al restar se elimina el producto del carrito
       if (productoEnCarrito?.cantidad === 1) {
         return carritoActual.filter((item) => item.id !== id);
       }
 
-      // Si es mayor que 1, simplemente se resta uno a la cantidad.
+      // Si es mayor que 1, simplemente se resta uno a la cantidad
       return carritoActual.map((item) =>
         item.id === id
           ? { ...item, cantidad: item.cantidad - 1 }

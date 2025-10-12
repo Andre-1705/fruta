@@ -3,6 +3,9 @@ import ItemList from '../ItemList/ItemList.jsx';
 import './ItemListContainer.css';
 import { ProductosContexto } from '../../contexto/ProductosContexto.jsx';
 
+// Usa producto contexto
+// Si no carga y no es error cargue Productos Array
+
 const ItemListContainer = () => {
   const { productosArray, cargando, error } = useContext(ProductosContexto);
 

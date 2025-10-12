@@ -12,7 +12,8 @@ const Carrito = () => {
       total + (producto.precio * (producto.cantidad || 0)), 0);
   };
 
-  // Mapea los productos del carrito y muestra su información
+  // Mapea los productos del carrito, muestra su información
+  //colocamos los botones
 
   return (
     <div className="carrito">

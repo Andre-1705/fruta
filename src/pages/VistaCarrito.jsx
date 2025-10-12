@@ -13,7 +13,7 @@ export default function VistaCarrito() {
 
   return (
     <div className="carrito">
-      <h2>Revisa cómo está quedando tu carrito</h2>
+      <h2>Revisa cómo esta quedando tu carrito</h2>
       {carrito.length === 0 ? (
         <p>Tu carrito está vacío</p>
       ) : (

@@ -10,6 +10,9 @@ const ItemDetailContainer = () => {
 
   const producto = !cargando && productosArray.find(p => p.id.toString() === id);
 
+// Si no esta cargando que busque y compare el valor de un id (convertido a un string) con otro
+// Si no encuentra el producto mensaje de error
+
   return (
     <section className="item-detail-container">
       {cargando && <p className="cargando">Cargando producto...</p>}

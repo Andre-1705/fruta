@@ -1,7 +1,7 @@
 import './Nav.css';
 import { Link } from 'react-router-dom';
 
-// Definición del componente Nav. Este componente renderiza la barra de navegación
+//Este componente renderiza la barra de navegación
 export const Nav = () => {
     return (
 
