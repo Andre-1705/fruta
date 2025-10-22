@@ -1,0 +1,25 @@
+.fruta-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra las frutas verticalmente al final de la animación */
+  gap: 10px;
+  margin-top: 20px;
+  min-height: 100px; /* Le damos una altura mínima para que se vea la caída */
+}
+
+.fruta {
+  font-size: 24px;
+  animation: caer 1.5s ease-out forwards; /* Duración de la caída */
+  opacity: 0;
+}
+
+@keyframes caer {
+  0% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

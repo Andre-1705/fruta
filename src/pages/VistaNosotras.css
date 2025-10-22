@@ -22,8 +22,9 @@
   font-size: 1.2rem;
   max-width: 700px;
   margin-top: 1.5rem;
-  margin-left: 17rem;
   margin-bottom: 0rem;
+  margin-left: auto; /* Centra el bloque de texto horizontalmente */
+  margin-right: auto; /* Centra el bloque de texto horizontalmente */
   text-align: justify;
   justify-content: center;
   align-items: center;

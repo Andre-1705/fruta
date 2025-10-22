@@ -12,7 +12,7 @@ export const Nav = () => {
                     <Link to= "/VistaProductos">Productos</Link>
                     <Link to="/VistaCarrito">Carrito</Link>
                     <Link to="/VistaContacto">Contacto</Link>
-
+                    <Link to="/Registrate">Registrate</Link>
         </nav>
     );
 };

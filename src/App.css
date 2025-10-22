@@ -1,12 +1,24 @@
-#root {
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ocupa al menos toda la altura de la pantalla */
+}
+
+.app-content {
+  flex-grow: 1; /* Esta es la magia: hace que el contenido principal crezca y empuje el footer */
+  display: flex; /* Lo convertimos en contenedor flex */
+  flex-direction: column; /* Para que sus hijos se apilen verticalmente */
+  align-items: center; /* Centra los hijos (como la sección de productos) horizontalmente */
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.7rem ;
-  color:lightseagreen;
-  }
+  width: 100%;
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+  position: relative; /* Necesario para que los elementos internos se posicionen correctamente */
+}
+
+/* Eliminamos los estilos conflictivos de #root que estaban aquí */
+/* y los dejamos en index.css para una mejor organización */
 
 .logo {
   height: 6em;
@@ -21,7 +33,6 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
-
 
 @keyframes logo-spin {
   from {

@@ -1,0 +1,30 @@
+.registrate-container {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center;     /* Centra verticalmente */
+  flex-grow: 1;            /* Ocupa todo el espacio vertical disponible */
+  width: 100%;
+}
+
+.registrate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Espacio entre los elementos del formulario */
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 400px; /* Ancho máximo del formulario */
+}
+
+.registrate-form h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.registrate-form div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
