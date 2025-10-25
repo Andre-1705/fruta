@@ -80,3 +80,17 @@
   font-weight: bold;
   margin-top: 1.5rem;
 }
+
+.bton-pagar {
+  display: block;
+  width: 15rem;
+  margin: 2rem auto 0 auto;
+  padding: 0.8rem 2rem;
+  background-color: red;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}

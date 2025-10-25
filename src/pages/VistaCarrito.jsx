@@ -42,6 +42,7 @@ export default function VistaCarrito() {
             </div>
           ))}
           <p className="total-carrito">Total del carrito: ${totalCarrito.toFixed(2)}</p>
+          <button className="bton-pagar">Pagar</button>
         </>
       )}
     </div>

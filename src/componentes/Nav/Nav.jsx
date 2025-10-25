@@ -7,7 +7,7 @@ export const Nav = () => {
 
 // En nav, está pensado solo para secciones básicas de navegación
         <nav className="nav">
-
+                    <Link to="/">Inicio</Link>
                     <Link to="/VistaNosotras">Nosotras</Link>
                     <Link to= "/VistaProductos">Productos</Link>
                     <Link to="/VistaCarrito">Carrito</Link>

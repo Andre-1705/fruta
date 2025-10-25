@@ -1,19 +1,22 @@
 import React,  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../../contexto/RegistroContexto';
+import { useAuthContexto } from '../../contexto/AuthContexto.jsx';
+
+//revisar lógica de registro
 
 function Registrate() {
   const [ usuario, setUsuario ] = useState('');
   const [ password, setPassword ] = useState('');
   const navigate = useNavigate();
-  const { registrarUsuario } = useAuthContext();
+  const { registrarUsuario } = useAuthContexto();
 
 
 const enviarFormulario = (evento) => {
   evento.preventDefault();
 
-  if(usuario && password) {
-    registrarUsuario(usuario, password);
+    if(usuario && password) {
+    // registrarUsuario en AuthContexto marca al usuario como cliente
+    registrarUsuario(usuario);
     navigate('/dashboard');
   } else {
     alert('Completa todos los campos');

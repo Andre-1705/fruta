@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContexto } from '../contexto/AuthContexto.jsx';
-import './Registrate.css'; // Importamos el nuevo archivo CSS
+import './Registrate.css';
+
+
+//Inicio de sesión
+//Revisar lógica de registro, login, user y cliente
+
 
 function Registrate() {
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuthContexto();
+  const { registrarUsuario } = useAuthContexto();
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // Simulación de autenticación
     if (usuario === 'admin' && password === '1234') {
-      login(usuario);
-      navigate('/dashboard');
+      registrarUsuario(usuario);
+      // Pequeño delay para asegurar que el estado se actualice
+      setTimeout(() => {
+        navigate('/VistaCarrito');
+      }, 100);
     } else {
       alert('Credenciales incorrectas');
     }

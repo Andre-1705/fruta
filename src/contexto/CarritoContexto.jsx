@@ -8,7 +8,7 @@ export const CarritoProvider = ({ children }) => {
   const agregarAlCarrito = (producto) => {
     setCarrito((carritoActual) => {
 
-      // 1. Buscar si el producto ya está en el carrito.
+      // 1. Buscar si el producto ya está en el carrito
       const productoEnCarrito = carritoActual.find(
         (item) => item.id === producto.id
       );

@@ -16,11 +16,13 @@ export const Item = ({ producto }) => {
 // Propagation maneja el evento para que no se propague al hacer click en los botones
 
   const handleAgregar = (evento) => {
+    evento.preventDefault();
     evento.stopPropagation();
     agregarAlCarrito(producto);
   };
 
   const handleRemover = (evento) => {
+    evento.preventDefault();
     evento.stopPropagation();
     removerDelCarrito(producto.id);
   };
@@ -29,8 +31,6 @@ export const Item = ({ producto }) => {
   // Link te dirige hacia producto.id
 
   return (
-
-    <Link to={`/producto/${producto.id}`} className="item-link">
       <article
         className={`tarjeta ${estaHovered ? 'hovered' : ''}`}
         onMouseEnter={() => setEstaHovered(true)}
@@ -46,20 +46,26 @@ export const Item = ({ producto }) => {
             <p className="descripcion">{producto.descripcion}</p>
           )}
 
+        <div className="botones-item">
+
+          <Link to={`/producto/${producto.id}`}>
+          <button type="button">
+              Ver producto
+            </button>
+          </Link>
+
           {enCarrito ? (
-            <button onClick={handleRemover}>
+            <button type="button" onClick={handleRemover}>
               Quitar del carrito
             </button>
           ) : (
-            <button onClick={handleAgregar}>
+            <button type="button" onClick={handleAgregar}>
               Agregar al carrito
             </button>
           )}
-
         </div>
-      </article>
-    </Link>
-
+      </div>
+    </article>
   );
 };
 export default Item;

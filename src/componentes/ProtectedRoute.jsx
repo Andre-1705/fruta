@@ -4,9 +4,12 @@ import { Navigate } from 'react-router-dom';
 import { useAuthContexto } from '../contexto/AuthContexto.jsx';
 
 function ProtectedRoute({ children }) {
-  const { user } = useAuthContexto();
+  const { user, isCliente } = useAuthContexto();
 
-  if (!user) {
+  // Requiere que el usuario esté logueado Y sea cliente
+  // si no es usuario ni cliente que redirija a registrarse
+
+  if (!user || !isCliente) {
     return <Navigate to="/Registrate" />;
   }
 

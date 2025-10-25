@@ -35,6 +35,7 @@
 
 .tarjeta .info button {
   margin-top: auto; /* Empuja el botón hacia abajo */
+  margin-bottom: 5px;
   align-self: center; /* Centra el botón horizontalmente */
   width: fit-content; /* Ajusta el ancho del botón a su contenido */
 }
