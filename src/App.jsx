@@ -7,6 +7,7 @@ import ProtectedRoute from './componentes/ProtectedRoute.jsx';
 import Layout from './pages/Layout.jsx';
 import { Header } from './componentes/Header/Header.jsx';
 import { Footer } from './componentes/Footer/Footer.jsx';
+import  ItemListContainer from './componentes/ItemListContainer/ItemListContainer.jsx';
 import Home from './pages/Home.jsx';
 
 // Vistas principales
@@ -33,11 +34,12 @@ function App() {
             <Route path="/Registrate" element={<Registrate />} />
             <Route path="/VistaProductos" element={<VistaProductos />} />
             <Route path="/VistaCarrito" element={
-              <ProtectedRoute>
+            <ProtectedRoute>
                 <VistaCarrito />
               </ProtectedRoute>} />
             <Route path="/producto/:id" element={<ItemDetailContainer/>} />
-            {/* Añade una ruta para el dashboard para que la redirección funcione */}
+            <Route path="/categoria/:categoria" element={<ItemListContainer/>} />
+
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <h2>Panel de Administración</h2>

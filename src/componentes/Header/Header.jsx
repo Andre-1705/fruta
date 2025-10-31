@@ -2,10 +2,12 @@
 import { Nav } from "../Nav/Nav"
 import './Header.css';
 
+
+// Ver logo tiene atrás luz
 // Definición del componente Header. Este componente renderiza el encabezado de la aplicación
 export const Header = () => {
     return (
-  
+
         // El header manejará titulo, logo y subtitulo
         <header>
             {/* Título principal de la aplicación */}

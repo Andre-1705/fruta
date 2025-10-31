@@ -8,8 +8,9 @@ const ItemDetailContainer = () => {
   const { id } = useParams();
   const { productosArray, cargando, error } = useContext(ProductosContexto);
 
-  const producto = !cargando && productosArray.find(p => p.id.toString() === id);
+  const producto = productosArray.find(p => p.id.toString() === id);
 
+// Busca en el array de productos el producto y lo guarda en producto (estaba dupliacado)
 // Si no esta cargando que busque y compare el valor de un id (convertido a un string) con otro
 // Si no encuentra el producto mensaje de error
 

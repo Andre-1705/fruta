@@ -7,6 +7,8 @@ export const ItemDetail = ({ detail }) => {
 
   // Verificación de seguridad: si `detail` no existe, no renderizar nada.
   // El contenedor se encargará de mostrar el mensaje de "cargando" o "no encontrado".
+
+
   if (!detail) {
     return null;
   }
