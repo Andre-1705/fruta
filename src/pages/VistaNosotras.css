@@ -1,32 +1,56 @@
 /* VistaNosotras.css */
 
 .nosotras {
-  padding: 2rem;
-  text-align: center;
+  padding: 0 2rem 3rem 2rem;
   background-color: white;
   color: black;
-  margin-top: 0rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: -1rem;
+}
+
+.nosotras-titulo {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: rgb(15, 77, 8);
+}
+
+.nosotras-contenido {
+  display: flex;
+  gap: 3.5rem;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .nosotras-img {
-  max-width: 1000px;
-  width: 100%;
+  max-width: 600px;
+  width: 45%;
   height: auto;
   border-radius: 8px;
-  margin: 1rem auto;
-  display: block;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .nosotras-parrafo {
   font-size: 1.2rem;
-  max-width: 700px;
-  margin-top: 1.5rem;
-  margin-bottom: 0rem;
-  margin-left: auto; /* Centra el bloque de texto horizontalmente */
-  margin-right: auto; /* Centra el bloque de texto horizontalmente */
+  margin: 0;
   text-align: justify;
-  justify-content: center;
-  align-items: center;
-  color: black
+  color: black;
+  flex: 1;
+  line-height: 1.6;
+}
+
+/* Responsive: en pantallas pequeñas, cambiar a columna */
+@media (max-width: 768px) {
+  .nosotras-contenido {
+    flex-direction: column;
+  }
+
+  .nosotras-img {
+    width: 100%;
+    max-width: 100%;
+  }
 }

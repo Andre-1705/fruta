@@ -7,7 +7,11 @@ export default function VistaCarrito() {
     useContext(CarritoContexto);
 
   const totalCarrito = carrito.reduce(
-    (acc, prod) => acc + prod.precio * prod.cantidad,
+    (acc, prod) => {
+      const precio = Number(prod.precio) || 0;
+      const cantidad = Number(prod.cantidad) || 0;
+      return acc + (precio * cantidad);
+    },
     0
   );
 
@@ -21,26 +25,32 @@ export default function VistaCarrito() {
         <p>Tu carrito está vacío</p>
       ) : (
         <>
-          {carrito.map((producto) => (
-            <div key={producto.id} className="item-carrito">
-              <img src={producto.img} alt={producto.nombre} className="item-carrito-img" />
+          {carrito.map((producto) => {
+            const cantidad = Number(producto.cantidad) || 0;
+            const precio = Number(producto.precio) || 0;
+            const subtotal = (precio * cantidad).toFixed(2);
+            
+            return (
+              <div key={producto.id} className="item-carrito">
+                <img src={producto.img} alt={producto.nombre} className="item-carrito-img" />
 
-              <span className="item-carrito-nombre">{producto.nombre}</span>
-              <div className="control-cantidad">
+                <span className="item-carrito-nombre">{producto.nombre}</span>
+                <div className="control-cantidad">
 
-                <button onClick={() => restarDelCarrito(producto.id)}>-</button>
+                  <button onClick={() => restarDelCarrito(producto.id)}>-</button>
 
-                <span>{producto.cantidad}</span>
+                  <span>{cantidad}</span>
 
-                <button onClick={() => agregarAlCarrito(producto)}>+</button>
+                  <button onClick={() => agregarAlCarrito(producto)}>+</button>
 
+                </div>
+
+                <span className="item-carrito-subtotal">${subtotal}</span>
+
+                <button className="btn-quitar" onClick={() => removerDelCarrito(producto.id)}>Quitar</button>
               </div>
-
-              <span className="item-carrito-subtotal">${(producto.precio * producto.cantidad).toFixed(2)}</span>
-
-              <button className="btn-quitar" onClick={() => removerDelCarrito(producto.id)}>Quitar</button>
-            </div>
-          ))}
+            );
+          })}
           <p className="total-carrito">Total del carrito: ${totalCarrito.toFixed(2)}</p>
           <button className="bton-pagar">Pagar</button>
         </>

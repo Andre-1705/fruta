@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './componentes/ProtectedRoute.jsx';
 
 // Componentes visuales
-import Layout from './pages/Layout.jsx';
 import { Header } from './componentes/Header/Header.jsx';
 import { Footer } from './componentes/Footer/Footer.jsx';
 import  ItemListContainer from './componentes/ItemListContainer/ItemListContainer.jsx';
@@ -12,7 +11,7 @@ import Home from './pages/Home.jsx';
 
 // Vistas principales
 import VistaContacto from './pages/VistaContacto.jsx';
-import VistaProductos from './pages/VistaProductos.jsx';
+//import VistaProductos from './pages/VistaProductos.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
 import Registrate from './pages/Registrate.jsx';
@@ -32,13 +31,13 @@ function App() {
             <Route path="/VistaContacto" element={<VistaContacto />} />
             <Route path="/VistaNosotras" element={<VistaNosotras />} />
             <Route path="/Registrate" element={<Registrate />} />
-            <Route path="/VistaProductos" element={<VistaProductos />} />
+            <Route path="/VistaProductos" element={<ItemListContainer />} />
             <Route path="/VistaCarrito" element={
             <ProtectedRoute>
                 <VistaCarrito />
               </ProtectedRoute>} />
-            <Route path="/producto/:id" element={<ItemDetailContainer/>} />
-            <Route path="/categoria/:categoria" element={<ItemListContainer/>} />
+            <Route path="/producto/:id" element={<ItemDetailContainer />} />
+            <Route path="/categoria/:categoria" element={<ItemListContainer />} />
 
             <Route path="/dashboard" element={
               <ProtectedRoute>

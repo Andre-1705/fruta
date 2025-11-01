@@ -1,0 +1,10 @@
+.vista-contacto {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  margin-top: -1rem; /* Compensa el padding superior del app-content */
+}
+

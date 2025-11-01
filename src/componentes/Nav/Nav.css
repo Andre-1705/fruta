@@ -1,10 +1,14 @@
 .nav {
-  margin-top: 20px;
+  margin-top: 15px;
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  padding: 0.5 0.5rem;
+  padding: 0.5rem 0.5rem;
   height: 60px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 .nav a {
@@ -12,7 +16,7 @@
   text-decoration: none;
   color: rgb(15, 77, 8);
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   padding: 0.8rem 1rem;
   transition: color 0.3s ease;
   border: 2px solid rgb(15, 77, 8);
@@ -21,4 +25,46 @@
 
 .nav a:hover {
   color: rgb(32, 178, 170);
+}
+
+/* Nav secundario para categorías - aparece debajo del nav principal */
+.nav-categorias-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 0.5rem 0.5rem;
+}
+
+.categorias-titulo {
+  font-size: 1.1rem;
+  color: rgb(15, 77, 8);
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.nav-categorias {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.nav-categorias a {
+  text-decoration: none;
+  color: rgb(15, 77, 8);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgb(15, 77, 8);
+  border-radius: 4px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-categorias a:hover {
+  color: rgb(32, 178, 170);
+  background-color: rgba(15, 77, 8, 0.1);
 }

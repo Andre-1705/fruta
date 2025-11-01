@@ -1,11 +1,9 @@
 import React from 'react';
-import { Item } from '../Item/Item';
+import { Item } from '../Item/Item.jsx';
+import { Link } from 'react-router-dom';
 import './ItemList.css';
 
-export const ItemList = ({ lista, categoria }) => {
-  if (!lista || lista.length === 0) {
-    return <p className="mensaje-vacio">No hay productos disponibles</p>;
-  }
+export const ItemList = ({ lista }) => {
 
 // Reveer el filtrado por experiencia del usuario versus filtrado por url
 // categorías con sus propias url
@@ -16,15 +14,20 @@ export const ItemList = ({ lista, categoria }) => {
 
   return (
     <section className="item-list-section">
-      <h1></h1>
 
       <div className="item-list">
-        {lista.map(producto => (
-          <Item
-            key={producto.id}
-            producto={producto} />
-        ))}
+        {lista.length ? (
+         lista.map((producto) => (
+          <Link to={`/producto/${producto.id}`}
+            key={producto.id}>
+            <Item producto={producto} />
+            </Link>
+            ))
+        ) : (
+          <p>No hay productos disponibles</p>
+      )}
       </div>
+
     </section>
   );
 };

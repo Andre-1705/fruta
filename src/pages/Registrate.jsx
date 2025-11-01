@@ -11,12 +11,26 @@ import './Registrate.css';
 function Registrate() {
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { registrarUsuario } = useAuthContexto();
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Simulación de autenticación
+    setError(''); // Limpiar error previo
+
+    // Validaciones básicas
+    if (!usuario.trim()) {
+      setError('Por favor ingresa un usuario');
+      return;
+    }
+
+    if (!password.trim()) {
+      setError('Por favor ingresa una contraseña');
+      return;
+    }
+
+    // Simulación de autenticación (lógica de login)
     if (usuario === 'admin' && password === '1234') {
       registrarUsuario(usuario);
       // Pequeño delay para asegurar que el estado se actualice
@@ -24,20 +38,29 @@ function Registrate() {
         navigate('/VistaCarrito');
       }, 100);
     } else {
-      alert('Credenciales incorrectas');
+      // Para usuarios normales, registrarlos como clientes
+      registrarUsuario(usuario);
+      setTimeout(() => {
+        navigate('/VistaCarrito');
+      }, 100);
     }
   };
 
   return (
     <div className="registrate-container">
       <form className="registrate-form" onSubmit={handleSubmit}>
-        <h2>Iniciar sesión</h2>
+        <h2>Iniciar sesión / Registrarse</h2>
+        {error && <div className="error-mensaje" style={{color: 'red', fontSize: '0.9rem'}}>{error}</div>}
         <div>
           <label>Usuario:</label>
           <input
             type="text"
             value={usuario}
-            onChange={(event) => setUsuario(event.target.value)}
+            onChange={(event) => {
+              setUsuario(event.target.value);
+              setError(''); // Limpiar error al escribir
+            }}
+            required
           />
         </div>
         <div>
@@ -45,7 +68,11 @@ function Registrate() {
           <input
             type="password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setError(''); // Limpiar error al escribir
+            }}
+            required
           />
         </div>
         <button type="submit">Iniciar sesión</button>

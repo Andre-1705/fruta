@@ -8,7 +8,11 @@ const ItemDetailContainer = () => {
   const { id } = useParams();
   const { productosArray, cargando, error } = useContext(ProductosContexto);
 
-  const producto = productosArray.find(p => p.id.toString() === id);
+  // Convertir id a número para búsqueda más eficiente y precisa
+  const productoId = id ? parseInt(id, 10) : null;
+  const producto = productoId && !isNaN(productoId) 
+    ? productosArray.find(p => p.id === productoId)
+    : null;
 
 // Busca en el array de productos el producto y lo guarda en producto (estaba dupliacado)
 // Si no esta cargando que busque y compare el valor de un id (convertido a un string) con otro

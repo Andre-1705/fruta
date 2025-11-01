@@ -14,6 +14,10 @@ export const ItemDetail = ({ detail }) => {
   }
 
   const { nombre, precio, descripcion, img, stock } = detail;
+  
+  // Validar que stock sea un número válido
+  const stockNum = Number(stock);
+  const tieneStock = !isNaN(stockNum) && stockNum > 0;
 
   return (
     <div className="detalle-producto">
@@ -21,11 +25,11 @@ export const ItemDetail = ({ detail }) => {
       <img src={img} alt={nombre} />
       <p>{descripcion}</p>
       <p>Precio: ${precio}</p>
-      <p className={stock > 0 ? "stock-ok" : "stock-out"}>
-        {stock > 0 ? `Stock disponible: ${stock}` : "Sin stock"}
+      <p className={tieneStock ? "stock-ok" : "stock-out"}>
+        {tieneStock ? `Stock disponible: ${stockNum}` : "Sin stock"}
       </p>
 
-      {stock > 0 && (
+      {tieneStock && (
         <button onClick={() => agregarAlCarrito(detail)}>
           Agregar al carrito
         </button>

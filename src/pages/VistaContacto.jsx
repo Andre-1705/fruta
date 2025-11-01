@@ -1,9 +1,9 @@
 import Formulario from '../componentes/Formulario/Formulario.jsx';
+import './VistaContacto.css';
 
 export default function VistaContacto() {
   return (
-    <section>
-      <h2></h2>
+    <section className="vista-contacto">
       <Formulario />
     </section>
   );
