@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthContexto } from '../contexto/AuthContexto.jsx';
 import './Registrate.css';
 
@@ -12,8 +12,28 @@ function Registrate() {
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { registrarUsuario } = useAuthContexto();
+  const [mensajeLogin, setMensajeLogin] = useState('');
+  const { registrarUsuario, user, isCliente } = useAuthContexto();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Si viene de una ruta protegida, mostrar mensaje
+  useEffect(() => {
+    // Verificar si viene de una ruta protegida (carrito, dashboard, etc)
+    const fromProtectedRoute = location.state?.from === '/VistaCarrito' || 
+                                location.state?.from === '/dashboard' ||
+                                location.state?.from;
+    
+    if (fromProtectedRoute) {
+      setMensajeLogin('Debes iniciar sesión para acceder al carrito');
+    }
+    
+    // Solo redirigir si ya está logueado Y no viene de una ruta protegida
+    // (para evitar loops infinitos)
+    if (user && isCliente && !fromProtectedRoute) {
+      navigate('/VistaCarrito', { replace: true });
+    }
+  }, [location.state, user, isCliente, navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,6 +51,7 @@ function Registrate() {
     }
 
     // Simulación de autenticación (lógica de login)
+    // Si es admin con la contraseña correcta, permitir acceso
     if (usuario === 'admin' && password === '1234') {
       registrarUsuario(usuario);
       // Pequeño delay para asegurar que el estado se actualice
@@ -38,11 +59,8 @@ function Registrate() {
         navigate('/VistaCarrito');
       }, 100);
     } else {
-      // Para usuarios normales, registrarlos como clientes
-      registrarUsuario(usuario);
-      setTimeout(() => {
-        navigate('/VistaCarrito');
-      }, 100);
+      // Si las credenciales no son correctas, mostrar error
+      setError('Credenciales incorrectas. Usa admin/1234 para iniciar sesión');
     }
   };
 
@@ -50,6 +68,20 @@ function Registrate() {
     <div className="registrate-container">
       <form className="registrate-form" onSubmit={handleSubmit}>
         <h2>Iniciar sesión / Registrarse</h2>
+        {(mensajeLogin || location.state?.from) && (
+          <div className="mensaje-login" style={{
+            color: 'rgb(15, 77, 8)', 
+            fontSize: '1rem', 
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            padding: '0.75rem',
+            backgroundColor: 'rgba(15, 77, 8, 0.1)',
+            borderRadius: '4px',
+            textAlign: 'center'
+          }}>
+            {mensajeLogin || 'Debes iniciar sesión para acceder al carrito'}
+          </div>
+        )}
         {error && <div className="error-mensaje" style={{color: 'red', fontSize: '0.9rem'}}>{error}</div>}
         <div>
           <label>Usuario:</label>
