@@ -29,7 +29,7 @@ header {
     margin-top: 2.4rem;
     margin-bottom: 0rem;
     margin-left: 0;
-    margin-right: 0;
+    margin-right: 3rem;
     flex-shrink: 1;
 }
 
@@ -39,7 +39,7 @@ header {
     color: rgb(32, 178, 170);
     margin-bottom: 1.5rem;
     margin-left: 0;
-    margin-right: 0;
+    margin-right: 3rem;
     text-align: center;
 }
 

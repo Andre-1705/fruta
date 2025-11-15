@@ -14,8 +14,17 @@ export function AuthProvider({ children }) {
     }
   });
 
+  // Rol del usuario: 'cliente' | 'admin' | null
+  const [role, setRole] = useState(() => {
+    try {
+      return localStorage.getItem('role') || null;
+    } catch (e) {
+      return null;
+    }
+  });
+
   // flag que indica si el usuario es cliente registrado o no
-  // Separo usuario de cliente registrado lo que permite
+  // Separo por rol usuario de cliente registrado lo que permite
   // diferenciar entre un visitante admin de un cliente e impactarlo
   // en el sector de pago
 
@@ -35,6 +44,11 @@ export function AuthProvider({ children }) {
       } else {
         localStorage.removeItem('user');
       }
+      if (role) {
+        localStorage.setItem('role', role);
+      } else {
+        localStorage.removeItem('role');
+      }
       if (isCliente) {
         localStorage.setItem('isCliente', 'true');
       } else {
@@ -43,26 +57,34 @@ export function AuthProvider({ children }) {
     } catch (e) {
       // ignore storage errores
     }
-  }, [user, isCliente]);
+  }, [user, role, isCliente]);
 
-  const login = (username) => {
-    // Login simple: no cambia isCliente (puede ser un admin o visitante)
+  const login = (username, rol = null) => {
+    // Login simple con rol opcional
     setUser(username);
+    if (rol) {
+      setRole(rol);
+      setIsCliente(rol === 'cliente');
+    }
   };
 
   const logout = () => {
     setUser(null);
     setIsCliente(false);
+    setRole(null);
   };
 
   // Registrar al usuario como cliente (setea user y marca isCliente=true)
-  const registrarUsuario = (username) => {
+  const registrarUsuario = (username, rol = 'cliente') => {
     setUser(username);
-    setIsCliente(true);
+    setRole(rol);
+    setIsCliente(rol === 'cliente');
   };
 
+  const isAdmin = role === 'admin';
+
   return (
-    <AuthContexto.Provider value={{ user, isCliente, login, logout, registrarUsuario }}>
+    <AuthContexto.Provider value={{ user, role, isAdmin, isCliente, login, logout, registrarUsuario }}>
       {children}
     </AuthContexto.Provider>
   );

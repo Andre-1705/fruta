@@ -1,6 +1,6 @@
 
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './componentes/ProtectedRoute.jsx';
 
 // Componentes visuales
@@ -15,10 +15,13 @@ import VistaContacto from './pages/VistaContacto.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
 import Registrate from './pages/Registrate.jsx';
+import InicioSesion from './pages/InicioSesion.jsx';
 
 // Para la ruta dinámica producto:id importo ItemDetailContainer
 
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer.jsx';
+import ProductosAdminPanel from './componentes/adminComponents/ProductosAdminPanel.jsx';
+import AdminRoute from './componentes/AdminRoute.jsx';
 
 function App() {
   return (
@@ -30,7 +33,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/VistaContacto" element={<VistaContacto />} />
             <Route path="/VistaNosotras" element={<VistaNosotras />} />
-            <Route path="/Registrate" element={<Registrate />} />
+            {/* Página de inicio de sesión dedicada */}
+            <Route path="/login" element={<InicioSesion />} />
+            {/* /Registrate muestra el mismo formulario de inicio de sesión */}
+            <Route path="/Registrate" element={<InicioSesion />} />
             <Route path="/VistaProductos" element={<ItemListContainer />} />
             <Route path="/VistaCarrito" element={
             <ProtectedRoute>
@@ -43,6 +49,11 @@ function App() {
               <ProtectedRoute>
                 <h2>Panel de Administración</h2>
               </ProtectedRoute>} />
+            <Route path="/admin/productos" element={
+              <AdminRoute>
+                <ProductosAdminPanel />
+              </AdminRoute>
+            } />
           </Routes>
         </main>
         <Footer />

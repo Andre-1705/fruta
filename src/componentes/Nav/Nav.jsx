@@ -12,9 +12,12 @@ export const Nav = () => {
           <Link to="/VistaProductos">Productos</Link>
           <Link to="/VistaCarrito">Carrito</Link>
           <Link to="/VistaContacto">Contacto</Link>
-          <Link to="/Registrate">Registrate</Link>
+          <Link to="/login">Iniciar sesión</Link>
+          <Link to="/admin/productos" title="Administración de productos" style={{fontSize:'1.2em'}}>
+            <span role="img" aria-label="admin">🔒</span>
+          </Link>
         </nav>
-        
+
         {/* Nav secundario para categorías */}
         <nav className="nav-categorias-wrapper">
           <h2 className="categorias-titulo">Seleccioná por categoría</h2>

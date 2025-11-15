@@ -1,10 +1,14 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CarritoContexto } from '../contexto/CarritoContexto.jsx'; // Asegúrate que el nombre y la ruta son correctos
+import { useAuthContexto } from '../contexto/AuthContexto.jsx';
 import './VistaCarrito.css'; // Importamos un CSS para los estilos
 
 export default function VistaCarrito() {
   const { carrito, agregarAlCarrito, restarDelCarrito, removerDelCarrito } =
     useContext(CarritoContexto);
+  const { user, isCliente } = useAuthContexto();
+  const navigate = useNavigate();
 
   const totalCarrito = carrito.reduce(
     (acc, prod) => {
@@ -29,7 +33,7 @@ export default function VistaCarrito() {
             const cantidad = Number(producto.cantidad) || 0;
             const precio = Number(producto.precio) || 0;
             const subtotal = (precio * cantidad).toFixed(2);
-            
+
             return (
               <div key={producto.id} className="item-carrito">
                 <img src={producto.img} alt={producto.nombre} className="item-carrito-img" />
@@ -52,7 +56,25 @@ export default function VistaCarrito() {
             );
           })}
           <p className="total-carrito">Total del carrito: ${totalCarrito.toFixed(2)}</p>
-          <button className="bton-pagar">Pagar</button>
+          {/* Si no hay usuario, el botón Pagar pedirá iniciar sesión */}
+          {!user ? (
+            <button
+              className="bton-pagar"
+              onClick={() => navigate('/login', { state: { from: '/VistaCarrito' } })}
+            >
+              Iniciar sesión para pagar
+            </button>
+          ) : (
+            <button
+              className="bton-pagar"
+              onClick={() => {
+                // Aquí iría tu lógica de checkout real
+                alert('Procediendo al pago...');
+              }}
+            >
+              Pagar
+            </button>
+          )}
         </>
       )}
     </div>
