@@ -12,11 +12,9 @@ export default function AdminLogin() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const destino = location.pathname || '/admin/productos';
-
   if (user && isAdmin) {
-    // Ya autenticado como admin
-    return null; // AdminRoute renderizará children
+    // Ya autenticado como admin, no mostrar formulario
+    return null;
   }
 
   const handleSubmit = (e) => {
@@ -28,7 +26,7 @@ export default function AdminLogin() {
     }
     if (username === 'admin' && password === '1234') {
       registrarUsuario(username, 'admin');
-      setTimeout(() => navigate(destino, { replace: true }), 50);
+      // AdminRoute detectará el cambio y renderizará el panel
     } else {
       setError('Usuario no autorizado');
     }

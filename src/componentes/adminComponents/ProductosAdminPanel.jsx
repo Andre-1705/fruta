@@ -4,14 +4,16 @@ import { ProductosContexto } from '../../contexto/ProductosContexto.jsx';
 import { useContext } from 'react';
 import ProductoForm from './ProductoForm.jsx';
 import { useAdminProductos } from './useAdminProductos.js';
+import { useNavigate } from 'react-router-dom';
 
 // Panel de administración de productos
-// Requiere que el usuario esté logueado (podrías extender a rol admin más adelante)
+// Requiere que el usuario esté logueado como admin
 
 export default function ProductosAdminPanel() {
-  const { user, isAdmin } = useAuthContexto();
+  const { user, isAdmin, logout } = useAuthContexto();
   const { productosArray, cargando, error, eliminarProducto, usarApiRemota } = useContext(ProductosContexto);
   const { crearProducto, editarProducto, subirImagenEnProgreso } = useAdminProductos();
+  const navigate = useNavigate();
 
   const [editando, setEditando] = useState(null); // producto en edición
   const [creando, setCreando] = useState(false); // flag para mostrar formulario nuevo
@@ -23,6 +25,11 @@ export default function ProductosAdminPanel() {
   if (!isAdmin) {
     return <p>No autorizado</p>;
   }
+
+  const handleLogoutAdmin = () => {
+    logout();
+    navigate('/');
+  };
 
   const manejarCrear = async (producto, file) => {
     if (!crearProducto) return;
@@ -62,16 +69,30 @@ export default function ProductosAdminPanel() {
 
   return (
     <div className="admin-panel">
-      <h2>Administración de Productos</h2>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
+        <h2 style={{margin:0}}>Administración de Productos</h2>
+        <button
+          onClick={handleLogoutAdmin}
+          style={{
+            padding:'0.5rem 1rem',
+            background:'#dc3545',
+            color:'#fff',
+            border:'none',
+            borderRadius:'4px',
+            cursor:'pointer',
+            fontWeight:'bold'
+          }}
+        >
+          Cerrar sesión Admin
+        </button>
+      </div>
       {!usarApiRemota && (
         <p style={{color: 'orange'}}>API remota no configurada. Sólo lectura desde JSON local.</p>
       )}
       {error && <p style={{color:'red'}}>{error}</p>}
       {cargando && <p>Cargando productos...</p>}
 
-      {!creando && !editando && usarApiRemota && (
-        <button onClick={() => setCreando(true)}>Nuevo Producto</button>
-      )}
+      {/* El botón inferior abrirá el formulario de gestión de productos */}
 
       {creando && (
         <ProductoForm
@@ -125,6 +146,26 @@ export default function ProductosAdminPanel() {
           ))}
         </tbody>
       </table>
+
+      {/* Botón inferior para ingresar al formulario de creación/edición */}
+      {!creando && !editando && usarApiRemota && (
+        <div style={{marginTop:'1rem', display:'flex', justifyContent:'flex-end'}}>
+          <button
+            onClick={() => setCreando(true)}
+            style={{
+              padding:'0.5rem 1rem',
+              background:'#0d6efd',
+              color:'#fff',
+              border:'none',
+              borderRadius:'4px',
+              cursor:'pointer',
+              fontWeight:'bold'
+            }}
+          >
+            Abrir formulario de producto
+          </button>
+        </div>
+      )}
     </div>
   );
 }
