@@ -8,10 +8,9 @@ const ItemDetailContainer = () => {
   const { id } = useParams();
   const { productosArray, cargando, error } = useContext(ProductosContexto);
 
-  // Convertir id a número para búsqueda más eficiente y precisa
-  const productoId = id ? parseInt(id, 10) : null;
-  const producto = productoId && !isNaN(productoId) 
-    ? productosArray.find(p => p.id === productoId)
+  // MockAPI suele devolver id como string; comparamos como string para robustez
+  const producto = Array.isArray(productosArray)
+    ? productosArray.find(p => String(p?.id) === String(id))
     : null;
 
 // Busca en el array de productos el producto y lo guarda en producto (estaba dupliacado)

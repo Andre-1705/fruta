@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './ProductoForm.css';
 
 // Formulario reutilizable para crear / editar productos
 // Props:
@@ -7,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 // loading: boolean mientras guarda
 // onCancel: callback opcional
 
-export default function ProductoForm({ initialData = null, onSubmit, loading = false, onCancel }) {
+export default function ProductoForm({ initialData = null, onSubmit, loading = false, onCancel, onDelete, onResetToNew }) {
   const [formData, setFormData] = useState({
     nombre: '',
     categoria: '',
@@ -50,36 +51,62 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
     }, file);
   };
 
+  const handleReset = () => {
+    // Si estamos editando y existe callback para volver a modo nuevo, usarlo.
+    if (initialData && onResetToNew) {
+      onResetToNew();
+      return;
+    }
+    setFormData({ nombre: '', categoria: '', precio: '', img: '', stock: '', descripcion: '' });
+    setFile(null);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="producto-form">
-      <h3>{initialData ? 'Editar Producto' : 'Nuevo Producto'}</h3>
-      <label>Nombre
-        <input name="nombre" value={formData.nombre} onChange={handleChange} required />
-      </label>
-      <label>Categoría
-        <input name="categoria" value={formData.categoria} onChange={handleChange} required />
-      </label>
-      <label>Precio
-        <input name="precio" value={formData.precio} onChange={handleChange} required />
-      </label>
-      <label>Stock
-        <input name="stock" value={formData.stock} onChange={handleChange} />
-      </label>
-      <label>Imagen (URL imgbb)
-        <input name="img" value={formData.img} onChange={handleChange} />
-      </label>
-      <label>O subir archivo (se sube a imgbb)
-        <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-      </label>
-      <label>Descripción
-        <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} />
-      </label>
-      <div className="form-actions">
-        <button type="submit" disabled={loading}>{loading ? 'Guardando...' : 'Guardar'}</button>
-        {onCancel && (
-          <button type="button" onClick={onCancel} className="btn-cancelar">Cancelar</button>
-        )}
-      </div>
-    </form>
+    <div className="producto-form-wrapper">
+      <form onSubmit={handleSubmit} className="producto-form-grid">
+        <h3 className="form-titulo">{initialData ? 'Editar Producto' : 'Nuevo Producto'}</h3>
+        <label className="campo">
+          <span>Nombre</span>
+          <input name="nombre" value={formData.nombre} onChange={handleChange} required />
+        </label>
+        <label className="campo">
+          <span>Categoría</span>
+          <input name="categoria" value={formData.categoria} onChange={handleChange} required />
+        </label>
+        <label className="campo">
+          <span>Precio</span>
+          <input name="precio" value={formData.precio} onChange={handleChange} required />
+        </label>
+        <label className="campo">
+          <span>Stock</span>
+          <input name="stock" value={formData.stock} onChange={handleChange} />
+        </label>
+        <div className="campo campo-imagen">
+          <label className="subcampo">
+            <span>Imagen (URL imgbb)</span>
+            <input name="img" value={formData.img} onChange={handleChange} />
+          </label>
+          <label className="subcampo">
+            <span>Subir archivo</span>
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+          </label>
+        </div>
+        <label className="campo campo-descripcion">
+          <span>Descripción</span>
+          <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} />
+        </label>
+
+        <div className="acciones">
+          <button type="submit" className="btn btn-guardar" disabled={loading}>{loading ? 'Guardando...' : 'Guardar'}</button>
+          {initialData && onDelete && (
+            <button type="button" className="btn btn-eliminar" onClick={() => onDelete(initialData.id)}>Eliminar</button>
+          )}
+          <button type="button" className="btn btn-limpiar" onClick={handleReset}>{initialData ? 'Nuevo' : 'Limpiar'}</button>
+          {onCancel && (
+            <button type="button" className="btn btn-cancelar" onClick={onCancel}>Cancelar</button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }
