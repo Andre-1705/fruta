@@ -13,18 +13,9 @@ export const ProductosProvider = ({ children }) => {
   // Configuración de API mock y fallback a JSON local
   // Permitimos 2 nombres posibles para la variable para evitar confusiones: VITE_MOCKAPI_BASE o VITE_MOCKAPI_URL
   const API_BASE_RAW = import.meta.env.VITE_MOCKAPI_BASE || import.meta.env.VITE_MOCKAPI_URL;
-  const API_BASE_VAR_NAME = import.meta.env.VITE_MOCKAPI_BASE ? 'VITE_MOCKAPI_BASE' : (import.meta.env.VITE_MOCKAPI_URL ? 'VITE_MOCKAPI_URL' : 'NINGUNA');
   const API_BASE = API_BASE_RAW ? String(API_BASE_RAW).trim() : '';
   const API_BASE_CLEAN = API_BASE.replace(/\/+$/, '');
   const usarApiRemota = Boolean(API_BASE_CLEAN);
-
-  if (!usarApiRemota) {
-    console.warn('[ProductosContexto] API remota NO configurada. Variable detectada:', API_BASE_VAR_NAME, 'Valor bruto:', API_BASE_RAW);
-    console.warn('[ProductosContexto] Trim ->', API_BASE, ' / limpio ->', API_BASE_CLEAN);
-    console.warn('[ProductosContexto] Pasos: 1) Verifica .env en raíz, 2) Usa VITE_MOCKAPI_BASE=URL, 3) Reinicia servidor, 4) No pongas comillas, 5) No dejes espacios antes/después.');
-  } else {
-    console.log('[ProductosContexto] API remota configurada usando', API_BASE_VAR_NAME, '->', API_BASE_CLEAN);
-  }
 
 
 //Con provider cualquier componente hijo accede a datos relacionados
@@ -63,10 +54,7 @@ export const ProductosProvider = ({ children }) => {
 
   // CRUD contra API remota (si no hay API, no-ops para mantener compatibilidad)
   const agregarProducto = useCallback(async (producto) => {
-    if (!usarApiRemota) {
-      console.warn('agregarProducto: API no configurada, operación omitida');
-      return null;
-    }
+    if (!usarApiRemota) return null;
     const res = await fetch(`${API_BASE_CLEAN}/productos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -82,10 +70,7 @@ export const ProductosProvider = ({ children }) => {
   }, [API_BASE_CLEAN, usarApiRemota]);
 
   const actualizarProducto = useCallback(async (id, producto) => {
-    if (!usarApiRemota) {
-      console.warn('actualizarProducto: API no configurada, operación omitida');
-      return null;
-    }
+    if (!usarApiRemota) return null;
     const res = await fetch(`${API_BASE_CLEAN}/productos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -101,10 +86,7 @@ export const ProductosProvider = ({ children }) => {
   }, [API_BASE_CLEAN, usarApiRemota]);
 
   const eliminarProducto = useCallback(async (id) => {
-    if (!usarApiRemota) {
-      console.warn('eliminarProducto: API no configurada, operación omitida');
-      return false;
-    }
+    if (!usarApiRemota) return false;
     const res = await fetch(`${API_BASE_CLEAN}/productos/${id}`, { method: 'DELETE' });
     if (!res.ok) {
       const txt = await res.text();
@@ -124,8 +106,6 @@ export const ProductosProvider = ({ children }) => {
       actualizarProducto,
       eliminarProducto,
       usarApiRemota,
-      apiBase: API_BASE_CLEAN,
-      apiBaseVarName: API_BASE_VAR_NAME,
     }}>
       {children}
     </ProductosContexto.Provider>

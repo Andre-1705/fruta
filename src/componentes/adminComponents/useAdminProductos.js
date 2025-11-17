@@ -20,10 +20,8 @@ export function useAdminProductos() {
     const RAW_KEY = import.meta.env.VITE_IMGBB_API_KEY || import.meta.env.VITE_IMGBB_KEY;
     const API_KEY = RAW_KEY ? String(RAW_KEY).trim() : '';
     if (!API_KEY) {
-      console.warn('[useAdminProductos] Claves disponibles en import.meta.env:', Object.keys(import.meta.env));
       throw new Error('Falta VITE_IMGBB_API_KEY (o VITE_IMGBB_KEY) en el entorno');
     }
-    console.log('[useAdminProductos] Usando API Key imgbb (longitud):', API_KEY.length);
     const url = `https://api.imgbb.com/1/upload?key=${API_KEY}`;
 
     const formData = new FormData();

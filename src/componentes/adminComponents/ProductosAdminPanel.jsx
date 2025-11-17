@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ProductosAdminPanel() {
   const { user, isAdmin, logout } = useAuthContexto();
-  const { productosArray, cargando, error, eliminarProducto, usarApiRemota, apiBase, apiBaseVarName } = useContext(ProductosContexto);
+  const { productosArray, cargando, error, eliminarProducto, usarApiRemota } = useContext(ProductosContexto);
   const { crearProducto, editarProducto, subirImagenEnProgreso } = useAdminProductos();
   const navigate = useNavigate();
 
@@ -124,33 +124,7 @@ export default function ProductosAdminPanel() {
       {!usarApiRemota && (
         <div style={{background:'#fff3cd', border:'1px solid #ffeeba', padding:'0.6rem 0.8rem', borderRadius:'4px', marginBottom:'0.75rem', color:'#856404'}}>
           <p style={{margin:0, fontWeight:600}}>API remota no configurada</p>
-          <small>Variable detectada: <strong>{apiBaseVarName}</strong>. Valor actual: "{apiBase || 'vacío'}".<br/>
-          Revisa archivo <code>.env</code> y asegúrate de definir <code>VITE_MOCKAPI_BASE</code> (o <code>VITE_MOCKAPI_URL</code>) y luego reinicia con <code>npm run dev</code>.</small>
-          <div style={{marginTop:'0.5rem'}}>
-            <button
-              type="button"
-              onClick={async ()=>{
-                console.group('DEBUG API ENV');
-                console.log('import.meta.env keys:', Object.keys(import.meta.env));
-                console.log('apiBaseVarName:', apiBaseVarName, 'apiBase:', apiBase);
-                if(apiBase){
-                  try {
-                    const testRes = await fetch(`${apiBase}/productos`);
-                    console.log('Test fetch status:', testRes.status);
-                    const txt = await testRes.text();
-                    console.log('Test fetch body snippet:', txt.substring(0,200));
-                  } catch(err){
-                    console.error('Test fetch error:', err);
-                  }
-                } else {
-                  console.warn('apiBase vacío, no se intenta fetch');
-                }
-                console.groupEnd();
-                alert('Revisa la consola (DEBUG API ENV) para detalles.');
-              }}
-              style={{marginTop:'0.4rem', padding:'0.4rem 0.8rem', background:'#856404', color:'#fff', border:'none', borderRadius:'4px', cursor:'pointer', fontSize:'0.75rem'}}
-            >Debug API</button>
-          </div>
+          <small>Revisa archivo <code>.env</code> y asegúrate de definir <code>VITE_MOCKAPI_BASE</code> (o <code>VITE_MOCKAPI_URL</code>) y luego reinicia con <code>npm run dev</code>.</small>
         </div>
       )}
       {ultimoError && (
