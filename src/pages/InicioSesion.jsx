@@ -5,11 +5,13 @@ import './Registrate.css'; // Reutilizamos estilos
 
 // Página dedicada de Inicio de Sesión
 function InicioSesion() {
-  const [usuario, setUsuario] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [modo, setModo] = useState('login'); // login | signup
+  const [loading, setLoading] = useState(false);
   const [mensajeLogin, setMensajeLogin] = useState('');
-  const { registrarUsuario, user } = useAuthContexto();
+  const { user, login, signUp } = useAuthContexto();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,40 +28,30 @@ function InicioSesion() {
     }
   }, [location.state, user, navigate, from]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
-
-    if (!usuario.trim()) {
-      setError('Por favor ingresa un usuario');
-      return;
+    if (!email.trim()) return setError('Por favor ingresa un email');
+    if (!password.trim()) return setError('Por favor ingresa una contraseña');
+    try {
+      setLoading(true);
+      if (modo === 'login') {
+        await login({ email, password });
+      } else {
+        await signUp({ email, password });
+      }
+      navigate(from, { replace: true });
+    } catch (e) {
+      setError(e.message || 'Error de autenticación');
+    } finally {
+      setLoading(false);
     }
-    if (!password.trim()) {
-      setError('Por favor ingresa una contraseña');
-      return;
-    }
-
-    // Simulación de autenticación para CLIENTES solamente
-    // Este formulario es para clientes. Admin usa su propio formulario en /admin/productos
-    // No permitir que admin se loguee aquí
-    if (usuario === 'admin') {
-      setError('Los administradores deben ingresar por el candado (🔒)');
-      return;
-    }
-
-    if (password === '1234') {
-      registrarUsuario(usuario, 'cliente');
-      setTimeout(() => navigate(from, { replace: true }), 50);
-      return;
-    }
-
-    setError('Credenciales incorrectas. Usa cualquier usuario con contraseña 1234');
   };
 
   return (
     <div className="registrate-container">
       <form className="registrate-form" onSubmit={handleSubmit}>
-        <h2>Iniciar Sesión - Clientes</h2>
+        <h2>{modo === 'login' ? 'Iniciar Sesión' : 'Crear cuenta'}</h2>
         {(mensajeLogin || location.state?.from) && (
           <div className="mensaje-login" style={{
             color: 'rgb(15, 77, 8)',
@@ -76,12 +68,12 @@ function InicioSesion() {
         )}
         {error && <div className="error-mensaje" style={{color: 'red', fontSize: '0.9rem'}}>{error}</div>}
         <div>
-          <label>Usuario:</label>
+          <label>Email:</label>
           <input
-            type="text"
-            value={usuario}
+            type="email"
+            value={email}
             onChange={(event) => {
-              setUsuario(event.target.value);
+              setEmail(event.target.value);
               setError('');
             }}
             required
@@ -99,7 +91,10 @@ function InicioSesion() {
             required
           />
         </div>
-        <button type="submit">Ingresar</button>
+        <button type="submit" disabled={loading}>{loading ? 'Procesando...' : (modo === 'login' ? 'Ingresar' : 'Crear cuenta')}</button>
+        <button type="button" onClick={() => setModo(modo === 'login' ? 'signup' : 'login')} style={{marginLeft:'0.5rem'}}>
+          {modo === 'login' ? 'Crear cuenta' : 'Ya tengo cuenta'}
+        </button>
       </form>
     </div>
   );

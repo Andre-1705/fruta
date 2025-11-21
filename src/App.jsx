@@ -14,7 +14,6 @@ import VistaContacto from './pages/VistaContacto.jsx';
 //import VistaProductos from './pages/VistaProductos.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
-import Registrate from './pages/Registrate.jsx';
 import InicioSesion from './pages/InicioSesion.jsx';
 
 // Para la ruta dinámica producto:id importo ItemDetailContainer
@@ -22,6 +21,7 @@ import InicioSesion from './pages/InicioSesion.jsx';
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer.jsx';
 import ProductosAdminPanel from './componentes/adminComponents/ProductosAdminPanel.jsx';
 import AdminRoute from './componentes/AdminRoute.jsx';
+import NotFound from './pages/NotFound.jsx';
 
 function App() {
   return (
@@ -54,6 +54,7 @@ function App() {
                 <ProductosAdminPanel />
               </AdminRoute>
             } />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />

@@ -1,90 +1,58 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { supabase } from '../lib/supabaseClient.js';
 // Crear el contexto de autenticación
 const AuthContexto = createContext(null);
 
 export function AuthProvider({ children }) {
-  // Inicializamos el estado del usuario leyendo desde localStorage
-  // null si no hay usuario logueado
+  const [user, setUser] = useState(null);
+  const [isCliente, setIsCliente] = useState(false);
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL?.toLowerCase?.();
 
-  const [user, setUser] = useState(() => {
-    try {
-      return localStorage.getItem('user') || null;
-    } catch (e) {
-      return null;
-    }
-  });
-
-  // Rol del usuario: 'cliente' | 'admin' | null
-  const [role, setRole] = useState(() => {
-    try {
-      return localStorage.getItem('role') || null;
-    } catch (e) {
-      return null;
-    }
-  });
-
-  // flag que indica si el usuario es cliente registrado o no
-  // Separo por rol usuario de cliente registrado lo que permite
-  // diferenciar entre un visitante admin de un cliente e impactarlo
-  // en el sector de pago
-
-  const [isCliente, setIsCliente] = useState(() => {
-    try {
-      return localStorage.getItem('isCliente') === 'true';
-    } catch (e) {
-      return false;
-    }
-  });
-
-  // Efecto para sincronizar el estado con localStorage cada vez que el usuario o isCliente cambian
+  // Cargar sesión inicial y suscribirse a cambios de auth
   useEffect(() => {
-    try {
-      if (user) {
-        localStorage.setItem('user', user);
-      } else {
-        localStorage.removeItem('user');
+    let mounted = true;
+    const init = async () => {
+      if (!supabase) return;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (mounted) {
+        setUser(session?.user || null);
+        setIsCliente(!!session?.user && session.user.email?.toLowerCase() !== adminEmail);
       }
-      if (role) {
-        localStorage.setItem('role', role);
-      } else {
-        localStorage.removeItem('role');
-      }
-      if (isCliente) {
-        localStorage.setItem('isCliente', 'true');
-      } else {
-        localStorage.removeItem('isCliente');
-      }
-    } catch (e) {
-      // ignore storage errores
-    }
-  }, [user, role, isCliente]);
+    };
+    init();
+    const { data: sub } = supabase?.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+      setIsCliente(!!session?.user && session.user.email?.toLowerCase() !== adminEmail);
+    }) || { data: { subscription: null } };
+    return () => {
+      mounted = false;
+      sub?.subscription?.unsubscribe?.();
+    };
+  }, [adminEmail]);
 
-  const login = (username, rol = null) => {
-    // Login simple con rol opcional
-    setUser(username);
-    if (rol) {
-      setRole(rol);
-      setIsCliente(rol === 'cliente');
-    }
+  const isAdmin = !!user && user.email?.toLowerCase() === adminEmail;
+
+  const login = async ({ email, password }) => {
+    if (!supabase) throw new Error('Supabase no configurado');
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data;
   };
 
-  const logout = () => {
-    setUser(null);
-    setIsCliente(false);
-    setRole(null);
+  const signUp = async ({ email, password }) => {
+    if (!supabase) throw new Error('Supabase no configurado');
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) throw error;
+    return data;
   };
 
-  // Registrar al usuario como cliente (setea user y marca isCliente=true)
-  const registrarUsuario = (username, rol = 'cliente') => {
-    setUser(username);
-    setRole(rol);
-    setIsCliente(rol === 'cliente');
+  const logout = async () => {
+    if (!supabase) return;
+    await supabase.auth.signOut();
   };
-
-  const isAdmin = role === 'admin';
 
   return (
-    <AuthContexto.Provider value={{ user, role, isAdmin, isCliente, login, logout, registrarUsuario }}>
+    <AuthContexto.Provider value={{ user, isAdmin, isCliente, login, logout, signUp }}>
       {children}
     </AuthContexto.Provider>
   );
