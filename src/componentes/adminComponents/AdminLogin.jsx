@@ -42,6 +42,11 @@ export default function AdminLogin() {
   return (
     <div style={{maxWidth:'360px',margin:'2rem auto',padding:'1.25rem',border:'1px solid #ccc',borderRadius:'8px',background:'#fafafa'}}>
       <h3 style={{marginTop:0,textAlign:'center'}}>Acceso Administrador</h3>
+      {!adminEmail && (
+        <div style={{background:'#fff3cd',border:'1px solid #ffeeba',color:'#856404',padding:'0.6rem',borderRadius:'6px',marginBottom:'0.75rem',fontSize:'0.85rem'}}>
+          Falta configurar <code>VITE_ADMIN_EMAIL</code> en el entorno. Defínelo en .env y en Vercel, luego redeploy.
+        </div>
+      )}
       <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
         <label style={{display:'flex',flexDirection:'column',fontSize:'0.9rem'}}>Email
           <input type="email" value={email} onChange={(e)=>{setEmail(e.target.value);setError('');}} required />
