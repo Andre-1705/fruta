@@ -1,13 +1,13 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClientesContexto } from '../../contexto/ClientesContexto.jsx';
-import { AuthContexto } from '../../contexto/AuthContexto.jsx';
+import { useAuthContexto } from '../../contexto/AuthContexto.jsx';
 import ClienteForm from './ClienteForm.jsx';
 import './ClientesAdminPanel.css';
 
 export default function ClientesAdminPanel() {
   const navigate = useNavigate();
-  const { usuario, cerrarSesion } = useContext(AuthContexto);
+  const { user, logout } = useAuthContexto();
   const {
     clientesArray,
     cargando,
@@ -72,7 +72,7 @@ export default function ClientesAdminPanel() {
   };
 
   const manejarCerrarSesion = () => {
-    cerrarSesion();
+    logout();
     navigate('/admin/login');
   };
 
@@ -97,7 +97,7 @@ export default function ClientesAdminPanel() {
         <div>
           <h1>Gestión de Clientes</h1>
           <p className="usuario-info">
-            Administrador: <strong>{usuario?.email}</strong>
+            Administrador: <strong>{user?.email}</strong>
           </p>
         </div>
         <div className="header-actions">

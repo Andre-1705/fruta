@@ -20,10 +20,14 @@ export function AuthProvider({ children }) {
       }
     };
     init();
-    const { data: sub } = supabase?.auth.onAuthStateChange((_event, session) => {
+
+    if (!supabase) return;
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
       setIsCliente(!!session?.user && session.user.email?.toLowerCase() !== adminEmail);
-    }) || { data: { subscription: null } };
+    });
+
     return () => {
       mounted = false;
       sub?.subscription?.unsubscribe?.();
