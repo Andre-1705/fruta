@@ -164,7 +164,7 @@ export default function ProductosAdminPanel() {
       <table className="tabla-productos" style={{width:'100%', marginTop:'1rem', borderCollapse:'collapse'}}>
         <thead>
           <tr>
-            <th>ID</th>
+              <th>SKU</th>
             <th>Nombre</th>
             <th>Categoría</th>
             <th>Precio</th>
@@ -175,8 +175,8 @@ export default function ProductosAdminPanel() {
         </thead>
         <tbody>
           {productosFiltrados.map(p => (
-            <tr key={p.id} style={{borderBottom:'1px solid #ddd'}}>
-              <td>{p.id}</td>
+              <tr key={p.id} style={{borderBottom:'1px solid #ddd'}}>
+                <td>{p.sku || '—'}</td>
               <td>{p.nombre}</td>
               <td>{p.categoria}</td>
               <td>${p.precio}</td>

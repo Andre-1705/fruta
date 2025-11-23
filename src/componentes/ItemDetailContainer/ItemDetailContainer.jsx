@@ -5,12 +5,12 @@ import { ItemDetail } from '../ItemDetail/ItemDetail.jsx';
 import { ProductosContexto } from "../../contexto/ProductosContexto.jsx";
 
 const ItemDetailContainer = () => {
-  const { id } = useParams();
+  const { id: idOrSku } = useParams();
   const { productosArray, cargando, error } = useContext(ProductosContexto);
 
-  // MockAPI suele devolver id como string; comparamos como string para robustez
+  // Buscar por SKU primero, si no existe, buscar por ID
   const producto = Array.isArray(productosArray)
-    ? productosArray.find(p => String(p?.id) === String(id))
+    ? productosArray.find(p => String(p?.sku) === String(idOrSku) || String(p?.id) === String(idOrSku))
     : null;
 
 // Busca en el array de productos el producto y lo guarda en producto (estaba dupliacado)

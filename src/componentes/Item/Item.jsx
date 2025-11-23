@@ -41,6 +41,7 @@ export const Item = ({ producto }) => {
         <div className="info">
           <h2>{producto.nombre}</h2>
           <p>Precio: ${producto.precio}</p>
+          <p className="sku">SKU: {producto.sku || '—'}</p>
 
           {estaHovered && (
             <p className="descripcion">{producto.descripcion}</p>
@@ -48,7 +49,7 @@ export const Item = ({ producto }) => {
 
         <div className="botones-item">
 
-          <Link to={`/producto/${producto.id}`}>
+          <Link to={`/producto/${producto.sku || producto.id}`}>
           <button type="button">
               Ver producto
             </button>

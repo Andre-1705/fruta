@@ -10,6 +10,7 @@ import './ProductoForm.css';
 
 export default function ProductoForm({ initialData = null, onSubmit, loading = false, onCancel, onDelete, onResetToNew }) {
   const [formData, setFormData] = useState({
+    sku: '',
     nombre: '',
     categoria: '',
     precio: '',
@@ -21,6 +22,7 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
   useEffect(() => {
     if (initialData) {
       setFormData({
+        sku: initialData.sku || '',
         nombre: initialData.nombre || '',
         categoria: initialData.categoria || '',
         precio: String(initialData.precio || ''),
@@ -48,6 +50,7 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
       ...formData,
       precio: Number(formData.precio),
       stock: Number(formData.stock || 0),
+      sku: formData.sku.trim(),
     }, file);
   };
 
@@ -57,7 +60,7 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
       onResetToNew();
       return;
     }
-    setFormData({ nombre: '', categoria: '', precio: '', img: '', stock: '', descripcion: '' });
+    setFormData({ sku: '', nombre: '', categoria: '', precio: '', img: '', stock: '', descripcion: '' });
     setFile(null);
   };
 
@@ -65,6 +68,10 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
     <div className="producto-form-wrapper">
       <form onSubmit={handleSubmit} className="producto-form-grid">
         <h3 className="form-titulo">{initialData ? 'Editar Producto' : 'Nuevo Producto'}</h3>
+        <label className="campo">
+          <span>SKU</span>
+          <input name="sku" value={formData.sku} onChange={handleChange} required maxLength={32} placeholder="Ej: MANZ-001" />
+        </label>
         <label className="campo">
           <span>Nombre</span>
           <input name="nombre" value={formData.nombre} onChange={handleChange} required />

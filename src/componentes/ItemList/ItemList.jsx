@@ -17,12 +17,12 @@ export const ItemList = ({ lista }) => {
 
       <div className="item-list">
         {lista.length ? (
-         lista.map((producto) => (
-          <Link to={`/producto/${producto.id}`}
-            key={producto.id}>
-            <Item producto={producto} />
-            </Link>
-            ))
+           lista.map((producto) => (
+            <Link to={`/producto/${producto.sku || producto.id}`}
+              key={producto.sku || producto.id}>
+              <Item producto={producto} />
+              </Link>
+              ))
         ) : (
           <p>No hay productos disponibles</p>
       )}
