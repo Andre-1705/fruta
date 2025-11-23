@@ -20,6 +20,7 @@ import InicioSesion from './pages/InicioSesion.jsx';
 
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer.jsx';
 import ProductosAdminPanel from './componentes/adminComponents/ProductosAdminPanel.jsx';
+import ClientesAdminPanel from './componentes/adminComponents/ClientesAdminPanel.jsx';
 import AdminRoute from './componentes/AdminRoute.jsx';
 import NotFound from './pages/NotFound.jsx';
 
@@ -52,6 +53,11 @@ function App() {
             <Route path="/admin/productos" element={
               <AdminRoute>
                 <ProductosAdminPanel />
+              </AdminRoute>
+            } />
+            <Route path="/admin/clientes" element={
+              <AdminRoute>
+                <ClientesAdminPanel />
               </AdminRoute>
             } />
             <Route path="*" element={<NotFound />} />

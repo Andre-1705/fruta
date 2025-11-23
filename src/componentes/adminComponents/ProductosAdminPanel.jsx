@@ -86,24 +86,40 @@ export default function ProductosAdminPanel() {
     <div className="admin-panel">
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
         <h2 style={{margin:0}}>Administración de Productos</h2>
-        <button
-          onClick={() => {
-            console.log('Abrir formulario crear producto');
-            setEditando(null);
-            setCreando(true);
-          }}
-          style={{
-            padding:'0.5rem 1rem',
-            background:'#dc3545',
-            color:'#fff',
-            border:'none',
-            borderRadius:'4px',
-            cursor:'pointer',
-            fontWeight:'bold'
-          }}
-        >
-          Gestionar Productos
-        </button>
+        <div style={{display:'flex', gap:'0.75rem'}}>
+          <button
+            onClick={() => navigate('/admin/clientes')}
+            style={{
+              padding:'0.5rem 1rem',
+              background:'#2196F3',
+              color:'#fff',
+              border:'none',
+              borderRadius:'4px',
+              cursor:'pointer',
+              fontWeight:'bold'
+            }}
+          >
+            Gestionar Clientes
+          </button>
+          <button
+            onClick={() => {
+              console.log('Abrir formulario crear producto');
+              setEditando(null);
+              setCreando(true);
+            }}
+            style={{
+              padding:'0.5rem 1rem',
+              background:'#dc3545',
+              color:'#fff',
+              border:'none',
+              borderRadius:'4px',
+              cursor:'pointer',
+              fontWeight:'bold'
+            }}
+          >
+            Gestionar Productos
+          </button>
+        </div>
       </div>
       <div style={{display:'flex', gap:'0.75rem', alignItems:'center', marginBottom:'0.75rem'}}>
         <input
