@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuthContexto } from '../../contexto/AuthContexto.jsx';
-import { useLocation } from 'react-router-dom';
 
 // Formulario exclusivo para autenticación de administrador
 // Credenciales esperadas (prototipo): admin / 1234
@@ -10,7 +9,6 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
   const adminEmail = import.meta.env.VITE_ADMIN_EMAIL?.toLowerCase?.();
 
   if (user && isAdmin) {

@@ -21,12 +21,7 @@ export default function ProductosAdminPanel() {
   const [busqueda, setBusqueda] = useState('');
   const [ultimoError, setUltimoError] = useState(null);
 
-  if (!user) {
-    return <p>Debes iniciar sesión para administrar productos</p>;
-  }
-  if (!isAdmin) {
-    return <p>No autorizado</p>;
-  }
+  // Los early returns deben ir después de declarar todos los hooks
 
   const handleLogoutAdmin = () => {
     logout();
@@ -81,6 +76,13 @@ export default function ProductosAdminPanel() {
       String(p.categoria).toLowerCase().includes(term)
     ));
   }, [busqueda, productosArray]);
+
+  if (!user) {
+    return <p>Debes iniciar sesión para administrar productos</p>;
+  }
+  if (!isAdmin) {
+    return <p>No autorizado</p>;
+  }
 
   return (
     <div className="admin-panel">

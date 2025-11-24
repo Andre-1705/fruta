@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // src/contexto/ProductosContexto.jsx
 import { createContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient.js';

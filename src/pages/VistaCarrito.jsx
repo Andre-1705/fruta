@@ -7,7 +7,7 @@ import './VistaCarrito.css'; // Importamos un CSS para los estilos
 export default function VistaCarrito() {
   const { carrito, agregarAlCarrito, restarDelCarrito, removerDelCarrito } =
     useContext(CarritoContexto);
-  const { user, isCliente } = useAuthContexto();
+  const { user } = useAuthContexto();
   const navigate = useNavigate();
 
   const totalCarrito = carrito.reduce(

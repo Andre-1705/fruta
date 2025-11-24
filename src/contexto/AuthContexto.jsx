@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient.js';
 // Crear el contexto de autenticación
@@ -13,10 +14,28 @@ export function AuthProvider({ children }) {
     let mounted = true;
     const init = async () => {
       if (!supabase) return;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (mounted) {
-        setUser(session?.user || null);
-        setIsCliente(!!session?.user && session.user.email?.toLowerCase() !== adminEmail);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        // Si hay error de refresh token, limpiar la sesión corrupta
+        if (error) {
+          console.warn('Error al obtener sesión, limpiando:', error.message);
+          await supabase.auth.signOut();
+          if (mounted) {
+            setUser(null);
+            setIsCliente(false);
+          }
+          return;
+        }
+        if (mounted) {
+          setUser(session?.user || null);
+          setIsCliente(!!session?.user && session.user.email?.toLowerCase() !== adminEmail);
+        }
+      } catch (err) {
+        console.error('Error inicializando auth:', err);
+        if (mounted) {
+          setUser(null);
+          setIsCliente(false);
+        }
       }
     };
     init();

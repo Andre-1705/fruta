@@ -45,7 +45,7 @@ const Formulario = () => {
       setEstado({ loading: false, exito: 'Mensaje enviado. ¡Gracias por escribir!', error: '' });
       setUser({ nombre: '', email: '', mensaje: '' });
       if (formRef.current) formRef.current.reset();
-    } catch (err) {
+    } catch {
       setEstado({ loading: false, exito: '', error: 'Error al enviar. Intenta nuevamente.' });
     }
   };
