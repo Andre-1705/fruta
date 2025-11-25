@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 
 const CarritoContexto = createContext();
 
@@ -28,7 +28,7 @@ export const CarritoProvider = ({ children }) => {
           console.warn(`No hay más stock disponible. Disponible: ${stock}, En carrito: ${cantidadActual}`);
           return carritoActual; // Retornar el carrito sin cambios
         }
-        
+
         // Incrementar la cantidad solo si hay stock disponible
         return carritoActual.map((item) =>
           item.id === producto.id
@@ -69,6 +69,10 @@ export const CarritoProvider = ({ children }) => {
     setCarrito([]);
   };
 
+  const total = carrito.reduce((acc, item) => {
+    return acc + (Number(item.precio) || 0) * (Number(item.cantidad) || 0);
+  }, 0);
+
   return (
     <CarritoContexto.Provider
       value={{
@@ -77,11 +81,20 @@ export const CarritoProvider = ({ children }) => {
         restarDelCarrito,
         removerDelCarrito,
         vaciarCarrito,
+        total,
       }}
     >
       {children}
     </CarritoContexto.Provider>
   );
+};
+
+export const useCarrito = () => {
+  const context = useContext(CarritoContexto);
+  if (!context) {
+    throw new Error('useCarrito debe usarse dentro de CarritoProvider');
+  }
+  return context;
 };
 
 export { CarritoContexto };
