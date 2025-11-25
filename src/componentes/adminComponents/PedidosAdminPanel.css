@@ -1,0 +1,403 @@
+.pedidos-admin-panel {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.panel-header {
+  margin-bottom: 30px;
+}
+
+.panel-header h1 {
+  font-size: 2rem;
+  color: #157347;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Filtros */
+.filtros-pedidos {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.input-busqueda {
+  flex: 1;
+  min-width: 250px;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input-busqueda:focus {
+  outline: none;
+  border-color: #157347;
+}
+
+.select-filtro {
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: white;
+  min-width: 200px;
+}
+
+/* Tabla */
+.tabla-wrapper {
+  overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tabla-pedidos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-pedidos thead {
+  background-color: #157347;
+  color: white;
+}
+
+.tabla-pedidos th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tabla-pedidos tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.tabla-pedidos tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.tabla-pedidos td {
+  padding: 15px;
+  font-size: 0.9rem;
+}
+
+.numero-pedido {
+  color: #157347;
+  font-family: 'Courier New', monospace;
+}
+
+.cliente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cliente-info small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.total-pedido {
+  color: #157347;
+  font-size: 1.1rem;
+}
+
+/* Badges */
+.badge-estado,
+.badge-pago {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* Acciones */
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-ver-detalle {
+  padding: 8px 12px;
+  background-color: #7ED957;
+  color: #083b06;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+
+.btn-ver-detalle:hover {
+  background-color: #6cc84a;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-detalle-pedido {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.btn-cerrar-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.btn-cerrar-modal:hover {
+  background-color: #c82333;
+}
+
+.modal-detalle-pedido h2 {
+  color: #157347;
+  margin-bottom: 25px;
+  padding-right: 40px;
+}
+
+/* Secciones del modal */
+.info-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.info-section h3 {
+  color: #157347;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.info-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-grid strong {
+  color: #333;
+  font-size: 0.85rem;
+}
+
+/* Tabla de items en modal */
+.tabla-items {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.tabla-items th {
+  background-color: #157347;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.tabla-items td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-info img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Totales */
+.totales {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.totales > div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.total-final {
+  font-size: 1.3rem !important;
+  color: #157347;
+  padding-top: 10px;
+  border-top: 2px solid #157347;
+}
+
+/* Form cambiar estado */
+.cambiar-estado-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.select-nuevo-estado {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: white;
+}
+
+.textarea-notas {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.textarea-notas:focus {
+  outline: none;
+  border-color: #157347;
+}
+
+/* Estados vacíos */
+.no-pedidos {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.no-pedidos p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2rem;
+  color: #157347;
+}
+
+.acceso-denegado {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 50px auto;
+}
+
+.acceso-denegado h2 {
+  color: #dc3545;
+  margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pedidos-admin-panel {
+    padding: 15px;
+  }
+
+  .filtros-pedidos {
+    flex-direction: column;
+  }
+
+  .input-busqueda,
+  .select-filtro {
+    width: 100%;
+  }
+
+  .tabla-pedidos {
+    font-size: 0.85rem;
+  }
+
+  .tabla-pedidos th,
+  .tabla-pedidos td {
+    padding: 10px 8px;
+  }
+
+  /* Ocultar columnas menos importantes en móvil */
+  .tabla-pedidos th:nth-child(2),
+  .tabla-pedidos td:nth-child(2) {
+    display: none;
+  }
+
+  .modal-detalle-pedido {
+    padding: 20px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .totales {
+    align-items: stretch;
+  }
+
+  .totales > div {
+    justify-content: space-between;
+  }
+}

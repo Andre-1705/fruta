@@ -6,6 +6,7 @@ import { CarritoProvider } from './contexto/CarritoContexto.jsx';
 import { AuthProvider } from './contexto/AuthContexto.jsx';
 import { ProductosProvider } from './contexto/ProductosContexto.jsx';
 import { ClientesProvider } from './contexto/ClientesContexto.jsx';
+import { PedidosProvider } from './contexto/PedidosContexto.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -13,9 +14,11 @@ createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <ProductosProvider>
         <ClientesProvider>
-          <CarritoProvider>
-            <App />
-          </CarritoProvider>
+          <PedidosProvider>
+            <CarritoProvider>
+              <App />
+            </CarritoProvider>
+          </PedidosProvider>
         </ClientesProvider>
       </ProductosProvider>
     </AuthProvider>

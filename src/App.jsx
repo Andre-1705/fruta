@@ -21,8 +21,10 @@ import InicioSesion from './pages/InicioSesion.jsx';
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer.jsx';
 import ProductosAdminPanel from './componentes/adminComponents/ProductosAdminPanel.jsx';
 import ClientesAdminPanel from './componentes/adminComponents/ClientesAdminPanel.jsx';
+import PedidosAdminPanel from './componentes/adminComponents/PedidosAdminPanel.jsx';
 import AdminRoute from './componentes/AdminRoute.jsx';
 import NotFound from './pages/NotFound.jsx';
+import Checkout from './pages/Checkout.jsx';
 
 function App() {
   return (
@@ -59,6 +61,16 @@ function App() {
               <AdminRoute>
                 <ClientesAdminPanel />
               </AdminRoute>
+            } />
+            <Route path="/admin/pedidos" element={
+              <AdminRoute>
+                <PedidosAdminPanel />
+              </AdminRoute>
+            } />
+            <Route path="/checkout" element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -67,12 +67,9 @@ export default function VistaCarrito() {
           ) : (
             <button
               className="bton-pagar"
-              onClick={() => {
-                // Aquí iría tu lógica de checkout real
-                alert('Procediendo al pago...');
-              }}
+              onClick={() => navigate('/checkout')}
             >
-              Pagar
+              Finalizar Compra
             </button>
           )}
         </>
