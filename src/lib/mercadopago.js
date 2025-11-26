@@ -3,7 +3,6 @@
 // ============================================
 
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY;
-const MP_ACCESS_TOKEN = import.meta.env.VITE_MP_ACCESS_TOKEN;
 
 // Inicializar SDK de MercadoPago (frontend)
 export const initMercadoPago = () => {
@@ -22,49 +21,11 @@ export const crearPreferencia = async (datosCompra) => {
   try {
     const { items, pedidoId, email, telefono } = datosCompra;
 
-    // IMPORTANTE: En producción, esto debe ser una llamada a tu backend/API
-    // Nunca exponer el ACCESS_TOKEN en el frontend
-    const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+    // Llamar a nuestra API serverless en Vercel (token seguro en el backend)
+    const response = await fetch(`/api/mercadopago/create-preference`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
-      },
-      body: JSON.stringify({
-        items: items.map(item => ({
-          id: item.id,
-          title: item.nombre,
-          description: item.descripcion || 'Producto fresco',
-          picture_url: item.imagen,
-          category_id: 'food',
-          quantity: item.cantidad,
-          unit_price: Number(item.precio),
-          currency_id: 'ARS'
-        })),
-        payer: {
-          email: email,
-          phone: {
-            number: telefono
-          }
-        },
-        external_reference: pedidoId, // ID del pedido en tu sistema
-        notification_url: `${import.meta.env.VITE_PUBLIC_SITE_URL}/api/mercadopago/webhook`, // URL del webhook
-        back_urls: {
-          success: `${import.meta.env.VITE_PUBLIC_SITE_URL}/pedido/exito?pedido=${pedidoId}`,
-          failure: `${import.meta.env.VITE_PUBLIC_SITE_URL}/pedido/error?pedido=${pedidoId}`,
-          pending: `${import.meta.env.VITE_PUBLIC_SITE_URL}/pedido/pendiente?pedido=${pedidoId}`
-        },
-        auto_return: 'approved',
-        payment_methods: {
-          excluded_payment_types: [],
-          installments: 12 // Hasta 12 cuotas
-        },
-        shipments: {
-          cost: datosCompra.costoEnvio || 0,
-          mode: 'not_specified'
-        },
-        statement_descriptor: 'FRUTA-STORE'
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items, pedidoId, email, telefono, costoEnvio: datosCompra.costoEnvio || 0 })
     });
 
     if (!response.ok) {
@@ -99,12 +60,7 @@ export const abrirCheckout = (preferenceId) => {
 // Verificar estado de pago (consultar desde backend idealmente)
 export const verificarPago = async (paymentId) => {
   try {
-    const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
-      }
-    });
+    const response = await fetch(`/api/mercadopago/verificar-pago?payment_id=${encodeURIComponent(paymentId)}`);
 
     if (!response.ok) {
       throw new Error('Error al verificar pago');
@@ -137,10 +93,6 @@ export const mapearEstadoPago = (mpStatus) => {
 export const validarConfiguracion = () => {
   if (!MP_PUBLIC_KEY) {
     console.error('⚠️ VITE_MP_PUBLIC_KEY no está configurada');
-    return false;
-  }
-  if (!MP_ACCESS_TOKEN) {
-    console.error('⚠️ VITE_MP_ACCESS_TOKEN no está configurada (necesaria para backend)');
     return false;
   }
   return true;

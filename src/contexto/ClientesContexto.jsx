@@ -42,14 +42,40 @@ export const ClientesProvider = ({ children }) => {
   // CRUD: Agregar cliente
   const agregarCliente = useCallback(async (cliente) => {
     if (!usarSupabase) return null;
-    const { data, error: err } = await supabase
-      .from('clientes')
-      .insert([cliente])
-      .select()
-      .single();
-    if (err) throw err;
-    setClientesArray((prev) => [data, ...prev]);
-    return data;
+
+    try {
+      // Normalizar email para comparación (lowercase, trim)
+      const email = (cliente.email || '').trim().toLowerCase();
+      if (!email) throw new Error('Email requerido');
+
+      // 1. Buscar si ya existe por email
+      const { data: byEmail } = await supabase
+        .from('clientes')
+        .select('*')
+        .ilike('email', email) // case-insensitive
+        .limit(1);
+
+      const existente = Array.isArray(byEmail) && byEmail.length ? byEmail[0] : null;
+
+      // 2. Si existe, retornar sin insertar duplicado
+      if (existente) {
+        return existente;
+      }
+
+      // 3. Insertar nuevo (email normalizado)
+      const nuevo = { ...cliente, email };
+      const { data, error: errInsert } = await supabase
+        .from('clientes')
+        .insert([nuevo])
+        .select()
+        .single();
+      if (errInsert) throw errInsert;
+      setClientesArray((prev) => [data, ...prev]);
+      return data;
+    } catch (e) {
+      console.error('Error al agregar cliente:', e);
+      throw e;
+    }
   }, [usarSupabase]);
 
   // CRUD: Actualizar cliente

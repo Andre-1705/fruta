@@ -59,11 +59,47 @@ export const PedidosProvider = ({ children }) => {
   };
 
   // Crear nuevo pedido
-  const crearPedido = async (datosCarrito, datosEnvio, userId) => {
+  const crearPedido = async (datosCarrito, datosEnvio, userId = null) => {
     try {
       setError(null);
 
-      // 1. Verificar stock disponible
+      // 1. Buscar o crear cliente
+      const email = datosEnvio.email.trim().toLowerCase();
+      let clienteId = null;
+
+      // Buscar cliente existente por email
+      const { data: clienteExistente, error: buscarError } = await supabase
+        .from('clientes')
+        .select('id')
+        .ilike('email', email)
+        .limit(1)
+        .single();
+
+      if (buscarError && buscarError.code !== 'PGRST116') {
+        // PGRST116 = no rows found, cualquier otro error es problema real
+        throw buscarError;
+      }
+
+      if (clienteExistente) {
+        clienteId = clienteExistente.id;
+      } else {
+        // Crear nuevo cliente
+        const { data: nuevoCliente, error: crearError } = await supabase
+          .from('clientes')
+          .insert({
+            nombre: datosEnvio.nombre,
+            email: email,
+            telefono: datosEnvio.telefono,
+            direccion: datosEnvio.direccion
+          })
+          .select('id')
+          .single();
+
+        if (crearError) throw crearError;
+        clienteId = nuevoCliente.id;
+      }
+
+      // 2. Verificar stock disponible
       const itemsParaVerificar = datosCarrito.map(item => ({
         producto_id: item.id,
         cantidad: item.cantidad
@@ -85,16 +121,17 @@ export const PedidosProvider = ({ children }) => {
         throw new Error(`Stock insuficiente:\n${mensajes.join('\n')}`);
       }
 
-      // 2. Calcular totales
+      // 3. Calcular totales
       const subtotal = datosCarrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
       const costoEnvio = subtotal > 5000 ? 0 : 500; // Envío gratis >$5000
       const total = subtotal + costoEnvio;
 
-      // 3. Crear el pedido
+      // 4. Crear el pedido
       const { data: pedido, error: pedidoError } = await supabase
         .from('orders')
         .insert({
-          user_id: userId,
+          cliente_id: clienteId,
+          user_id: userId, // Puede ser null si no está autenticado
           subtotal,
           costo_envio: costoEnvio,
           total,
