@@ -21,6 +21,8 @@ export const crearPreferencia = async (datosCompra) => {
   try {
     const { items, pedidoId, email, telefono } = datosCompra;
 
+    console.log('📤 Enviando datos a create-preference:', { items, pedidoId, email, telefono });
+
     // Llamar a nuestra API serverless en Vercel (token seguro en el backend)
     const response = await fetch(`/api/mercadopago/create-preference`, {
       method: 'POST',
@@ -28,15 +30,25 @@ export const crearPreferencia = async (datosCompra) => {
       body: JSON.stringify({ items, pedidoId, email, telefono, costoEnvio: datosCompra.costoEnvio || 0 })
     });
 
+    console.log('📥 Respuesta create-preference:', response.status, response.statusText);
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error al crear preferencia de pago');
+      const errorText = await response.text();
+      console.error('❌ Error response body:', errorText);
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { error: errorText };
+      }
+      throw new Error(errorData.error || errorData.message || `HTTP ${response.status}: ${errorText}`);
     }
 
     const preferencia = await response.json();
+    console.log('✅ Preferencia creada:', preferencia);
     return preferencia;
   } catch (error) {
-    console.error('Error en crearPreferencia:', error);
+    console.error('❌ Error en crearPreferencia:', error);
     throw error;
   }
 };

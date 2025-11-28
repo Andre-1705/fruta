@@ -6,6 +6,7 @@ export default async function handler(req) {
   }
 
   try {
+    const url = new URL(req.url);
     const body = await req.json();
     const {
       items = [],
@@ -15,9 +16,12 @@ export default async function handler(req) {
       costoEnvio = 0
     } = body || {};
 
-    const token = process.env.MP_ACCESS_TOKEN;
-    if (!token) {
-      return new Response(JSON.stringify({ error: 'MP_ACCESS_TOKEN is not set' }), { status: 500 });
+    const siteUrl = (process.env.PUBLIC_SITE_URL && process.env.PUBLIC_SITE_URL.trim()) ? process.env.PUBLIC_SITE_URL : url.origin;
+    const mockMode = (process.env.MOCK_PAYMENTS === 'true');
+
+    // Validación básica
+    if (!Array.isArray(items) || items.length === 0) {
+      return new Response(JSON.stringify({ error: 'No hay items para pagar' }), { status: 400 });
     }
 
     const payload = {
@@ -36,11 +40,11 @@ export default async function handler(req) {
         phone: { number: telefono }
       },
       external_reference: pedidoId,
-      notification_url: `${process.env.PUBLIC_SITE_URL || ''}/api/mercadopago/webhook`,
+      notification_url: `${siteUrl}/api/mercadopago/webhook`,
       back_urls: {
-        success: `${process.env.PUBLIC_SITE_URL || ''}/pedido/exito?pedido=${pedidoId}`,
-        failure: `${process.env.PUBLIC_SITE_URL || ''}/pedido/error?pedido=${pedidoId}`,
-        pending: `${process.env.PUBLIC_SITE_URL || ''}/pedido/pendiente?pedido=${pedidoId}`
+        success: `${siteUrl}/pedido/exito?pedido=${pedidoId}`,
+        failure: `${siteUrl}/pedido/error?pedido=${pedidoId}`,
+        pending: `${siteUrl}/pedido/pendiente?pedido=${pedidoId}`
       },
       auto_return: 'approved',
       payment_methods: {
@@ -54,6 +58,30 @@ export default async function handler(req) {
       statement_descriptor: 'FRUTA-STORE'
     };
 
+    // Modo mock para pruebas sin credenciales de MercadoPago
+    if (mockMode) {
+      const fake = {
+        id: `MOCK-PREF-${pedidoId || Date.now()}`,
+        init_point: `${siteUrl}/pedido/exito?pedido=${pedidoId || 'mock'}`,
+        sandbox_init_point: `${siteUrl}/pedido/exito?pedido=${pedidoId || 'mock'}`,
+        collector_id: 0,
+        external_reference: pedidoId,
+        back_urls: payload.back_urls
+      };
+      return new Response(JSON.stringify(fake), {
+        status: 200,
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+
+    const token = process.env.MP_ACCESS_TOKEN;
+    if (!token) {
+      console.error('❌ MP_ACCESS_TOKEN no está configurado');
+      return new Response(JSON.stringify({ error: 'MP_ACCESS_TOKEN is not set' }), { status: 500 });
+    }
+
+    console.log('📤 Enviando a MercadoPago API:', { itemsCount: payload.items.length, pedidoId });
+
     const mpRes = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
       headers: {
@@ -64,11 +92,22 @@ export default async function handler(req) {
     });
 
     const text = await mpRes.text();
+    console.log('📥 Respuesta de MercadoPago:', mpRes.status, text.substring(0, 200));
+
+    if (!mpRes.ok) {
+      console.error('❌ MercadoPago error:', mpRes.status, text);
+      return new Response(JSON.stringify({ error: 'MercadoPago API error', status: mpRes.status, details: text }), {
+        status: mpRes.status,
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+
     return new Response(text, {
       status: mpRes.status,
       headers: { 'content-type': 'application/json' }
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal error', details: String(err) }), { status: 500 });
+    console.error('❌ Error en create-preference:', err);
+    return new Response(JSON.stringify({ error: 'Internal error', details: String(err), stack: err.stack }), { status: 500 });
   }
 }
