@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import { useAuthContexto } from './AuthContexto.jsx';
 
 const PedidosContexto = createContext();
 
@@ -16,6 +17,7 @@ export const PedidosProvider = ({ children }) => {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user, isAdmin } = useAuthContexto() || {};
 
   // Cargar pedidos (admin ve todos, usuario solo los suyos)
   const cargarPedidos = async (userId = null) => {
@@ -25,18 +27,7 @@ export const PedidosProvider = ({ children }) => {
 
       let query = supabase
         .from('orders')
-        .select(`
-          *,
-          order_items (
-            id,
-            producto_id,
-            nombre_producto,
-            imagen_producto,
-            precio_unitario,
-            cantidad,
-            subtotal
-          )
-        `)
+        .select('*')
         .order('fecha_pedido', { ascending: false });
 
       // Si se proporciona userId, filtrar por usuario
@@ -63,45 +54,47 @@ export const PedidosProvider = ({ children }) => {
     try {
       setError(null);
 
-      // 1. Buscar o crear cliente
+      // 1. Buscar o crear cliente SOLO si el usuario está autenticado.
+      // Para checkout invitado, no tocamos la tabla clientes (RLS lo bloquearía).
       const email = datosEnvio.email.trim().toLowerCase();
       let clienteId = null;
-
-      // Buscar cliente existente por email
-      const { data: clienteExistente, error: buscarError } = await supabase
-        .from('clientes')
-        .select('id')
-        .ilike('email', email)
-        .limit(1)
-        .single();
-
-      if (buscarError && buscarError.code !== 'PGRST116') {
-        // PGRST116 = no rows found, cualquier otro error es problema real
-        throw buscarError;
-      }
-
-      if (clienteExistente) {
-        clienteId = clienteExistente.id;
-      } else {
-        // Crear nuevo cliente
-        const { data: nuevoCliente, error: crearError } = await supabase
+      if (userId) {
+        // Buscar cliente existente por email
+        const { data: clienteExistente, error: buscarError } = await supabase
           .from('clientes')
-          .insert({
-            nombre: datosEnvio.nombre,
-            email: email,
-            telefono: datosEnvio.telefono,
-            direccion: datosEnvio.direccion
-          })
           .select('id')
+          .ilike('email', email)
+          .limit(1)
           .single();
 
-        if (crearError) throw crearError;
-        clienteId = nuevoCliente.id;
+        if (buscarError && buscarError.code !== 'PGRST116') {
+          // PGRST116 = no rows found, cualquier otro error es problema real
+          throw buscarError;
+        }
+
+        if (clienteExistente) {
+          clienteId = clienteExistente.id;
+        } else {
+          // Crear nuevo cliente
+          const { data: nuevoCliente, error: crearError } = await supabase
+            .from('clientes')
+            .insert({
+              nombre: datosEnvio.nombre,
+              email: email,
+              telefono: datosEnvio.telefono,
+              direccion: datosEnvio.direccion
+            })
+            .select('id')
+            .single();
+
+          if (crearError) throw crearError;
+          clienteId = nuevoCliente.id;
+        }
       }
 
       // 2. Verificar stock disponible
       const itemsParaVerificar = datosCarrito.map(item => ({
-        producto_id: item.id,
+        product_id: item.id,
         cantidad: item.cantidad
       }));
 
@@ -126,10 +119,12 @@ export const PedidosProvider = ({ children }) => {
       const costoEnvio = subtotal > 5000 ? 0 : 500; // Envío gratis >$5000
       const total = subtotal + costoEnvio;
 
-      // 4. Crear el pedido
-      const { data: pedido, error: pedidoError } = await supabase
+      // 4. Crear el pedido usando un id generado en cliente para evitar SELECT posterior
+      const pedidoId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      const { error: pedidoError } = await supabase
         .from('orders')
         .insert({
+          id: pedidoId,
           cliente_id: clienteId,
           user_id: userId, // Puede ser null si no está autenticado
           subtotal,
@@ -145,16 +140,14 @@ export const PedidosProvider = ({ children }) => {
           notas_cliente: datosEnvio.notas,
           estado: 'pendiente',
           estado_pago: 'pendiente'
-        })
-        .select()
-        .single();
+        });
 
       if (pedidoError) throw pedidoError;
 
       // 4. Crear los items del pedido
       const items = datosCarrito.map(item => ({
-        order_id: pedido.id,
-        producto_id: item.id,
+        order_id: pedidoId,
+        product_id: item.id,
         nombre_producto: item.nombre,
         imagen_producto: item.imagen,
         precio_unitario: item.precio,
@@ -168,10 +161,12 @@ export const PedidosProvider = ({ children }) => {
 
       if (itemsError) throw itemsError;
 
-      // 5. Recargar pedidos
-      await cargarPedidos(userId);
+      // 5. Recargar pedidos solo si hay usuario autenticado
+      if (userId) {
+        await cargarPedidos(userId);
+      }
 
-      return pedido;
+      return { id: pedidoId };
     } catch (err) {
       console.error('Error al crear pedido:', err);
       setError(err.message);
@@ -272,7 +267,7 @@ export const PedidosProvider = ({ children }) => {
           *,
           order_items (
             id,
-            producto_id,
+            product_id,
             nombre_producto,
             imagen_producto,
             precio_unitario,
@@ -293,8 +288,17 @@ export const PedidosProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    cargarPedidos();
-  }, []);
+    // Admin carga todos los pedidos; usuario autenticado carga los suyos; invitado no carga
+    if (isAdmin) {
+      cargarPedidos();
+    } else if (user?.id) {
+      cargarPedidos(user.id);
+    } else {
+      setPedidos([]);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin, user?.id]);
 
   const valor = {
     pedidos,

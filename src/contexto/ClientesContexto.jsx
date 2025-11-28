@@ -2,6 +2,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient.js';
+import { useAuthContexto } from './AuthContexto.jsx';
 
 export const ClientesContexto = createContext();
 
@@ -9,6 +10,7 @@ export const ClientesProvider = ({ children }) => {
   const [clientesArray, setClientesArray] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const { isAdmin } = useAuthContexto() || {};
 
   const usarSupabase = Boolean(supabase);
 
@@ -36,8 +38,14 @@ export const ClientesProvider = ({ children }) => {
   }, [usarSupabase]);
 
   useEffect(() => {
-    cargarClientes();
-  }, [cargarClientes]);
+    // Solo el admin debe cargar el listado completo de clientes
+    if (isAdmin) {
+      cargarClientes();
+    } else {
+      setClientesArray([]);
+      setCargando(false);
+    }
+  }, [cargarClientes, isAdmin]);
 
   // CRUD: Agregar cliente
   const agregarCliente = useCallback(async (cliente) => {

@@ -48,12 +48,9 @@ export const Item = ({ producto }) => {
           )}
 
         <div className="botones-item">
-
-          <Link to={`/producto/${producto.sku || producto.id}`}>
           <button type="button">
-              Ver producto
-            </button>
-          </Link>
+            Ver producto
+          </button>
 
           {enCarrito ? (
             <button type="button" onClick={handleRemover}>
