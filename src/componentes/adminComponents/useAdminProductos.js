@@ -24,7 +24,16 @@ export function useAdminProductos() {
     if (FOLDER) formData.append('folder', FOLDER);
 
     const res = await fetch(url, { method: 'POST', body: formData });
-    if (!res.ok) throw new Error('Error subiendo imagen a Cloudinary');
+    if (!res.ok) {
+      let detalle = '';
+      try {
+        const errJson = await res.json();
+        detalle = errJson?.error?.message || JSON.stringify(errJson).substring(0,140);
+      } catch {
+        try { detalle = (await res.text()).substring(0,140); } catch { /* noop */ }
+      }
+      throw new Error(`Error subiendo imagen a Cloudinary (HTTP ${res.status}) ${detalle}`);
+    }
     const data = await res.json();
     const imageUrl = data?.secure_url;
     if (!imageUrl) throw new Error('Respuesta inválida de Cloudinary');

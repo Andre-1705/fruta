@@ -120,7 +120,7 @@ const Checkout = () => {
         <div className="carrito-vacio">
           <h2>🛒 Carrito Vacío</h2>
           <p>No tienes productos en tu carrito</p>
-          <button onClick={() => navigate('/productos')} className="btn-ir-productos">
+          <button onClick={() => navigate('/VistaProductos')} className="btn-ir-productos">
             Ver Productos
           </button>
         </div>
