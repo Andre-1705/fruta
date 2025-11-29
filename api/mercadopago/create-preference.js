@@ -108,10 +108,10 @@ export default async function handler(req, res) {
     return res.status(200).json(result);
   } catch (err) {
     console.error('❌ Error en create-preference:', err);
-    return res.status(500).json({ 
-      error: 'Internal error', 
+    return res.status(500).json({
+      error: 'Internal error',
       details: err.message,
-      cause: err.cause?.message 
+      cause: err.cause?.message
     });
   }
 }
