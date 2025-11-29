@@ -1,27 +1,27 @@
-export const config = { runtime: 'edge' };
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 
-export default async function handler(req) {
+export const config = { runtime: 'nodejs' };
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const url = new URL(req.url);
-    const body = await req.json();
     const {
       items = [],
       pedidoId,
       email,
       telefono,
       costoEnvio = 0
-    } = body || {};
+    } = req.body || {};
 
-    const siteUrl = (process.env.PUBLIC_SITE_URL && process.env.PUBLIC_SITE_URL.trim()) ? process.env.PUBLIC_SITE_URL : url.origin;
+    const siteUrl = process.env.PUBLIC_SITE_URL || `https://${req.headers.host}`;
     const mockMode = (process.env.MOCK_PAYMENTS === 'true');
 
     // Validación básica
     if (!Array.isArray(items) || items.length === 0) {
-      return new Response(JSON.stringify({ error: 'No hay items para pagar' }), { status: 400 });
+      return res.status(400).json({ error: 'No hay items para pagar' });
     }
 
     // Normalizar y validar items mínimos requeridos por MP
@@ -42,7 +42,7 @@ export default async function handler(req) {
 
     // Validaciones previas a llamar a MP
     if (normalizedItems.some(i => !i.title || !Number.isFinite(i.unit_price) || i.unit_price <= 0)) {
-      return new Response(JSON.stringify({ error: 'Items inválidos: title requerido y unit_price > 0' }), { status: 400 });
+      return res.status(400).json({ error: 'Items inválidos: title requerido y unit_price > 0' });
     }
 
     const payload = {
@@ -81,46 +81,37 @@ export default async function handler(req) {
         external_reference: pedidoId,
         back_urls: payload.back_urls
       };
-      return new Response(JSON.stringify(fake), {
-        status: 200,
-        headers: { 'content-type': 'application/json' }
-      });
+      console.log('🧪 MOCK MODE: Returning fake preference');
+      return res.status(200).json(fake);
     }
 
     const token = process.env.MP_ACCESS_TOKEN;
     if (!token) {
       console.error('❌ MP_ACCESS_TOKEN no está configurado');
-      return new Response(JSON.stringify({ error: 'MP_ACCESS_TOKEN is not set' }), { status: 500 });
+      return res.status(500).json({ error: 'MP_ACCESS_TOKEN is not set' });
     }
 
-    console.log('📤 Enviando a MercadoPago API:', { itemsCount: payload.items.length, pedidoId });
+    console.log('📤 Creando preferencia con SDK de MercadoPago');
 
-    const mpRes = await fetch('https://api.mercadopago.com/checkout/preferences', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(payload)
+    // Inicializar SDK de MercadoPago
+    const client = new MercadoPagoConfig({
+      accessToken: token,
+      options: { timeout: 5000 }
     });
+    const preference = new Preference(client);
 
-    const text = await mpRes.text();
-    console.log('📥 Respuesta de MercadoPago:', mpRes.status, text.substring(0, 200));
+    // Crear preferencia usando el SDK oficial
+    const result = await preference.create({ body: payload });
 
-    if (!mpRes.ok) {
-      console.error('❌ MercadoPago error:', mpRes.status, text);
-      return new Response(JSON.stringify({ error: 'MercadoPago API error', status: mpRes.status, details: text }), {
-        status: mpRes.status,
-        headers: { 'content-type': 'application/json' }
-      });
-    }
+    console.log('✅ Preferencia creada:', result.id);
 
-    return new Response(text, {
-      status: mpRes.status,
-      headers: { 'content-type': 'application/json' }
-    });
+    return res.status(200).json(result);
   } catch (err) {
     console.error('❌ Error en create-preference:', err);
-    return new Response(JSON.stringify({ error: 'Internal error', details: String(err), stack: err.stack }), { status: 500 });
+    return res.status(500).json({ 
+      error: 'Internal error', 
+      details: err.message,
+      cause: err.cause?.message 
+    });
   }
 }
