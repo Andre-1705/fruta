@@ -25,7 +25,8 @@ import PedidosAdminPanel from './componentes/adminComponents/PedidosAdminPanel.j
 import AdminRoute from './componentes/AdminRoute.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Checkout from './pages/Checkout.jsx';
-import PedidoExito from './pages/PedidoExito.jsx';
+import PedidoExito from './pages/PedidoExito';
+import MisPedidos from './pages/MisPedidos';
 
 function App() {
   return (
@@ -76,6 +77,11 @@ function App() {
             {/* Alias de éxito para compatibilidad con enlaces antiguos */}
             <Route path="/exito" element={<PedidoExito />} />
             <Route path="/pedido/exito" element={<PedidoExito />} />
+            <Route path="/mis-pedidos" element={
+              <ProtectedRoute>
+                <MisPedidos />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
