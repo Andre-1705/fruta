@@ -97,11 +97,14 @@ const Checkout = () => {
       // 4. Vaciar carrito
       vaciarCarrito();
 
-      // 5. Abrir checkout de MercadoPago
-      abrirCheckout(preferencia.id);
-
-      // Opcional: Redirigir a página de espera
-      // navigate(`/pedido/pendiente?pedido=${pedido.id}`);
+      // 5. Si es mock, redirigir directamente; si no, abrir SDK de MercadoPago
+      if (preferencia.id && preferencia.id.startsWith('MOCK-')) {
+        // Modo mock: redirigir a éxito sin abrir SDK
+        navigate(`/pedido/exito?pedido=${pedido.id}`);
+      } else {
+        // Modo real: abrir checkout de MercadoPago
+        abrirCheckout(preferencia.id);
+      }
 
     } catch (error) {
       console.error('Error al procesar checkout:', error);

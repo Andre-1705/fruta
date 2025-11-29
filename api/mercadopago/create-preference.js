@@ -24,17 +24,29 @@ export default async function handler(req) {
       return new Response(JSON.stringify({ error: 'No hay items para pagar' }), { status: 400 });
     }
 
-    const payload = {
-      items: items.map((item) => ({
-        id: item.id,
-        title: item.nombre,
-        description: item.descripcion || 'Producto fresco',
-        picture_url: item.imagen,
-        category_id: 'food',
-        quantity: Number(item.cantidad) || 1,
-        unit_price: Number(item.precio) || 0,
+    // Normalizar y validar items mínimos requeridos por MP
+    const normalizedItems = items.map((item) => {
+      const title = (item.nombre || item.title || '').toString().trim();
+      const qty = Number.isFinite(Number(item.cantidad)) ? parseInt(item.cantidad, 10) : 1;
+      const quantity = Math.max(1, qty || 1);
+      const unit = Number(item.precio);
+      const unit_price = Number.isFinite(unit) ? Number(unit.toFixed(2)) : NaN;
+      return {
+        title,
+        description: item.descripcion || undefined,
+        quantity,
+        unit_price,
         currency_id: 'ARS'
-      })),
+      };
+    });
+
+    // Validaciones previas a llamar a MP
+    if (normalizedItems.some(i => !i.title || !Number.isFinite(i.unit_price) || i.unit_price <= 0)) {
+      return new Response(JSON.stringify({ error: 'Items inválidos: title requerido y unit_price > 0' }), { status: 400 });
+    }
+
+    const payload = {
+      items: normalizedItems,
       payer: {
         email,
         phone: { number: telefono }
@@ -47,6 +59,7 @@ export default async function handler(req) {
         pending: `${siteUrl}/pedido/pendiente?pedido=${pedidoId}`
       },
       auto_return: 'approved',
+      ...(process.env.MP_BINARY_MODE === 'true' ? { binary_mode: true } : {}),
       payment_methods: {
         excluded_payment_types: [],
         installments: 12
