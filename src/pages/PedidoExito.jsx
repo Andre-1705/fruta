@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { usePedidos } from '../contexto/PedidosContexto';
+import { supabase } from '../lib/supabaseClient';
 import './PedidoExito.css';
 
 export default function PedidoExito() {
   const [searchParams] = useSearchParams();
   const pedidoId = searchParams.get('pedido');
-  const { obtenerPedidoPorId } = usePedidos();
+  const { obtenerPedido } = usePedidos();
   const [pedido, setPedido] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +18,30 @@ export default function PedidoExito() {
         return;
       }
       try {
-        const data = await obtenerPedidoPorId(pedidoId);
+        let data = null;
+        if (typeof obtenerPedido === 'function') {
+          data = await obtenerPedido(pedidoId);
+        } else {
+          // Fallback directo a Supabase si el contexto no expone el método
+          const { data: d, error } = await supabase
+            .from('orders')
+            .select(`
+              *,
+              order_items (
+                id,
+                product_id,
+                nombre_producto,
+                imagen_producto,
+                precio_unitario,
+                cantidad,
+                subtotal
+              )
+            `)
+            .eq('id', pedidoId)
+            .single();
+          if (error) throw error;
+          data = d;
+        }
         setPedido(data);
       } catch (error) {
         console.error('Error al cargar pedido:', error);

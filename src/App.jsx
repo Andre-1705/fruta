@@ -73,6 +73,8 @@ function App() {
                 <Checkout />
               </ProtectedRoute>
             } />
+            {/* Alias de éxito para compatibilidad con enlaces antiguos */}
+            <Route path="/exito" element={<PedidoExito />} />
             <Route path="/pedido/exito" element={<PedidoExito />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
