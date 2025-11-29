@@ -25,6 +25,7 @@ import PedidosAdminPanel from './componentes/adminComponents/PedidosAdminPanel.j
 import AdminRoute from './componentes/AdminRoute.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Checkout from './pages/Checkout.jsx';
+import PedidoExito from './pages/PedidoExito.jsx';
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
                 <Checkout />
               </ProtectedRoute>
             } />
+            <Route path="/pedido/exito" element={<PedidoExito />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
