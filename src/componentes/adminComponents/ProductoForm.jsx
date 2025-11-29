@@ -90,13 +90,23 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
         </label>
         <div className="campo campo-imagen">
           <label className="subcampo">
-            <span>Imagen (URL imgbb)</span>
-            <input name="img" value={formData.img} onChange={handleChange} />
+            <span>Imagen (URL opcional)</span>
+            <input name="img" value={formData.img} placeholder="https://" onChange={handleChange} />
           </label>
           <label className="subcampo">
-            <span>Subir archivo</span>
+            <span>Subir archivo (Cloudinary)</span>
             <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
           </label>
+          {(file || formData.img) && (
+            <div style={{marginTop:'0.5rem'}}>
+              <span style={{fontSize:'0.75rem',color:'#555'}}>Preview:</span><br />
+              <img
+                src={file ? URL.createObjectURL(file) : formData.img}
+                alt="preview"
+                style={{width:'70px',height:'70px',objectFit:'cover',border:'1px solid #ddd',borderRadius:'4px'}}
+              />
+            </div>
+          )
         </div>
         <label className="campo campo-descripcion">
           <span>Descripción</span>
