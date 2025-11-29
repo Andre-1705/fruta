@@ -18,6 +18,7 @@ export default function ProductosAdminPanel() {
   const [editando, setEditando] = useState(null); // producto en edición
   const [creando, setCreando] = useState(false); // flag para mostrar formulario nuevo
   const [guardando, setGuardando] = useState(false);
+  const [eliminandoId, setEliminandoId] = useState(null);
   const [busqueda, setBusqueda] = useState('');
   const [ultimoError, setUltimoError] = useState(null);
 
@@ -61,10 +62,18 @@ export default function ProductosAdminPanel() {
   const manejarEliminar = async (id) => {
     if (!eliminarProducto) return;
     if (!window.confirm('¿Eliminar este producto?')) return;
+    setUltimoError(null);
+    setEliminandoId(id);
     try {
-      await eliminarProducto(id);
+      const ok = await eliminarProducto(id);
+      if (!ok) {
+        setUltimoError('No se pudo eliminar (ver políticas/RLS o backend).');
+      }
     } catch (e) {
-      console.error(e);
+      console.error('Error eliminando producto:', e);
+      setUltimoError(e.message || 'Error eliminando producto');
+    } finally {
+      setEliminandoId(null);
     }
   };
 
@@ -207,7 +216,11 @@ export default function ProductosAdminPanel() {
               {usarApiRemota && (
                 <td>
                   <button onClick={() => setEditando(p)}>Editar</button>
-                  <button onClick={() => manejarEliminar(p.id)} style={{marginLeft:'0.5rem', color:'red'}}>Eliminar</button>
+                  <button
+                    onClick={() => manejarEliminar(p.id)}
+                    disabled={eliminandoId === p.id}
+                    style={{marginLeft:'0.5rem', color:'red', opacity: eliminandoId === p.id ? 0.6 : 1}}
+                  >{eliminandoId === p.id ? 'Eliminando...' : 'Eliminar'}</button>
                 </td>
               )}
             </tr>
