@@ -70,8 +70,8 @@ export default function PedidoExito() {
           <div className="icon-error">❌</div>
           <h1>Pedido no encontrado</h1>
           <p>No se pudo encontrar la información del pedido.</p>
-          <Link to="/productos" className="btn-volver">
-            Volver a la tienda
+          <Link to="/VistaCarrito" className="btn-volver">
+            Ir al carrito
           </Link>
         </div>
       </div>
@@ -112,8 +112,8 @@ export default function PedidoExito() {
         </div>
 
         <div className="acciones">
-          <Link to="/productos" className="btn-primary">
-            Seguir comprando
+          <Link to="/VistaCarrito" className="btn-primary">
+            Ir al carrito
           </Link>
           <Link to="/mis-pedidos" className="btn-secondary">
             Ver mis pedidos

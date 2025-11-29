@@ -92,7 +92,7 @@ export default function MisPedidos() {
               </div>
             </div>
             <div className="pedido-footer">
-              <Link to={`/pedido/detalle/${pedido.id}`} className="btn-ver-detalle">
+              <Link to={`/pedido/exito?pedido=${pedido.id}`} className="btn-ver-detalle">
                 Ver detalle
               </Link>
             </div>
