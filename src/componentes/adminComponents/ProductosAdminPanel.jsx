@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ProductosAdminPanel() {
   const { user, isAdmin, logout } = useAuthContexto();
-  const { productosArray, cargando, error, eliminarProducto, usarApiRemota } = useContext(ProductosContexto);
+  const { productosArray, cargando, error, eliminarProducto, restaurarProducto, cargarProductos, usarApiRemota } = useContext(ProductosContexto);
   const { crearProducto, editarProducto, subirImagenEnProgreso } = useAdminProductos();
   const navigate = useNavigate();
 
@@ -19,10 +19,19 @@ export default function ProductosAdminPanel() {
   const [creando, setCreando] = useState(false); // flag para mostrar formulario nuevo
   const [guardando, setGuardando] = useState(false);
   const [eliminandoId, setEliminandoId] = useState(null);
+  const [restaurandoId, setRestaurandoId] = useState(null);
   const [busqueda, setBusqueda] = useState('');
   const [ultimoError, setUltimoError] = useState(null);
+  const [mostrarInactivos, setMostrarInactivos] = useState(false);
 
   // Los early returns deben ir después de declarar todos los hooks
+
+  // Recargar productos cuando cambia el toggle
+  React.useEffect(() => {
+    if (cargarProductos) {
+      cargarProductos(mostrarInactivos);
+    }
+  }, [mostrarInactivos, cargarProductos]);
 
   const handleLogoutAdmin = () => {
     logout();
@@ -74,6 +83,25 @@ export default function ProductosAdminPanel() {
       setUltimoError(e.message || 'Error eliminando producto');
     } finally {
       setEliminandoId(null);
+    }
+  };
+
+  const manejarRestaurar = async (id) => {
+    if (!restaurarProducto) return;
+    if (!window.confirm('¿Restaurar este producto?')) return;
+    setUltimoError(null);
+    setRestaurandoId(id);
+    try {
+      await restaurarProducto(id);
+      // Recargar lista activos después de restaurar
+      if (cargarProductos && !mostrarInactivos) {
+        await cargarProductos(false);
+      }
+    } catch (e) {
+      console.error('Error restaurando producto:', e);
+      setUltimoError(e.message || 'Error restaurando producto');
+    } finally {
+      setRestaurandoId(null);
     }
   };
 
@@ -140,6 +168,14 @@ export default function ProductosAdminPanel() {
           onChange={(e)=> setBusqueda(e.target.value)}
           style={{flex:'1', padding:'0.45rem 0.6rem', border:'1px solid #ccc', borderRadius:'4px'}}
         />
+        <label style={{display:'flex', alignItems:'center', gap:'0.5rem', whiteSpace:'nowrap'}}>
+          <input
+            type="checkbox"
+            checked={mostrarInactivos}
+            onChange={(e) => setMostrarInactivos(e.target.checked)}
+          />
+          <span>Ver eliminados</span>
+        </label>
         {(busqueda || editando || creando) && (
           <button
             type="button"
@@ -196,18 +232,26 @@ export default function ProductosAdminPanel() {
             <th>Categoría</th>
             <th>Precio</th>
             <th>Stock</th>
+            {mostrarInactivos && <th>Estado</th>}
             <th>Imagen</th>
             {usarApiRemota && <th>Acciones</th>}
           </tr>
         </thead>
         <tbody>
           {productosFiltrados.map(p => (
-              <tr key={p.id} style={{borderBottom:'1px solid #ddd'}}>
+              <tr key={p.id} style={{borderBottom:'1px solid #ddd', opacity: p.activo === false ? 0.6 : 1}}>
                 <td>{p.sku || '—'}</td>
               <td>{p.nombre}</td>
               <td>{p.categoria}</td>
               <td>${p.precio}</td>
               <td>{p.stock ?? '-'}</td>
+              {mostrarInactivos && (
+                <td>
+                  <span style={{color: p.activo === false ? '#dc3545' : '#28a745', fontWeight:'bold'}}>
+                    {p.activo === false ? 'Inactivo' : 'Activo'}
+                  </span>
+                </td>
+              )}
               <td>
                 {p.img ? (
                   <img src={p.img} alt={p.nombre} style={{width:'50px', height:'50px', objectFit:'cover'}} />
@@ -215,12 +259,22 @@ export default function ProductosAdminPanel() {
               </td>
               {usarApiRemota && (
                 <td>
-                  <button onClick={() => setEditando(p)}>Editar</button>
-                  <button
-                    onClick={() => manejarEliminar(p.id)}
-                    disabled={eliminandoId === p.id}
-                    style={{marginLeft:'0.5rem', color:'red', opacity: eliminandoId === p.id ? 0.6 : 1}}
-                  >{eliminandoId === p.id ? 'Eliminando...' : 'Eliminar'}</button>
+                  {p.activo === false ? (
+                    <button
+                      onClick={() => manejarRestaurar(p.id)}
+                      disabled={restaurandoId === p.id}
+                      style={{color:'#28a745', opacity: restaurandoId === p.id ? 0.6 : 1}}
+                    >{restaurandoId === p.id ? 'Restaurando...' : 'Restaurar'}</button>
+                  ) : (
+                    <>
+                      <button onClick={() => setEditando(p)}>Editar</button>
+                      <button
+                        onClick={() => manejarEliminar(p.id)}
+                        disabled={eliminandoId === p.id}
+                        style={{marginLeft:'0.5rem', color:'red', opacity: eliminandoId === p.id ? 0.6 : 1}}
+                      >{eliminandoId === p.id ? 'Eliminando...' : 'Eliminar'}</button>
+                    </>
+                  )}
                 </td>
               )}
             </tr>

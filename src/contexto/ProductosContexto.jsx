@@ -29,7 +29,7 @@ export const ProductosProvider = ({ children }) => {
 
 //fetch futura Api
 
-  const cargarProductos = useCallback(async () => {
+  const cargarProductos = useCallback(async (incluirInactivos = false) => {
     setCargando(true);
     setError(null);
     try {
@@ -38,11 +38,11 @@ export const ProductosProvider = ({ children }) => {
         let data = [];
         let err = null;
         try {
-          const resp = await supabase
-            .from('products')
-            .select('*')
-            .eq('activo', true)
-            .order('created_at', { ascending: false });
+          let query = supabase.from('products').select('*');
+          if (!incluirInactivos) {
+            query = query.eq('activo', true);
+          }
+          const resp = await query.order('created_at', { ascending: false });
           data = resp.data;
           err = resp.error;
           if (err) throw err;
@@ -85,10 +85,34 @@ export const ProductosProvider = ({ children }) => {
     cargarProductos();
   }, [cargarProductos]);
 
+  // Validar SKU único (incluye activos e inactivos)
+  const validarSkuUnico = useCallback(async (sku, idExcluir = null) => {
+    if (!usarSupabase || !sku) return true;
+    try {
+      let query = supabase.from('products').select('id, sku, activo').eq('sku', sku);
+      if (idExcluir) {
+        query = query.neq('id', idExcluir);
+      }
+      const { data, error: err } = await query;
+      if (err) throw err;
+      return !data || data.length === 0;
+    } catch (e) {
+      console.warn('No se pudo validar SKU:', e);
+      return true; // fallback: permitir si falla validación
+    }
+  }, [usarSupabase]);
+
   // CRUD contra API remota (si no hay API, no-ops para mantener compatibilidad)
   const agregarProducto = useCallback(async (producto) => {
     if (!usarApiRemota) return null;
     if (usarSupabase) {
+      // Validar SKU único
+      if (producto.sku) {
+        const skuValido = await validarSkuUnico(producto.sku);
+        if (!skuValido) {
+          throw new Error(`El SKU "${producto.sku}" ya está en uso. Elegí otro SKU o restaurá el producto existente.`);
+        }
+      }
       const { data, error: err } = await supabase
         .from('products')
         .insert([producto])
@@ -116,15 +140,38 @@ export const ProductosProvider = ({ children }) => {
   const actualizarProducto = useCallback(async (id, producto) => {
     if (!usarApiRemota) return null;
     if (usarSupabase) {
-      const { data, error: err } = await supabase
-        .from('products')
-        .update(producto)
-        .eq('id', id)
-        .select()
-        .single();
-      if (err) throw err;
-      setProductosArray((prev) => prev.map(p => (String(p.id) === String(id) ? data : p)));
-      return data;
+      try {
+        // Validar SKU único (excluir el producto actual)
+        if (producto.sku) {
+          const skuValido = await validarSkuUnico(producto.sku, id);
+          if (!skuValido) {
+            throw new Error(`El SKU "${producto.sku}" ya está en uso por otro producto.`);
+          }
+        }
+        const { data, error: err } = await supabase
+          .from('products')
+          .update(producto)
+          .eq('id', id)
+          .select()
+          .single();
+        if (err) throw err;
+        setProductosArray((prev) => prev.map(p => (String(p.id) === String(id) ? data : p)));
+        return data;
+      } catch (e) {
+        console.error('Error actualizando producto en Supabase:', {
+          id,
+          keys: Object.keys(producto || {}),
+          code: e?.code,
+          message: e?.message,
+          details: e?.details,
+          hint: e?.hint,
+        });
+        const notFound = String(e?.message || '').toLowerCase().includes('no rows') || String(e?.details || '').toLowerCase().includes('results contain 0 rows') || String(e?.code || '').includes('PGRST116');
+        const msg = notFound
+          ? 'Este producto ya no existe o fue eliminado. Creá uno nuevo.'
+          : (e?.message || e?.details || 'No se pudo guardar el producto');
+        throw new Error(msg);
+      }
     }
     // MockAPI
     const res = await fetch(`${API_BASE_CLEAN}/productos/${id}`, {
@@ -180,6 +227,34 @@ export const ProductosProvider = ({ children }) => {
     return true;
   }, [API_BASE_CLEAN, usarApiRemota, usarSupabase]);
 
+  const restaurarProducto = useCallback(async (id) => {
+    if (!usarApiRemota) return false;
+    if (usarSupabase) {
+      try {
+        const { data, error: err } = await supabase
+          .from('products')
+          .update({ activo: true })
+          .eq('id', id)
+          .select()
+          .single();
+        if (err) throw err;
+        // Agregar al array si no está, o actualizar si está
+        setProductosArray((prev) => {
+          const existe = prev.find(p => String(p.id) === String(id));
+          if (existe) {
+            return prev.map(p => String(p.id) === String(id) ? data : p);
+          }
+          return [data, ...prev];
+        });
+        return true;
+      } catch (e) {
+        console.error('Error restaurando producto:', e);
+        throw e;
+      }
+    }
+    return false;
+  }, [usarApiRemota, usarSupabase]);
+
   return (
     <ProductosContexto.Provider value={{
       productosArray,
@@ -189,6 +264,8 @@ export const ProductosProvider = ({ children }) => {
       agregarProducto,
       actualizarProducto,
       eliminarProducto,
+      restaurarProducto,
+      validarSkuUnico,
       usarApiRemota,
     }}>
       {children}
