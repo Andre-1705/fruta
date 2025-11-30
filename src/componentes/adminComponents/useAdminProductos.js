@@ -23,6 +23,17 @@ export function useAdminProductos() {
     formData.append('upload_preset', UPLOAD_PRESET);
     if (FOLDER) formData.append('folder', FOLDER);
 
+    try {
+      console.debug('[Cloudinary] Subiendo imagen', {
+        cloud: CLOUD_NAME,
+        preset: UPLOAD_PRESET,
+        folder: FOLDER || '(sin carpeta)',
+        fileName: file?.name,
+        fileType: file?.type,
+        fileSize: file?.size,
+      });
+    } catch { /* no-op for environments without console */ }
+
     const res = await fetch(url, { method: 'POST', body: formData });
     if (!res.ok) {
       let detalle = '';
@@ -35,6 +46,9 @@ export function useAdminProductos() {
       throw new Error(`Error subiendo imagen a Cloudinary (HTTP ${res.status}) ${detalle}`);
     }
     const data = await res.json();
+    try {
+      console.debug('[Cloudinary] Respuesta OK', { secure_url: data?.secure_url, public_id: data?.public_id });
+    } catch { /* noop */ }
     const imageUrl = data?.secure_url;
     if (!imageUrl) throw new Error('Respuesta inválida de Cloudinary');
     return imageUrl;
@@ -58,6 +72,13 @@ export function useAdminProductos() {
   const editarProducto = async (id, producto, file) => {
     if (!usarApiRemota) throw new Error('API remota no configurada');
     let payload = { ...producto };
+    try {
+      console.debug('[AdminProductos] Editar producto', {
+        id,
+        conArchivo: Boolean(file),
+        keys: Object.keys(payload || {}),
+      });
+    } catch { /* noop */ }
     if (file) {
       setSubiendo(true);
       try {
@@ -67,7 +88,9 @@ export function useAdminProductos() {
         setSubiendo(false);
       }
     }
-    return actualizarProducto(id, payload);
+    const res = await actualizarProducto(id, payload);
+    try { console.debug('[AdminProductos] Producto actualizado', { id, img: res?.img }); } catch { /* noop */ }
+    return res;
   };
 
   return {

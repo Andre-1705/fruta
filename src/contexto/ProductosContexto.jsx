@@ -34,11 +34,32 @@ export const ProductosProvider = ({ children }) => {
     setError(null);
     try {
       if (usarSupabase) {
-        const { data, error: err } = await supabase
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: false });
-        if (err) throw err;
+        // Intentar filtrar por activo=true (soft delete). Si la columna no existe, fallback sin filtro
+        let data = [];
+        let err = null;
+        try {
+          const resp = await supabase
+            .from('products')
+            .select('*')
+            .eq('activo', true)
+            .order('created_at', { ascending: false });
+          data = resp.data;
+          err = resp.error;
+          if (err) throw err;
+        } catch (e) {
+          // 42703: undefined_column (columna no existe)
+          const code = e?.code || e?.details || '';
+          if (String(code).includes('42703') || String(e?.message || '').toLowerCase().includes('column') ) {
+            const fallback = await supabase
+              .from('products')
+              .select('*')
+              .order('created_at', { ascending: false });
+            if (fallback.error) throw fallback.error;
+            data = fallback.data;
+          } else {
+            throw e;
+          }
+        }
         setProductosArray(Array.isArray(data) ? data : []);
       } else if (usarMockApi) {
         const res = await fetch(`${API_BASE_CLEAN}/productos`);
@@ -123,13 +144,31 @@ export const ProductosProvider = ({ children }) => {
   const eliminarProducto = useCallback(async (id) => {
     if (!usarApiRemota) return false;
     if (usarSupabase) {
-      const { error: err } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', id);
-      if (err) throw err;
-      setProductosArray((prev) => prev.filter(p => String(p.id) !== String(id)));
-      return true;
+      // Soft delete: set activo=false. Si la columna no existe, fallback a delete.
+      try {
+        const { error: updErr } = await supabase
+          .from('products')
+          .update({ activo: false })
+          .eq('id', id);
+        if (updErr) throw updErr;
+        setProductosArray((prev) => prev.filter(p => String(p.id) !== String(id)));
+        return true;
+      } catch (e) {
+        const code = e?.code || e?.details || '';
+        const isNoColumn = String(code).includes('42703') || String(e?.message || '').toLowerCase().includes('column');
+        if (!isNoColumn) {
+          // Si no es por columna inexistente, propagar (p.ej. otros errores)
+          throw e;
+        }
+        // Fallback a hard delete si no existe la columna
+        const { error: delErr } = await supabase
+          .from('products')
+          .delete()
+          .eq('id', id);
+        if (delErr) throw delErr;
+        setProductosArray((prev) => prev.filter(p => String(p.id) !== String(id)));
+        return true;
+      }
     }
     // MockAPI
     const res = await fetch(`${API_BASE_CLEAN}/productos/${id}`, { method: 'DELETE' });
