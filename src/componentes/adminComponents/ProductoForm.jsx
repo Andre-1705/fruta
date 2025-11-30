@@ -106,7 +106,7 @@ export default function ProductoForm({ initialData = null, onSubmit, loading = f
                 style={{width:'70px',height:'70px',objectFit:'cover',border:'1px solid #ddd',borderRadius:'4px'}}
               />
             </div>
-          )
+          )}
         </div>
         <label className="campo campo-descripcion">
           <span>Descripción</span>
