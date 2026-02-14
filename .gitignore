@@ -23,5 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
-#Environment files
+# Environment files
 .env
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Cache
+.cache/
+.parcel-cache/

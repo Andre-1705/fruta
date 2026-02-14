@@ -1,0 +1,173 @@
+npm warn Unknown cli config "--run". This will stop working in the next major version of npm.
+
+> fruta@0.0.0 test
+> vitest
+
+
+[7m[1m[34m DEV [39m[22m[27m [34mv1.6.1[39m [90mC:/Users/maria/OneDrive/Escritorio/IT/fruta[39m
+
+ [32mÔ£ô[39m src/test/api/mercadopago.test.js [2m ([22m[2m10 tests[22m[2m)[22m[90m 17[2mms[22m[39m
+ [32mÔ£ô[39m src/test/utils/validaciones.test.js [2m ([22m[2m16 tests[22m[2m)[22m[90m 42[2mms[22m[39m
+ [32mÔ£ô[39m src/test/contexto/CarritoContexto.test.jsx [2m ([22m[2m10 tests[22m[2m)[22m[90m 119[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/adminComponents/AdminLogin.test.jsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 178[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/Footer.test.jsx [2m ([22m[2m12 tests[22m[2m)[22m[33m 311[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/Item.test.jsx [2m ([22m[2m12 tests[22m[2m)[22m[33m 456[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/Header.test.jsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 205[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/Nav.test.jsx [2m ([22m[2m7 tests[22m[2m)[22m[33m 949[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/ProtectedRoute.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 63[2mms[22m[39m
+ [33mÔØ»[39m src/test/componentes/adminComponents/useAdminProductos.test.jsx [2m ([22m[2m1 test[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 58[2mms[22m[39m
+[31m   [33mÔØ»[31m src/test/componentes/adminComponents/useAdminProductos.test.jsx[2m > [22museAdminProductos[2m > [22mdebe renderizar correctamente[39m
+[31m     ÔåÆ Cannot destructure property 'agregarProducto' of 'useContext(...)' as it is undefined.[39m
+ [32mÔ£ô[39m src/test/pages/Producto.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 198[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/VistaProductos.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 179[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/AdminRoute.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 47[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/ItemList.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 88[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/VistaContacto.test.jsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 171[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/VistaNosotras.test.jsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 107[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/Home.test.jsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 105[2mms[22m[39m
+ [33mÔØ»[39m src/test/pages/VistaCarrito.test.jsx [2m ([22m[2m1 test[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 73[2mms[22m[39m
+[31m   [33mÔØ»[31m src/test/pages/VistaCarrito.test.jsx[2m > [22mVistaCarrito[2m > [22mdebe renderizar[39m
+[31m     ÔåÆ Cannot destructure property 'user' of 'useAuthContexto(...)' as it is null.[39m
+ [32mÔ£ô[39m src/test/pages/MisPedidos.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 113[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/InicioSesion.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 87[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/ItemDetail.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 87[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/Registrate.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 86[2mms[22m[39m
+ [33mÔØ»[39m src/test/pages/Checkout.test.jsx [2m ([22m[2m1 test[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 112[2mms[22m[39m
+[31m   [33mÔØ»[31m src/test/pages/Checkout.test.jsx[2m > [22mCheckout[2m > [22mdebe renderizar[39m
+[31m     ÔåÆ usePedidos debe usarse dentro de un PedidosProvider[39m
+ [33mÔØ»[39m src/test/componentes/adminComponents/ClientesAdminPanel.test.jsx [2m ([22m[2m1 test[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 102[2mms[22m[39m
+[31m   [33mÔØ»[31m src/test/componentes/adminComponents/ClientesAdminPanel.test.jsx[2m > [22mClientesAdminPanel[2m > [22mdebe renderizar[39m
+[31m     ÔåÆ useNavigate() may be used only in the context of a <Router> component.[39m
+ [32mÔ£ô[39m src/test/lib/mercadopago.test.js [2m ([22m[2m3 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/adminComponents/ProductoForm.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 72[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/adminComponents/PedidosAdminPanel.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 73[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/Formulario.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 102[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/ItemDetailContainer.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 130[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/ItemListContainer.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 136[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/Carrito.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 62[2mms[22m[39m
+ [32mÔ£ô[39m src/test/lib/emails.test.js [2m ([22m[2m2 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32mÔ£ô[39m src/test/componentes/adminComponents/ClienteForm.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 88[2mms[22m[39m
+ [32mÔ£ô[39m src/test/pages/NotFound.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 60[2mms[22m[39m
+ [32mÔ£ô[39m src/test/contexto/PedidosContexto.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 12[2mms[22m[39m
+ [33mÔØ»[39m src/test/pages/PedidoExito.test.jsx [2m ([22m[2m1 test[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 97[2mms[22m[39m
+[31m   [33mÔØ»[31m src/test/pages/PedidoExito.test.jsx[2m > [22mPedidoExito[2m > [22mdebe renderizar[39m
+[31m     ÔåÆ usePedidos debe usarse dentro de un PedidosProvider[39m
+ [32mÔ£ô[39m src/test/contexto/ProductosContexto.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32mÔ£ô[39m src/test/contexto/ClientesContexto.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32mÔ£ô[39m src/test/contexto/AuthContexto.test.jsx [2m ([22m[2m1 test[22m[2m)[22m[90m 6[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 5 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/test/pages/Checkout.test.jsx > Checkout > debe renderizar
+Error: usePedidos debe usarse dentro de un PedidosProvider
+ ÔØ» Module.usePedidos src/contexto/PedidosContexto.jsx:11:11
+      9|   const context = useContext(PedidosContexto);
+     10|   if (!context) {
+     11|     throw new Error('usePedidos debe usarse dentro de un PedidosProvidÔÇª
+       |           ^
+     12|   }
+     13|   return context;
+ ÔØ» Checkout src/pages/Checkout.jsx:11:27
+ ÔØ» Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:23863:20
+ ÔØ» renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:5529:22
+ ÔØ» updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:8897:19
+ ÔØ» beginWork node_modules/react-dom/cjs/react-dom-client.development.js:10522:18
+ ÔØ» runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1522:13
+ ÔØ» performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:15140:22
+ ÔØ» workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:14956:41
+ ÔØ» renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:14936:11
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/5]ÔÄ»
+
+ FAIL  src/test/pages/PedidoExito.test.jsx > PedidoExito > debe renderizar
+Error: usePedidos debe usarse dentro de un PedidosProvider
+ ÔØ» Module.usePedidos src/contexto/PedidosContexto.jsx:11:11
+      9|   const context = useContext(PedidosContexto);
+     10|   if (!context) {
+     11|     throw new Error('usePedidos debe usarse dentro de un PedidosProvidÔÇª
+       |           ^
+     12|   }
+     13|   return context;
+ ÔØ» PedidoExito src/pages/PedidoExito.jsx:10:29
+ ÔØ» Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:23863:20
+ ÔØ» renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:5529:22
+ ÔØ» updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:8897:19
+ ÔØ» beginWork node_modules/react-dom/cjs/react-dom-client.development.js:10522:18
+ ÔØ» runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1522:13
+ ÔØ» performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:15140:22
+ ÔØ» workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:14956:41
+ ÔØ» renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:14936:11
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/5]ÔÄ»
+
+ FAIL  src/test/pages/VistaCarrito.test.jsx > VistaCarrito > debe renderizar
+TypeError: Cannot destructure property 'user' of 'useAuthContexto(...)' as it is null.
+ ÔØ» VistaCarrito src/pages/VistaCarrito.jsx:10:11
+      8|   const { carrito, agregarAlCarrito, restarDelCarrito, removerDelCarriÔÇª
+      9|     useContext(CarritoContexto);
+     10|   const { user } = useAuthContexto();
+       |           ^
+     11|   const navigate = useNavigate();
+     12| 
+ ÔØ» Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:23863:20
+ ÔØ» renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:5529:22
+ ÔØ» updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:8897:19
+ ÔØ» beginWork node_modules/react-dom/cjs/react-dom-client.development.js:10522:18
+ ÔØ» runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1522:13
+ ÔØ» performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:15140:22
+ ÔØ» workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:14956:41
+ ÔØ» renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:14936:11
+ ÔØ» performWorkOnRoot node_modules/react-dom/cjs/react-dom-client.development.js:14462:44
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[3/5]ÔÄ»
+
+ FAIL  src/test/componentes/adminComponents/ClientesAdminPanel.test.jsx > ClientesAdminPanel > debe renderizar
+Error: useNavigate() may be used only in the context of a <Router> component.
+ ÔØ» invariant node_modules/react-router/dist/development/chunk-NISHYRIK.mjs:188:11
+ ÔØ» useNavigateUnstable node_modules/react-router/dist/development/chunk-NISHYRIK.mjs:5024:3
+ ÔØ» Proxy.useNavigate node_modules/react-router/dist/development/chunk-NISHYRIK.mjs:5021:46
+ ÔØ» ClientesAdminPanel src/componentes/adminComponents/ClientesAdminPanel.jsx:9:20
+      7| 
+      8| export default function ClientesAdminPanel() {
+      9|   const navigate = useNavigate();
+       |                    ^
+     10|   const { user, logout } = useAuthContexto();
+     11|   const {
+ ÔØ» Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:23863:20
+ ÔØ» renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:5529:22
+ ÔØ» updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:8897:19
+ ÔØ» beginWork node_modules/react-dom/cjs/react-dom-client.development.js:10522:18
+ ÔØ» runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1522:13
+ ÔØ» performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:15140:22
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[4/5]ÔÄ»
+
+ FAIL  src/test/componentes/adminComponents/useAdminProductos.test.jsx > useAdminProductos > debe renderizar correctamente
+TypeError: Cannot destructure property 'agregarProducto' of 'useContext(...)' as it is undefined.
+ ÔØ» Module.useAdminProductos src/componentes/adminComponents/useAdminProductos.js:8:11
+      6| 
+      7| export function useAdminProductos() {
+      8|   const { agregarProducto, actualizarProducto, eliminarProducto, usarAÔÇª
+       |           ^
+      9|   const [subiendo, setSubiendo] = useState(false);
+     10| 
+ ÔØ» src/test/componentes/adminComponents/useAdminProductos.test.jsx:25:41
+ ÔØ» TestComponent node_modules/@testing-library/react/dist/pure.js:309:27
+ ÔØ» Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:23863:20
+ ÔØ» renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:5529:22
+ ÔØ» updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:8897:19
+ ÔØ» beginWork node_modules/react-dom/cjs/react-dom-client.development.js:10522:18
+ ÔØ» runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1522:13
+ ÔØ» performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:15140:22
+ ÔØ» workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:14956:41
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[5/5]ÔÄ»
+
+[2m Test Files [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[90m (39)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m106 passed[39m[22m[90m (111)[39m
+[2m   Start at [22m 18:09:14
+[2m   Duration [22m 23.76s[2m (transform 1.93s, setup 37.52s, collect 11.52s, tests 4.82s, environment 92.50s, prepare 19.30s)[22m
+
+
+[1m[7m[31m FAIL [39m[27m[22m[31m Tests failed. Watching for file changes...[39m
+       [2mpress [22m[1mh[22m[2m to show help[22m[2m, [22m[2mpress [22m[1mq[22m[2m to quit[22m
