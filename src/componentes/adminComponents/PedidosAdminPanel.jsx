@@ -5,7 +5,7 @@ import './PedidosAdminPanel.css';
 
 const PedidosAdminPanel = () => {
   const { pedidos, loading, cargarPedidos, actualizarEstadoPedido } = usePedidos();
-  const { user, isAdmin } = useAuthContexto();
+  const { isAdmin } = useAuthContexto();
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('todos');
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
@@ -15,7 +15,7 @@ const PedidosAdminPanel = () => {
     if (isAdmin) {
       cargarPedidos(); // Admin ve todos los pedidos
     }
-  }, [isAdmin]);
+  }, [cargarPedidos, isAdmin]);
 
   const pedidosFiltrados = pedidos.filter(pedido => {
     const coincideBusqueda =

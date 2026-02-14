@@ -1,5 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthContexto } from './AuthContexto.jsx';
 
@@ -20,7 +19,7 @@ export const PedidosProvider = ({ children }) => {
   const { user, isAdmin } = useAuthContexto() || {};
 
   // Cargar pedidos (admin ve todos, usuario solo los suyos)
-  const cargarPedidos = async (userId = null) => {
+  const cargarPedidos = useCallback(async (userId = null) => {
     try {
       setLoading(true);
       setError(null);
@@ -47,7 +46,7 @@ export const PedidosProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Crear nuevo pedido
   const crearPedido = async (datosCarrito, datosEnvio, userId = null) => {
@@ -297,8 +296,7 @@ export const PedidosProvider = ({ children }) => {
       setPedidos([]);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin, user?.id]);
+  }, [cargarPedidos, isAdmin, user?.id]);
 
   const valor = {
     pedidos,

@@ -13,7 +13,7 @@ export default function MisPedidos() {
     if (user?.id) {
       cargarPedidos(user.id);
     }
-  }, [user?.id]);
+  }, [cargarPedidos, user?.id]);
 
   useEffect(() => {
     // Filtrar solo pedidos del usuario actual

@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 // src/contexto/ProductosContexto.jsx
 import { createContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient.js';
@@ -135,7 +134,7 @@ export const ProductosProvider = ({ children }) => {
     const creado = await res.json();
     setProductosArray((prev) => [creado, ...prev]);
     return creado;
-  }, [API_BASE_CLEAN, usarApiRemota, usarSupabase]);
+  }, [API_BASE_CLEAN, usarApiRemota, usarSupabase, validarSkuUnico]);
 
   const actualizarProducto = useCallback(async (id, producto) => {
     if (!usarApiRemota) return null;
@@ -186,7 +185,7 @@ export const ProductosProvider = ({ children }) => {
     const actualizado = await res.json();
     setProductosArray((prev) => prev.map(p => (String(p.id) === String(id) ? actualizado : p)));
     return actualizado;
-  }, [API_BASE_CLEAN, usarApiRemota, usarSupabase]);
+  }, [API_BASE_CLEAN, usarApiRemota, usarSupabase, validarSkuUnico]);
 
   const eliminarProducto = useCallback(async (id) => {
     if (!usarApiRemota) return false;

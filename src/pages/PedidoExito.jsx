@@ -51,7 +51,7 @@ export default function PedidoExito() {
     };
 
     cargarPedido();
-  }, [pedidoId]);
+  }, [obtenerPedido, pedidoId]);
 
   if (loading) {
     return (
