@@ -8,7 +8,7 @@ import './Checkout.css';
 
 const Checkout = () => {
   const { carrito, vaciarCarrito, total } = useCarrito();
-  const { crearPedido } = usePedidos();
+  const { crearPedido, validarStockCarrito } = usePedidos();
   const { user } = useAuthContexto();
   const navigate = useNavigate();
 
@@ -25,6 +25,7 @@ const Checkout = () => {
 
   const [errores, setErrores] = useState({});
   const [procesando, setProcesando] = useState(false);
+  const [errorStock, setErrorStock] = useState(null);
 
   const costoEnvio = total > 5000 ? 0 : 500;
   const totalFinal = total + costoEnvio;
@@ -78,11 +79,27 @@ const Checkout = () => {
 
     try {
       setProcesando(true);
+      setErrorStock(null);
 
-      // 1. Crear el pedido en la base de datos
+      // 1. VALIDAR STOCK antes de hacer nada
+      const validacionStock = await validarStockCarrito(carrito);
+
+      if (!validacionStock.valido) {
+        // Hay problemas de stock
+        const detalles = validacionStock.problemasStock
+          .map(item => `${item.producto_id}: disponible ${item.stock_disponible}, solicitado ${item.cantidad_solicitada}`)
+          .join('\n');
+
+        setErrorStock(`❌ Stock insuficiente:\n${detalles}\n\nPor favor, ajusta las cantidades en tu carrito.`);
+        setProcesando(false);
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      // 2. Crear el pedido en la base de datos
       const pedido = await crearPedido(carrito, datosEnvio, user?.id);
 
-      // 2. Crear preferencia de pago en MercadoPago
+      // 3. Crear preferencia de pago en MercadoPago
       const preferencia = await crearPreferencia({
         items: carrito,
         pedidoId: pedido.id,
@@ -91,13 +108,13 @@ const Checkout = () => {
         costoEnvio: costoEnvio
       });
 
-      // 3. Guardar preference_id en el pedido
+      // 4. Guardar preference_id en el pedido
       // (esto debería hacerse desde el backend idealmente)
 
-      // 4. Vaciar carrito
+      // 5. Vaciar carrito
       vaciarCarrito();
 
-      // 5. Si es mock, redirigir directamente; si no, abrir SDK de MercadoPago
+      // 6. Si es mock, redirigir directamente; si no, abrir SDK de MercadoPago
       if (preferencia.id && preferencia.id.startsWith('MOCK-')) {
         // Modo mock: redirigir a éxito sin abrir SDK
         navigate(`/pedido/exito?pedido=${pedido.id}`);
@@ -108,7 +125,15 @@ const Checkout = () => {
 
     } catch (error) {
       console.error('Error al procesar checkout:', error);
-      alert('Error al procesar el pedido: ' + error.message);
+      const mensajeError = error?.message || 'Error desconocido';
+
+      // Detectar si es un error sobre stock insuficiente
+      if (mensajeError.toLowerCase().includes('stock')) {
+        setErrorStock(`❌ ${mensajeError}`);
+        window.scrollTo(0, 0);
+      } else {
+        alert('Error al procesar el pedido: ' + mensajeError);
+      }
     } finally {
       setProcesando(false);
     }
@@ -131,6 +156,47 @@ const Checkout = () => {
   return (
     <div className="checkout-container">
       <div className="checkout-wrapper">
+        {/* PANEL DE DEBUG */}
+        {procesando && (
+          <div style={{
+            backgroundColor: '#e0f2fe',
+            border: '2px solid #0284c7',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '20px',
+            color: '#075985',
+            fontFamily: 'monospace',
+            fontSize: '0.9rem',
+            maxHeight: '200px',
+            overflowY: 'auto'
+          }}>
+            <strong>🔄 Procesando pedido...</strong>
+            <div style={{ marginTop: '8px', whiteSpace: 'pre-wrap' }}>
+              {JSON.stringify({
+                usuario: user?.id || 'invitado',
+                items_carrito: carrito.length,
+                total: totalFinal.toFixed(2),
+                estado: 'creando_pedido'
+              }, null, 2)}
+            </div>
+          </div>
+        )}
+
+        {errorStock && (
+          <div className="alert-error-stock" style={{
+            backgroundColor: '#fee2e2',
+            border: '2px solid #dc2626',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '20px',
+            color: '#991b1b',
+            whiteSpace: 'pre-wrap',
+            fontWeight: '500'
+          }}>
+            {errorStock}
+          </div>
+        )}
+
         <div className="checkout-left">
           <h1>📋 Finalizar Compra</h1>
 

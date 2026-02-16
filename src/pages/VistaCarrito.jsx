@@ -32,21 +32,46 @@ export default function VistaCarrito() {
           {carrito.map((producto) => {
             const cantidad = Number(producto.cantidad) || 0;
             const precio = Number(producto.precio) || 0;
+            const stock = Number(producto.stock) || 0;
             const subtotal = (precio * cantidad).toFixed(2);
+            const enLimititeStock = cantidad >= stock && stock > 0;
+            const sinStock = stock <= 0;
 
             return (
               <div key={producto.id} className="item-carrito">
                 <img src={producto.img} alt={producto.nombre} className="item-carrito-img" />
 
-                <span className="item-carrito-nombre">{producto.nombre}</span>
-                <div className="control-cantidad">
+                <div style={{ flex: 1 }}>
+                  <span className="item-carrito-nombre">{producto.nombre}</span>
 
-                  <button onClick={() => restarDelCarrito(producto.id)}>-</button>
+                  {/* Mostrar stock disponible */}
+                  <div style={{ fontSize: '0.85rem', color: sinStock ? '#dc2626' : enLimititeStock ? '#ea580c' : '#6b7280', marginTop: '4px' }}>
+                    {sinStock ? (
+                      <strong>❌ SIN STOCK</strong>
+                    ) : enLimititeStock ? (
+                      <strong>⚠️ Cantidad máxima alcanzada (disponible: {stock})</strong>
+                    ) : (
+                      <>📦 Stock disponible: {stock}</>
+                    )}
+                  </div>
+                </div>
+
+                <div className="control-cantidad">
+                  <button
+                    onClick={() => restarDelCarrito(producto.id)}
+                    disabled={sinStock}
+                  >
+                    -
+                  </button>
 
                   <span>{cantidad}</span>
 
-                  <button onClick={() => agregarAlCarrito(producto)}>+</button>
-
+                  <button
+                    onClick={() => agregarAlCarrito(producto)}
+                    disabled={sinStock || enLimititeStock}
+                  >
+                    +
+                  </button>
                 </div>
 
                 <span className="item-carrito-subtotal">${subtotal}</span>

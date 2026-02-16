@@ -15,15 +15,25 @@ export const initMercadoPago = () => {
   return null;
 };
 
-// Crear preferencia de pago (esto debe hacerse desde el backend en producción)
-// Por ahora lo hacemos desde el frontend pero DEBE moverse a una función serverless
+// Crear preferencia de pago
 export const crearPreferencia = async (datosCompra) => {
   try {
     const { items, pedidoId, email, telefono } = datosCompra;
 
-    console.log('📤 Enviando datos a create-preference:', { items, pedidoId, email, telefono });
+    console.log('📤 Creando preferencia de pago:', { items, pedidoId, email, telefono });
 
-    // Llamar a nuestra API serverless en Vercel (token seguro en el backend)
+    // En desarrollo, crear una preferencia mock
+    if (import.meta.env.DEV) {
+      console.warn('⚠️ Usando preferencia MOCK para desarrollo');
+      return {
+        id: `MOCK-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        init_point: '#',
+        sandbox_init_point: '#',
+        cliente_id: pedidoId
+      };
+    }
+
+    // En producción, llamar a la API serverless en Vercel
     const response = await fetch(`/api/mercadopago/create-preference`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -48,7 +48,7 @@ export const PedidosProvider = ({ children }) => {
     }
   }, []);
 
-  // Crear nuevo pedido
+  // Crear nuevo pedido (ATÓMICO con verificación de stock)
   const crearPedido = async (datosCarrito, datosEnvio, userId = null) => {
     try {
       setError(null);
@@ -91,84 +91,73 @@ export const PedidosProvider = ({ children }) => {
         }
       }
 
-      // 2. Verificar stock disponible
-      const itemsParaVerificar = datosCarrito.map(item => ({
-        product_id: item.id,
-        cantidad: item.cantidad
-      }));
-
-      const { data: stockData, error: stockError } = await supabase
-        .rpc('verificar_stock_disponible', {
-          p_items: itemsParaVerificar
-        });
-
-      if (stockError) throw stockError;
-
-      // Verificar si hay productos sin stock suficiente
-      const sinStock = stockData.filter(item => !item.suficiente);
-      if (sinStock.length > 0) {
-        const mensajes = sinStock.map(item =>
-          `Producto insuficiente (disponible: ${item.stock_disponible}, solicitado: ${item.stock_solicitado})`
-        );
-        throw new Error(`Stock insuficiente:\n${mensajes.join('\n')}`);
-      }
-
-      // 3. Calcular totales
+      // 2. Calcular totales
       const subtotal = datosCarrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
       const costoEnvio = subtotal > 5000 ? 0 : 500; // Envío gratis >$5000
       const total = subtotal + costoEnvio;
 
-      // 4. Crear el pedido usando un id generado en cliente para evitar SELECT posterior
-      const pedidoId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-      const { error: pedidoError } = await supabase
-        .from('orders')
-        .insert({
-          id: pedidoId,
-          cliente_id: clienteId,
-          user_id: userId, // Puede ser null si no está autenticado
-          subtotal,
-          costo_envio: costoEnvio,
-          total,
-          nombre_destinatario: datosEnvio.nombre,
-          email_destinatario: datosEnvio.email,
-          telefono_destinatario: datosEnvio.telefono,
-          direccion_envio: datosEnvio.direccion,
-          ciudad: datosEnvio.ciudad,
-          provincia: datosEnvio.provincia,
-          codigo_postal: datosEnvio.codigoPostal,
-          notas_cliente: datosEnvio.notas,
-          estado: 'pendiente',
-          estado_pago: 'pendiente'
-        });
+      // 3. FUNCIÓN TRANSACCIONAL: Verifica stock Y crea pedido de forma ATÓMICA
+      // Esto evita race conditions completamente
+      const { data: resultadoPedido, error: pedidoError } = await supabase.rpc(
+        'crear_pedido_con_stock',
+        {
+          p_cliente_id: clienteId,
+          p_user_id: userId,
+          p_items: datosCarrito.map(item => ({
+            product_id: item.id,
+            nombre_producto: item.nombre,
+            imagen_producto: item.imagen,
+            precio: item.precio,
+            cantidad: item.cantidad
+          })),
+          p_subtotal: subtotal,
+          p_costo_envio: costoEnvio,
+          p_total: total,
+          p_nombre_destinatario: datosEnvio.nombre,
+          p_email_destinatario: datosEnvio.email,
+          p_telefono_destinatario: datosEnvio.telefono,
+          p_direccion_envio: datosEnvio.direccion,
+          p_ciudad: datosEnvio.ciudad,
+          p_provincia: datosEnvio.provincia,
+          p_codigo_postal: datosEnvio.codigoPostal,
+          p_notas_cliente: datosEnvio.notas
+        }
+      );
 
-      if (pedidoError) throw pedidoError;
+      if (pedidoError) {
+        console.error('Error RPC:', pedidoError);
+        throw new Error(pedidoError.message || 'Error al crear el pedido');
+      }
 
-      // 4. Crear los items del pedido
-      const items = datosCarrito.map(item => ({
-        order_id: pedidoId,
-        product_id: item.id,
-        nombre_producto: item.nombre,
-        imagen_producto: item.imagen,
-        precio_unitario: item.precio,
-        cantidad: item.cantidad,
-        subtotal: item.precio * item.cantidad
-      }));
+      // Verificar respuesta de la función (ahora retorna un JSONB directo)
+      console.log('Respuesta de crear_pedido_con_stock:', resultadoPedido);
 
-      const { error: itemsError } = await supabase
-        .from('order_items')
-        .insert(items);
+      if (!resultadoPedido) {
+        throw new Error('No se recibió respuesta del servidor');
+      }
 
-      if (itemsError) throw itemsError;
+      const { order_id, success, mensaje } = resultadoPedido;
 
-      // 5. Recargar pedidos solo si hay usuario autenticado
+      console.log(`Pedido ${success ? '✅ CREADO' : '❌ ERROR'}: ${mensaje}`);
+
+      if (!success) {
+        // La función retornó un error específico
+        throw new Error(mensaje || 'Error desconocido al crear el pedido');
+      }
+
+      console.log('Order ID generado:', order_id);
+
+      // El stock ya fue descontado en la BD de forma atómica
+      // Solo actualizamos el carrito local
       if (userId) {
         await cargarPedidos(userId);
       }
 
-      return { id: pedidoId };
+      return { id: order_id };
     } catch (err) {
       console.error('Error al crear pedido:', err);
-      setError(err.message);
+      const mensajeError = err.message || 'No se pudo crear el pedido. Intenta de nuevo.';
+      setError(mensajeError);
       throw err;
     }
   };
@@ -286,6 +275,43 @@ export const PedidosProvider = ({ children }) => {
     }
   };
 
+  // Validar stock sin crear pedido (para mostrar avisos en frontend)
+  const validarStockCarrito = async (carrito) => {
+    try {
+      if (!carrito || carrito.length === 0) {
+        return { valido: true, detalles: [] };
+      }
+
+      const { data: validacionData, error: validacionError } = await supabase.rpc(
+        'validar_stock_items',
+        {
+          p_items: carrito.map(item => ({
+            product_id: item.id,
+            cantidad: item.cantidad
+          }))
+        }
+      );
+
+      if (validacionError) {
+        console.error('Error validando stock:', validacionError);
+        return { valido: false, detalles: [], error: validacionError.message };
+      }
+
+      // Verificar si algún item no tiene stock
+      const conProblema = validacionData.filter(item => !item.tiene_stock);
+      const valido = conProblema.length === 0;
+
+      return {
+        valido,
+        detalles: validacionData,
+        problemasStock: conProblema
+      };
+    } catch (err) {
+      console.error('Error al validar stock:', err);
+      return { valido: false, detalles: [], error: err.message };
+    }
+  };
+
   useEffect(() => {
     // Admin carga todos los pedidos; usuario autenticado carga los suyos; invitado no carga
     if (isAdmin) {
@@ -307,7 +333,8 @@ export const PedidosProvider = ({ children }) => {
     actualizarEstadoPedido,
     actualizarEstadoPago,
     obtenerHistorialEstados,
-    obtenerPedido
+    obtenerPedido,
+    validarStockCarrito
   };
 
   return (
