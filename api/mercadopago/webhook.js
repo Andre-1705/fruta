@@ -57,6 +57,40 @@ function verifySignature(headers, rawBody) {
   }
 }
 
+// Enviar email via Resend
+async function sendEmail(to, subject, html) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn('RESEND_API_KEY no configurada');
+    return;
+  }
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: 'Fruta Store <onboarding@resend.dev>',
+        to: [to],
+        subject,
+        html
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      console.error('Error enviando email:', err);
+    } else {
+      console.log('Email enviado a:', to);
+    }
+  } catch (e) {
+    console.error('Error enviando email:', e.message);
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(200).json({ ok: true });
@@ -133,6 +167,20 @@ export default async function handler(req, res) {
             console.error('Error actualizando orden:', error.message);
           } else {
             console.log('Orden actualizada:', data?.[0]?.numero_pedido || orderId);
+          }
+                  // Enviar email de confirmacion al cliente
+          if (data && data[0]) {
+            const order = data[0];
+            await sendEmail(
+              order.email_destinatario,
+              `Tu pedido ${order.numero_pedido} fue confirmado`,
+              `<h1>Pedido confirmado</h1>
+              <p>Hola ${order.nombre_destinatario},</p>
+              <p>Tu pedido <strong>${order.numero_pedido}</strong> fue pagado exitosamente.</p>
+              <p><strong>Total:</strong> $${Number(order.total).toLocaleString('es-AR')}</p>
+              <p>Estado: ${order.estado}</p>
+              <p>Gracias por tu compra.</p>`
+            );
           }
         } else {
           console.warn('SUPABASE_SERVICE_ROLE_KEY no configurada, no se actualizo la BD');
