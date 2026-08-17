@@ -1,4 +1,5 @@
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { createClient } from '@supabase/supabase-js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -24,16 +25,44 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No hay items para pagar' });
     }
 
-    // Normalizar y validar items mínimos requeridos por MP
+    // ✅ FIX #4: Consultar precios reales en la BD
+    const supabaseUrl = process.env.VITE_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('❌ SUPABASE_SERVICE_ROLE_KEY no configurada');
+      return res.status(500).json({ error: 'Configuración de BD incompleta' });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const productIds = items.map(item => item.id || item.producto_id);
+    const { data: products, error: dbError } = await supabase
+      .from('products')
+      .select('id, nombre, precio, descripcion')
+      .in('id', productIds);
+
+    if (dbError) {
+      console.error('❌ Error consultando productos:', dbError);
+      return res.status(500).json({ error: 'Error consultando productos' });
+    }
+
+    // Normalizar items usando precios de la BD, NO del frontend
     const normalizedItems = items.map((item) => {
-      const title = (item.nombre || item.title || '').toString().trim();
+      const itemId = item.id || item.producto_id;
+      const dbProduct = products.find(p => p.id === itemId);
+
+      if (!dbProduct) {
+        throw new Error(`Producto ${itemId} no encontrado en la base de datos`);
+      }
+
+      const title = (dbProduct.nombre || item.nombre || item.title || '').toString().trim();
       const qty = Number.isFinite(Number(item.cantidad)) ? parseInt(item.cantidad, 10) : 1;
       const quantity = Math.max(1, qty || 1);
-      const unit = Number(item.precio);
-      const unit_price = Number.isFinite(unit) ? Number(unit.toFixed(2)) : NaN;
+      const unit_price = Number(Number(dbProduct.precio).toFixed(2));
+
       return {
         title,
-        description: item.descripcion || undefined,
+        description: dbProduct.descripcion || item.descripcion || undefined,
         quantity,
         unit_price,
         currency_id: 'ARS'
@@ -93,14 +122,12 @@ export default async function handler(req, res) {
 
     console.log('📤 Creando preferencia con SDK de MercadoPago');
 
-    // Inicializar SDK de MercadoPago
     const client = new MercadoPagoConfig({
       accessToken: token,
       options: { timeout: 5000 }
     });
     const preference = new Preference(client);
 
-    // Crear preferencia usando el SDK oficial
     const result = await preference.create({ body: payload });
 
     console.log('✅ Preferencia creada:', result.id);
