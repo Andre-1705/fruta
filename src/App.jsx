@@ -1,7 +1,8 @@
-
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import ProtectedRoute from './componentes/ProtectedRoute.jsx';
+import PedidoError from './pages/PedidoError.jsx';
+import PedidoPendiente from './pages/PedidoPendiente.jsx';
 
 // Componentes visuales
 import { Header } from './componentes/Header/Header.jsx';
@@ -11,12 +12,9 @@ import Home from './pages/Home.jsx';
 
 // Vistas principales
 import VistaContacto from './pages/VistaContacto.jsx';
-//import VistaProductos from './pages/VistaProductos.jsx';
 import VistaCarrito from './pages/VistaCarrito.jsx';
 import VistaNosotras from './pages/VistaNosotras.jsx';
 import InicioSesion from './pages/InicioSesion.jsx';
-
-// Para la ruta dinámica producto:id importo ItemDetailContainer
 
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer.jsx';
 import ProductosAdminPanel from './componentes/adminComponents/ProductosAdminPanel.jsx';
@@ -38,22 +36,33 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/VistaContacto" element={<VistaContacto />} />
             <Route path="/VistaNosotras" element={<VistaNosotras />} />
-            {/* Página de inicio de sesión dedicada */}
             <Route path="/login" element={<InicioSesion />} />
-            {/* /Registrate muestra el mismo formulario de inicio de sesión */}
             <Route path="/Registrate" element={<InicioSesion />} />
             <Route path="/VistaProductos" element={<ItemListContainer />} />
             <Route path="/VistaCarrito" element={
-            <ProtectedRoute>
+              <ProtectedRoute>
                 <VistaCarrito />
               </ProtectedRoute>} />
             <Route path="/producto/:id" element={<ItemDetailContainer />} />
             <Route path="/categoria/:categoria" element={<ItemListContainer />} />
 
             <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <h2>Panel de Administración</h2>
-              </ProtectedRoute>} />
+              <AdminRoute>
+                <div style={{ maxWidth: 1200, margin: '20px auto', padding: 20 }}>
+                  <h2>Panel de Administracion</h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: 20 }}>
+                    <Link to="/admin/pedidos" style={{ padding: 20, background: '#fff', borderRadius: 8, textDecoration: 'none', color: '#333', border: '1px solid #eee', textAlign: 'center' }}>
+                      <h3>Pedidos</h3>
+                    </Link>
+                    <Link to="/admin/productos" style={{ padding: 20, background: '#fff', borderRadius: 8, textDecoration: 'none', color: '#333', border: '1px solid #eee', textAlign: 'center' }}>
+                      <h3>Productos</h3>
+                    </Link>
+                    <Link to="/admin/clientes" style={{ padding: 20, background: '#fff', borderRadius: 8, textDecoration: 'none', color: '#333', border: '1px solid #eee', textAlign: 'center' }}>
+                      <h3>Clientes</h3>
+                    </Link>
+                  </div>
+                </div>
+              </AdminRoute>} />
             <Route path="/admin/productos" element={
               <AdminRoute>
                 <ProductosAdminPanel />
@@ -74,9 +83,10 @@ function App() {
                 <Checkout />
               </ProtectedRoute>
             } />
-            {/* Alias de éxito para compatibilidad con enlaces antiguos */}
             <Route path="/exito" element={<PedidoExito />} />
             <Route path="/pedido/exito" element={<PedidoExito />} />
+            <Route path="/pedido/error" element={<PedidoError />} />
+            <Route path="/pedido/pendiente" element={<PedidoPendiente />} />
             <Route path="/mis-pedidos" element={
               <ProtectedRoute>
                 <MisPedidos />
