@@ -78,6 +78,7 @@ export const PedidosProvider = ({ children }) => {
           const { data: nuevoCliente, error: crearError } = await supabase
             .from('clientes')
             .insert({
+              user_id: userId,
               nombre: datosEnvio.nombre,
               email: email,
               telefono: datosEnvio.telefono,

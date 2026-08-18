@@ -156,7 +156,7 @@ export default function ProductosAdminPanel() {
               fontWeight:'bold'
             }}
           >
-            Gestionar Productos
+            Agregar Productos
           </button>
         </div>
       </div>

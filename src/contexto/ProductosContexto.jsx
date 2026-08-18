@@ -45,6 +45,8 @@ export const ProductosProvider = ({ children }) => {
           data = resp.data;
           err = resp.error;
           if (err) throw err;
+                    // Normalizar: BD usa 'imagen', frontend usa 'img'
+          data = (Array.isArray(data) ? data : []).map(p => ({ ...p, img: p.imagen || p.img }));
         } catch (e) {
           // 42703: undefined_column (columna no existe)
           const code = e?.code || e?.details || '';
@@ -55,6 +57,7 @@ export const ProductosProvider = ({ children }) => {
               .order('created_at', { ascending: false });
             if (fallback.error) throw fallback.error;
             data = fallback.data;
+            data = (Array.isArray(data) ? data : []).map(p => ({ ...p, img: p.imagen || p.img }));
           } else {
             throw e;
           }
@@ -118,7 +121,8 @@ export const ProductosProvider = ({ children }) => {
         .select()
         .single();
       if (err) throw err;
-      setProductosArray((prev) => [data, ...prev]);
+      const normalized = { ...data, img: data.imagen || data.img };
+      setProductosArray((prev) => [normalized, ...prev]);
       return data;
     }
     // MockAPI
@@ -154,7 +158,8 @@ export const ProductosProvider = ({ children }) => {
           .select()
           .single();
         if (err) throw err;
-        setProductosArray((prev) => prev.map(p => (String(p.id) === String(id) ? data : p)));
+        const normalized = { ...data, img: data.imagen || data.img };
+        setProductosArray((prev) => prev.map(p => (String(p.id) === String(id) ? normalized : p)));
         return data;
       } catch (e) {
         console.error('Error actualizando producto en Supabase:', {
