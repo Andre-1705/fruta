@@ -120,7 +120,7 @@ const Checkout = () => {
         navigate(`/pedido/exito?pedido=${pedido.id}`);
       } else {
         // Modo real: abrir checkout de MercadoPago
-        abrirCheckout(preferencia.id);
+        abrirCheckout(preferencia.id, preferencia.init_point || preferencia.sandbox_init_point);
       }
 
     } catch (error) {
@@ -159,41 +159,11 @@ const Checkout = () => {
         {/* PANEL DE DEBUG */}
         {procesando && (
           <div style={{
-            backgroundColor: '#e0f2fe',
-            border: '2px solid #0284c7',
-            borderRadius: '8px',
-            padding: '16px',
-            marginBottom: '20px',
-            color: '#075985',
-            fontFamily: 'monospace',
-            fontSize: '0.9rem',
-            maxHeight: '200px',
-            overflowY: 'auto'
-          }}>
-            <strong>🔄 Procesando pedido...</strong>
-            <div style={{ marginTop: '8px', whiteSpace: 'pre-wrap' }}>
-              {JSON.stringify({
-                usuario: user?.id || 'invitado',
-                items_carrito: carrito.length,
-                total: totalFinal.toFixed(2),
-                estado: 'creando_pedido'
-              }, null, 2)}
-            </div>
-          </div>
-        )}
-
-        {errorStock && (
-          <div className="alert-error-stock" style={{
-            backgroundColor: '#fee2e2',
-            border: '2px solid #dc2626',
-            borderRadius: '8px',
-            padding: '16px',
-            marginBottom: '20px',
-            color: '#991b1b',
-            whiteSpace: 'pre-wrap',
-            fontWeight: '500'
-          }}>
-            {errorStock}
+            backgroundColor: '#e0f2fe', border: '2px solid #0284c7',
+            borderRadius: '8px', padding: '16px', marginBottom: '20px',
+            color: '#075985', textAlign: 'center', fontWeight: '500'
+        }}>
+            Procesando tu pedido...
           </div>
         )}
 

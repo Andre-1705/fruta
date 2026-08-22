@@ -31,5 +31,5 @@ npm run dev
 
 > Tarjetas de prueba MercadoPago
 
-Aprobada: 5031 7557 3453 0604 | CVV: 123 | Venc: 11/25
+Aprobada: 5031 7557 3453 0604  | CVV: 123 | Venc: 11/25
 Rechazada: 5031 4332 1540 6351 | CVV: 123 | Venc: 11/25

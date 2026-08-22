@@ -115,9 +115,11 @@ export const ProductosProvider = ({ children }) => {
           throw new Error(`El SKU "${producto.sku}" ya está en uso. Elegí otro SKU o restaurá el producto existente.`);
         }
       }
+    // Limpiar payload: sacar campos que no son columnas de la BD
+      const { img, created_at, updated_at, ...payloadLimpio } = producto;
       const { data, error: err } = await supabase
         .from('products')
-        .insert([producto])
+        .insert([payloadLimpio])
         .select()
         .single();
       if (err) throw err;
@@ -151,9 +153,11 @@ export const ProductosProvider = ({ children }) => {
             throw new Error(`El SKU "${producto.sku}" ya está en uso por otro producto.`);
           }
         }
+        // Limpiar payload: sacar campos que no son columnas de la BD
+        const { img, created_at, updated_at, ...payloadLimpio } = producto;
         const { data, error: err } = await supabase
           .from('products')
-          .update(producto)
+          .update(payloadLimpio)
           .eq('id', id)
           .select()
           .single();
