@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useCarrito } from '../contexto/CarritoContexto';
 import { usePedidos } from '../contexto/PedidosContexto';
 import { useAuthContexto } from '../contexto/AuthContexto';
-import { crearPreferencia, abrirCheckout, validarConfiguracion } from '../lib/mercadopago';
+import { crearPreferencia, validarConfiguracion } from '../lib/mercadopago';
 import './Checkout.css';
 
 const Checkout = () => {
   const { carrito, vaciarCarrito, total } = useCarrito();
-  const { crearPedido, validarStockCarrito } = usePedidos();
+  const { validarStockCarrito } = usePedidos();
   const { user } = useAuthContexto();
   const navigate = useNavigate();
 
@@ -53,7 +53,6 @@ const Checkout = () => {
       ...prev,
       [name]: value
     }));
-    // Limpiar error del campo al escribir
     if (errores[name]) {
       setErrores(prev => ({ ...prev, [name]: null }));
     }
@@ -61,79 +60,35 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validarFormulario()) {
-      alert('Por favor completa todos los campos obligatorios');
-      return;
-    }
-
-    if (carrito.length === 0) {
-      alert('El carrito está vacío');
-      return;
-    }
-
-    if (!validarConfiguracion()) {
-      alert('MercadoPago no está configurado correctamente. Contacta al administrador.');
-      return;
-    }
+    if (!validarFormulario()) { alert('Completá todos los campos obligatorios'); return; }
+    if (carrito.length === 0) { alert('El carrito está vacío'); return; }
+    if (!validarConfiguracion()) { alert('MercadoPago no está configurado.'); return; }
 
     try {
       setProcesando(true);
       setErrorStock(null);
 
-      // 1. VALIDAR STOCK antes de hacer nada
       const validacionStock = await validarStockCarrito(carrito);
-
       if (!validacionStock.valido) {
-        // Hay problemas de stock
-        const detalles = validacionStock.problemasStock
-          .map(item => `${item.producto_id}: disponible ${item.stock_disponible}, solicitado ${item.cantidad_solicitada}`)
-          .join('\n');
-
-        setErrorStock(`❌ Stock insuficiente:\n${detalles}\n\nPor favor, ajusta las cantidades en tu carrito.`);
+        setErrorStock('Stock insuficiente. Ajustá las cantidades en tu carrito.');
         setProcesando(false);
-        window.scrollTo(0, 0);
         return;
       }
 
-      // 2. Crear el pedido en la base de datos
-      const pedido = await crearPedido(carrito, datosEnvio, user?.id);
-
-      // 3. Crear preferencia de pago en MercadoPago
       const preferencia = await crearPreferencia({
         items: carrito,
-        pedidoId: pedido.id,
+        pedidoId: `TMP-${Date.now()}`,
         email: datosEnvio.email,
         telefono: datosEnvio.telefono,
-        costoEnvio: costoEnvio
+        costoEnvio
       });
 
-      // 4. Guardar preference_id en el pedido
-      // (esto debería hacerse desde el backend idealmente)
-
-      // 5. Vaciar carrito
       vaciarCarrito();
-
-      // 6. Si es mock, redirigir directamente; si no, abrir SDK de MercadoPago
-      if (preferencia.id && preferencia.id.startsWith('MOCK-')) {
-        // Modo mock: redirigir a éxito sin abrir SDK
-        navigate(`/pedido/exito?pedido=${pedido.id}`);
-      } else {
-        // Modo real: abrir checkout de MercadoPago
-        abrirCheckout(preferencia.id, preferencia.init_point || preferencia.sandbox_init_point);
-      }
+      window.location.href = preferencia.init_point || preferencia.sandbox_init_point;
 
     } catch (error) {
-      console.error('Error al procesar checkout:', error);
-      const mensajeError = error?.message || 'Error desconocido';
-
-      // Detectar si es un error sobre stock insuficiente
-      if (mensajeError.toLowerCase().includes('stock')) {
-        setErrorStock(`❌ ${mensajeError}`);
-        window.scrollTo(0, 0);
-      } else {
-        alert('Error al procesar el pedido: ' + mensajeError);
-      }
+      console.error('Error:', error);
+      alert('Error al procesar el pago: ' + (error?.message || 'Intentá de nuevo'));
     } finally {
       setProcesando(false);
     }
@@ -156,14 +111,23 @@ const Checkout = () => {
   return (
     <div className="checkout-container">
       <div className="checkout-wrapper">
-        {/* PANEL DE DEBUG */}
         {procesando && (
           <div style={{
             backgroundColor: '#e0f2fe', border: '2px solid #0284c7',
             borderRadius: '8px', padding: '16px', marginBottom: '20px',
             color: '#075985', textAlign: 'center', fontWeight: '500'
-        }}>
+          }}>
             Procesando tu pedido...
+          </div>
+        )}
+
+        {errorStock && (
+          <div style={{
+            backgroundColor: '#fee2e2', border: '2px solid #dc2626',
+            borderRadius: '8px', padding: '16px', marginBottom: '20px',
+            color: '#991b1b', fontWeight: '500'
+          }}>
+            {errorStock}
           </div>
         )}
 
