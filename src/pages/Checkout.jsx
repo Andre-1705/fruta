@@ -83,7 +83,6 @@ const Checkout = () => {
         costoEnvio
       });
 
-      vaciarCarrito();
       window.location.href = preferencia.init_point || preferencia.sandbox_init_point;
 
     } catch (error) {
